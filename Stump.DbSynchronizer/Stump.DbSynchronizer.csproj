@@ -1,0 +1,115 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{78208F47-1752-4E2C-BD1E-C64F55D76681}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Stump.DbSynchronizer</RootNamespace>
+    <AssemblyName>Stump.DbSynchronizer</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="MySql.Data, Version=6.7.4.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="MapRenderer.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Protocol\D2I\D2IFile.cs" />
+    <Compile Include="Protocol\D2P\PakProtocol.cs" />
+    <Compile Include="Protocol\DataCenterManager.cs" />
+    <Compile Include="Protocol\DLM\Cell.cs" />
+    <Compile Include="Protocol\DLM\CellData.cs" />
+    <Compile Include="Protocol\DLM\Elements\BasicElement.cs" />
+    <Compile Include="Protocol\DLM\Elements\GraphicalElement.cs" />
+    <Compile Include="Protocol\DLM\Elements\SoundElement.cs" />
+    <Compile Include="Protocol\DLM\Fixture.cs" />
+    <Compile Include="Protocol\DLM\Layer.cs" />
+    <Compile Include="Protocol\DLM\Map.cs" />
+    <Compile Include="Protocol\Elements\Element.cs" />
+    <Compile Include="Protocol\Elements\GraphicalElementData.cs" />
+    <Compile Include="Protocol\Elements\GraphicalElementFactory.cs" />
+    <Compile Include="Protocol\Elements\GraphicalElementTypesEnum.cs" />
+    <Compile Include="Protocol\Elements\Subtypes\AnimatedGraphicalElementData.cs" />
+    <Compile Include="Protocol\Elements\Subtypes\BlendedGraphicalElementData.cs" />
+    <Compile Include="Protocol\Elements\Subtypes\BoundingBoxGraphicalElementData.cs" />
+    <Compile Include="Protocol\Elements\Subtypes\EntityGraphicalElementData.cs" />
+    <Compile Include="Protocol\Elements\Subtypes\NormalGraphicalElementData.cs" />
+    <Compile Include="Protocol\Elements\Subtypes\ParticlesGraphicalElementData.cs" />
+    <Compile Include="Protocol\GameData\GameDataClassDefinition.cs" />
+    <Compile Include="Protocol\GameData\GameDataField.cs" />
+    <Compile Include="Protocol\GameData\GameDataFileAccessor.cs" />
+    <Compile Include="Protocol\GameData\GameDataTypeEnum.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Stump.Core\Stump.Core.csproj">
+      <Project>{1dd88022-5a8e-4d3a-9206-d132569b734f}</Project>
+      <Name>Stump.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Stump.DofusProtocol\Stump.DofusProtocol.csproj">
+      <Project>{b1e55661-e3c4-4549-b3ce-9d5e9e5c04c5}</Project>
+      <Name>Stump.DofusProtocol</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Stump.ORM\Stump.ORM.csproj">
+      <Project>{1fb5c587-0a9c-4df8-8d20-61ced7692a47}</Project>
+      <Name>Stump.ORM</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Stump.Server.AuthServer\Stump.Server.AuthServer.csproj">
+      <Project>{de8b39a3-58dd-4812-8466-345c172ef8b8}</Project>
+      <Name>Stump.Server.AuthServer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Stump.Server.BaseServer\Stump.Server.BaseServer.csproj">
+      <Project>{e932b4de-fbce-4aa6-9e65-8f9be2433a2e}</Project>
+      <Name>Stump.Server.BaseServer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Stump.Server.WorldServer\Stump.Server.WorldServer.csproj">
+      <Project>{2aa7f866-0d70-4c7b-b89e-5012fe677b81}</Project>
+      <Name>Stump.Server.WorldServer</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

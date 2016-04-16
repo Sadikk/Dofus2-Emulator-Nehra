@@ -1,0 +1,7 @@
+Librairies/
+logs/
+bin/
+obj/
+*.v*.suo
+*.bat
+*.sql
