@@ -2,6 +2,7 @@ using Stump.Core.Pool;
 using Stump.Core.Reflection;
 using Stump.Core.Threading;
 using Stump.DofusProtocol.Enums;
+using Stump.DofusProtocol.Messages;
 using Stump.DofusProtocol.Types;
 using Stump.Server.WorldServer.Core.Network;
 using Stump.Server.WorldServer.Database.Items.Templates;
@@ -214,6 +215,16 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
 			get;
 			private set;
 		}
+        public FightActor Carrier
+        {
+            get;
+            private set;
+        }
+        public FightActor Carried
+        {
+            get;
+            private set;
+        }
         
         // CONSTRUCTORS
         protected FightActor(FightTeam team)
@@ -1469,6 +1480,25 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
                 BombFighter bombFighter = array[i];
                 bombFighter.Die();
             }
+        }
+
+        public void Carry(FightActor target)
+        {
+            this.Carrier = this;
+            this.Carried = target;
+
+            target.Carrier = this;
+            target.Carried = target;
+            target.Cell = this.Cell;
+        }
+        public void Throw(Cell cell)
+        {
+            Carried.Cell = cell;
+            Carried.Carrier = null;
+            Carried.Carried = null;
+
+            this.Carrier = null;
+            this.Carried = null;
         }
 
 	    public IEnumerable<BombFighter> BombsOfType(Database.Monsters.MonsterTemplate monsterTemplate)

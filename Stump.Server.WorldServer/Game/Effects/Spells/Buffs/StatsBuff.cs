@@ -7,7 +7,29 @@ using Stump.Server.WorldServer.Game.Spells;
 
 namespace Stump.Server.WorldServer.Game.Effects.Spells.Buffs
 {
-	[EffectHandler(EffectsEnum.Effect_AddRange_136), EffectHandler(EffectsEnum.Effect_AddAgility), EffectHandler(EffectsEnum.Effect_AddDamageBonus), EffectHandler(EffectsEnum.Effect_AddSummonLimit), EffectHandler(EffectsEnum.Effect_IncreaseDamage_138), EffectHandler(EffectsEnum.Effect_AddCriticalMiss), EffectHandler(EffectsEnum.Effect_AddDamageBonusPercent), EffectHandler(EffectsEnum.Effect_IncreaseDamage_1054), EffectHandler(EffectsEnum.Effect_AddRange), EffectHandler(EffectsEnum.Effect_AddChance), EffectHandler(EffectsEnum.Effect_AddCriticalHit), EffectHandler(EffectsEnum.Effect_AddDamageBonus_121), EffectHandler(EffectsEnum.Effect_AddIntelligence), EffectHandler(EffectsEnum.Effect_AddVitality), EffectHandler(EffectsEnum.Effect_AddWisdom), EffectHandler(EffectsEnum.Effect_AddStrength), EffectHandler(EffectsEnum.Effect_AddPhysicalDamage_137), EffectHandler(EffectsEnum.Effect_AddLock), EffectHandler(EffectsEnum.Effect_AddDodge), EffectHandler(EffectsEnum.Effect_AddDamageReflection), EffectHandler(EffectsEnum.Effect_AddPhysicalDamage_142), EffectHandler(EffectsEnum.Effect_AddPhysicalDamageReduction), EffectHandler(EffectsEnum.Effect_AddMagicDamageReduction)]
+	 [EffectHandler(EffectsEnum.Effect_AddRange_136),
+     EffectHandler(EffectsEnum.Effect_AddAgility),
+     EffectHandler(EffectsEnum.Effect_AddDamageBonus),
+     EffectHandler(EffectsEnum.Effect_AddSummonLimit),
+     EffectHandler(EffectsEnum.Effect_IncreaseDamage_138), 
+     EffectHandler(EffectsEnum.Effect_AddCriticalMiss), 
+     EffectHandler(EffectsEnum.Effect_AddDamageBonusPercent), 
+     EffectHandler(EffectsEnum.Effect_IncreaseDamage_1054), 
+     EffectHandler(EffectsEnum.Effect_AddRange), 
+     EffectHandler(EffectsEnum.Effect_AddChance),
+     EffectHandler(EffectsEnum.Effect_AddCriticalHit), 
+     EffectHandler(EffectsEnum.Effect_AddDamageBonus_121),
+     EffectHandler(EffectsEnum.Effect_AddIntelligence),
+     EffectHandler(EffectsEnum.Effect_AddVitality),
+     EffectHandler(EffectsEnum.Effect_AddWisdom), 
+     EffectHandler(EffectsEnum.Effect_AddStrength),
+     EffectHandler(EffectsEnum.Effect_AddPhysicalDamage_137),
+     EffectHandler(EffectsEnum.Effect_AddLock),
+     EffectHandler(EffectsEnum.Effect_AddDodge),
+     EffectHandler(EffectsEnum.Effect_AddDamageReflection),
+     EffectHandler(EffectsEnum.Effect_AddPhysicalDamage_142),
+     EffectHandler(EffectsEnum.Effect_AddPhysicalDamageReduction),
+     EffectHandler(EffectsEnum.Effect_AddMagicDamageReduction)]
 	public class StatsBuff : SpellEffectHandler
 	{
 		public StatsBuff(EffectDice effect, FightActor caster, Spell spell, Cell targetedCell, bool critical) : base(effect, caster, spell, targetedCell, critical)

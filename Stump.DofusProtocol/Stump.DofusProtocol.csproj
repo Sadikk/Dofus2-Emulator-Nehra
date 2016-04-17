@@ -337,6 +337,7 @@
     <Compile Include="Enums\Extensions\DirectionsEnumExtensions.cs" />
     <Compile Include="Enums\HomeMade\AcquaintanceErrorEnum.cs" />
     <Compile Include="Enums\HomeMade\ActionsEnum.cs" />
+    <Compile Include="Enums\HomeMade\CustomActionsEnum.cs" />
     <Compile Include="Enums\HomeMade\EffectsEnum.cs" />
     <Compile Include="Enums\HomeMade\EmotesEnum.cs" />
     <Compile Include="Enums\HomeMade\FightState.cs" />
