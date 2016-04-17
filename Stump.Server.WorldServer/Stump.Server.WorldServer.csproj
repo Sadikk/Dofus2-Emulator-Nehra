@@ -138,6 +138,8 @@
     <Compile Include="Game\Challenges\Checkers\UnwillingVolunteerChallenge.cs" />
     <Compile Include="Game\Challenges\Checkers\ZombieChallenge.cs" />
     <Compile Include="Game\Dialogs\Prisms\PrismInfoDialog.cs" />
+    <Compile Include="Game\Effects\Spells\Others\Carry.cs" />
+    <Compile Include="Game\Effects\Spells\Others\Throw.cs" />
     <Compile Include="Game\Effects\Spells\Shield\ShieldBuff.cs" />
     <Compile Include="Game\Effects\Spells\Shield\ShieldPercentBuff.cs" />
     <Compile Include="Game\Effects\Spells\Summon\SummonBomb.cs" />
@@ -146,6 +148,8 @@
     <Compile Include="Game\Parties\ArenaParty.cs" />
     <Compile Include="Game\Parties\ClassicalParty.cs" />
     <Compile Include="Game\Prisms\PrismNpc.cs" />
+    <Compile Include="Game\Spells\Pandawa\ChamrakHandler.cs" />
+    <Compile Include="Game\Spells\Pandawa\KarchamHandler.cs" />
     <Compile Include="Handlers\Achievements\AchievementHandler.cs" />
     <Compile Include="Handlers\Context\RolePlay\Arenas\ArenaHandler.cs" />
     <Compile Include="Handlers\Web\WebHandler.cs" />

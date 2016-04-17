@@ -27,7 +27,6 @@ namespace Stump.Server.WorldServer.Game.Effects.Spells.Others
                 return true;
             }
             return false;
-
         }
         private void OnApply()
         {

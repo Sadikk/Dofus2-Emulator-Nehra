@@ -356,6 +356,7 @@
     <Compile Include="Enums\HomeMade\SexTypeEnum.cs" />
     <Compile Include="Enums\HomeMade\SpellIdEnum.cs" />
     <Compile Include="Enums\HomeMade\SpellShapeEnum.cs" />
+    <Compile Include="Enums\HomeMade\SpellStateEnum.cs" />
     <Compile Include="Enums\HomeMade\SpellTargetType.cs" />
     <Compile Include="Enums\HomeMade\StatsBoostTypeEnum.cs" />
     <Compile Include="Messages\BooleanByteWrapper.cs" />

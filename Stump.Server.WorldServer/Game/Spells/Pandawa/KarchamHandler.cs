@@ -28,6 +28,7 @@ namespace Stump.Server.WorldServer.Game.Spells.Pandawa
         {
             //Made this code because it miss the state for caster and target
             //Another solution : add the effect in the database because isn't in d2o files.
+            //WARNING : needs to debuff when carried actor is moving, maybe use target.InstantMoved ?
             var id = this.Caster.PopNextBuffId();
             var target = this.Fight.GetOneFighter(this.TargetedCell);
             var effect = new EffectBase { Duration = -1 };

@@ -1675,22 +1675,18 @@ namespace Stump.Server.WorldServer.Game.Fights
 
         public IEnumerable<Character> GetAllCharacters(bool withSpectators = false)
         {
-            IEnumerable<Character> arg_8C_0;
+            IEnumerable<Character> result;
             if (!withSpectators)
             {
-                arg_8C_0 =
-                    from entry in this.Fighters.OfType<CharacterFighter>()
-                    select entry.Character;
+                result = from entry 
+                         in this.Fighters.OfType<CharacterFighter>()
+                         select entry.Character;
             }
             else
             {
-                arg_8C_0 = (
-                    from entry in this.Fighters.OfType<CharacterFighter>()
-                    select entry.Character).Concat(
-                    from entry in this.Spectators
-                    select entry.Character);
+                result = (from entry in this.Fighters.OfType<CharacterFighter>() select entry.Character).Concat( from entry in this.Spectators select entry.Character);
             }
-            return arg_8C_0;
+            return result;
         }
 
         public void ForEach(Action<Character> action)
