@@ -19,6 +19,8 @@ namespace Stump.Server.WorldServer.Game.Effects.Instances
 		private int m_modificator;
 		private int m_random;
 		private SpellTargetType m_targets;
+        private string m_targetMask;
+
 		[System.NonSerialized]
 		protected EffectTemplate m_template;
 		private bool m_trigger;
@@ -217,6 +219,18 @@ namespace Stump.Server.WorldServer.Game.Effects.Instances
 			get;
 			set;
 		}
+        public string TargetMask
+        {
+            get
+            {
+                return this.m_targetMask;
+            }
+            set
+            {
+                this.m_targetMask = value;
+                this.IsDirty = true;
+            }
+        }
 
 		public EffectBase()
 		{
@@ -226,6 +240,7 @@ namespace Stump.Server.WorldServer.Game.Effects.Instances
 			this.m_id = effect.Id;
 			this.m_template = Singleton<EffectManager>.Instance.GetTemplate(effect.Id);
 			this.m_targets = effect.Targets;
+            this.m_targetMask = effect.TargetMask;
 			this.m_delay = effect.Delay;
 			this.m_duration = effect.Duration;
 			this.m_group = effect.Group;
@@ -242,7 +257,8 @@ namespace Stump.Server.WorldServer.Game.Effects.Instances
 			this.m_id = id;
 			this.m_template = Singleton<EffectManager>.Instance.GetTemplate(id);
 			this.m_targets = effect.Targets;
-			this.m_delay = effect.Delay;
+            this.m_targetMask = effect.TargetMask;
+            this.m_delay = effect.Delay;
 			this.m_duration = effect.Duration;
 			this.m_group = effect.Group;
 			this.m_random = effect.Random;
@@ -258,7 +274,8 @@ namespace Stump.Server.WorldServer.Game.Effects.Instances
 			this.m_id = (short)effect.effectId;
 			this.m_template = Singleton<EffectManager>.Instance.GetTemplate(this.Id);
 			this.m_targets = (SpellTargetType)effect.targetId;
-			this.m_delay = effect.delay;
+            this.m_targetMask = effect.targetMask;
+            this.m_delay = effect.delay;
 			this.m_duration = effect.duration;
 			this.m_group = effect.group;
 			this.m_random = effect.random;
@@ -355,6 +372,7 @@ namespace Stump.Server.WorldServer.Game.Effects.Instances
 				zoneShape = (uint)this.ZoneShape
 			};
 		}
+
 		public byte[] Serialize()
 		{
 			System.IO.BinaryWriter binaryWriter = new System.IO.BinaryWriter(new System.IO.MemoryStream());
@@ -391,6 +409,7 @@ namespace Stump.Server.WorldServer.Game.Effects.Instances
 				}
 			}
 		}
+
 		internal void DeSerialize(byte[] buffer, ref int index)
 		{
 			System.IO.BinaryReader binaryReader = new System.IO.BinaryReader(new System.IO.MemoryStream(buffer, index, buffer.Length - index));
@@ -407,6 +426,7 @@ namespace Stump.Server.WorldServer.Game.Effects.Instances
 			else
 			{
 				this.m_targets = (SpellTargetType)reader.ReadInt32();
+                this.m_targetMask = reader.ReadString();
 				this.m_id = reader.ReadInt16();
 				this.m_duration = reader.ReadInt32();
 				this.m_delay = reader.ReadInt32();
@@ -418,6 +438,7 @@ namespace Stump.Server.WorldServer.Game.Effects.Instances
 				this.ParseRawZone(reader.ReadString());
 			}
 		}
+
 		public override bool Equals(object obj)
 		{
 			return !object.ReferenceEquals(null, obj) && (object.ReferenceEquals(this, obj) || (!(obj.GetType() != typeof(EffectBase)) && this.Equals((EffectBase)obj)));

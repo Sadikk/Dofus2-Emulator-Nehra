@@ -38,18 +38,13 @@ namespace Stump.Server.WorldServer.Game.Spells.Pandawa
             var casterState = Singleton<SpellManager>.Instance.GetSpellState(casterStateId);
             var targetState = Singleton<SpellManager>.Instance.GetSpellState(targetStateId);
 
-            StateBuff casterBuff = new StateBuff(id, target, this.Caster, effect, this.Spell, false, actionId, casterState);
+            StateBuff casterBuff = new StateBuff(id, this.Caster, this.Caster, effect, this.Spell, false, actionId, casterState);
             StateBuff targetBuff = new StateBuff(id, target, this.Caster, effect, this.Spell, false, actionId, targetState);
 
             this.Caster.AddAndApplyBuff(casterBuff);
             target.AddAndApplyBuff(targetBuff);
 
-            this.OnExecute(actionId, target);
             base.Execute();
-        }
-        private void OnExecute(short actionId, FightActor target)
-        {
-            this.Fight.Clients.Send(new GameActionFightCarryCharacterMessage((ushort)actionId, this.Caster.Id, target.Id, target.Cell.Id));
         }
     }
 }

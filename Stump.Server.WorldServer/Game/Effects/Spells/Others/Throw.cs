@@ -12,7 +12,7 @@ using Stump.Server.WorldServer.Game.Fights.Buffs;
 
 namespace Stump.Server.WorldServer.Game.Effects.Spells.Others
 {
-    [EffectHandler(EffectsEnum.Effect_Carry)]
+    [EffectHandler(EffectsEnum.Effect_Throw)]
     class Throw : SpellEffectHandler
     {
         public Throw(EffectDice effect, FightActor caster, Spell spell, Cell targetedCell, bool critical) : base(effect, caster, spell, targetedCell, critical)
@@ -22,14 +22,15 @@ namespace Stump.Server.WorldServer.Game.Effects.Spells.Others
         {
             if(this.Caster.Carrier == this.Caster && this.Caster.Carried != null)
             {
+                this.Applying();
                 this.Caster.Throw(this.TargetedCell);
-                this.OnApply();
                 return true;
             }
             return false;
         }
-        private void OnApply()
+        private void Applying()
         {
+            this.Fight.Clients.Send(new GameActionFightThrowCharacterMessage((ushort)ActionsEnum.ACTION_THROW_CARRIED_CHARACTER, this.Caster.Id, this.Caster.Carried.Id, this.TargetedCell.Id));
         }
     }
 }

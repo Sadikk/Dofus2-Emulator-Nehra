@@ -31,6 +31,7 @@ using Stump.Server.WorldServer.Handlers.Context;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Stump.Server.WorldServer.Game.Maps.Pathfinding;
 
 namespace Stump.Server.WorldServer.Game.Actors.Fight
 {
@@ -234,7 +235,6 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
             this.VisibleState = GameActionFightInvisibilityStateEnum.VISIBLE;
             this.Loot = new Stump.Server.WorldServer.Game.Fights.Results.FightLoot();
             this.SpellHistory = new SpellHistory(this);
-
             this._waitTime = null;
         }
 
@@ -429,8 +429,16 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
 				mpUsed(this, amount);
 			}
 		}
+        protected override void OnStartMoving(Path path)
+        {
+            if(this.Carried == this)
+            {
 
-		public abstract Spell GetSpell(int id);
+            }
+            base.OnStartMoving(path);
+        }
+
+        public abstract Spell GetSpell(int id);
 		public abstract bool HasSpell(int id);
 		public void ToggleReady(bool ready)
 		{
@@ -1342,8 +1350,10 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
 			System.Collections.Generic.List<Buff> list = (
 				from buff in this.m_buffList
 				where buff.Caster == caster
+                where buff.Duration != -1
 				where buff.DecrementDuration()
 				select buff).ToList<Buff>();
+
 			foreach (Buff current in list)
 			{
 				if (current is TriggerBuff && (current as TriggerBuff).Trigger.HasFlag(BuffTriggerType.BUFF_ENDED))

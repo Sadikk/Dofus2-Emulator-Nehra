@@ -1367,7 +1367,7 @@ namespace Stump.Server.WorldServer.Game.Fights
         protected virtual void OnBuffRemoved(FightActor target, Buff buff)
         {
             this.m_buffs.Remove(buff);
-            if (buff.Duration > 0)
+            if (buff.Duration > 0 || buff.Duration == -1)
             {
                 ActionsHandler.SendGameActionFightDispellEffectMessage(this.Clients, target, target, buff);
             }

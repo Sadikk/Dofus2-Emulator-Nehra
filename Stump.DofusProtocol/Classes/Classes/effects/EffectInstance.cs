@@ -25,12 +25,12 @@ using Stump.DofusProtocol.Tools.D2o;
 namespace Stump.DofusProtocol.Classes
 {
 
-[D2OClass("EffectInstance"), Serializable]
-    
-public class EffectInstance : IDataObject
-{
+    [D2OClass("EffectInstance"), Serializable]
 
-public uint effectUid;
+    public class EffectInstance : IDataObject
+    {
+
+        public uint effectUid;
         public uint effectId;
         public int targetId;
         public String targetMask;
@@ -51,8 +51,7 @@ public uint effectUid;
         public Object zoneMaxEfficiency;
         public Boolean rawZoneInit;
         public String rawZone;
-        
 
-}
 
+    }
 }
