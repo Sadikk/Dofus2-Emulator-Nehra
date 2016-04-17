@@ -46,7 +46,8 @@ namespace Stump.Server.AuthServer
         {
             ProviderName = "MySql.Data.MySqlClient",
             Host = "localhost",
-            DbName = "stump_auth",
+            Port = 3306,
+            DbName = "ubys_auth",
             User = "root",
             Password = ""
         };

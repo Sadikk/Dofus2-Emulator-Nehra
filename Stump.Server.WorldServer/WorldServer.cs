@@ -44,7 +44,8 @@ namespace Stump.Server.WorldServer
         public static DatabaseConfiguration DatabaseConfiguration = new DatabaseConfiguration
         {
             Host = "localhost",
-            DbName = "stump_world",
+            Port = 3306,
+            DbName = "ubys_world",
             User = "root",
             Password = "",
             ProviderName = "MySql.Data.MySqlClient"

@@ -10,9 +10,10 @@ namespace Stump.ORM
             
         }
 
-        public DatabaseConfiguration(string host, string user, string password, string dbName, string providerName)
+        public DatabaseConfiguration(string host, int port, string user, string password, string dbName, string providerName)
         {
             Host = host;
+            Port = port;
             User = user;
             Password = password;
             DbName = dbName;
@@ -43,6 +44,12 @@ namespace Stump.ORM
             set;
         }
 
+        public int Port
+        {
+            get;
+            set;
+        }
+
         public string ProviderName
         {
             get;
@@ -51,7 +58,7 @@ namespace Stump.ORM
 
         public string GetConnectionString()
         {
-            return string.Format("database={0};uid={1};password={2};server={3}", DbName, User, Password, Host);
+            return string.Format("database={0};uid={1};password={2};server={3};port={4}", DbName, User, Password, Host, Port);
         }
     }
 }
