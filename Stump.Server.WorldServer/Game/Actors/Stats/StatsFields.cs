@@ -145,7 +145,7 @@ namespace Stump.Server.WorldServer.Game.Actors.Stats
 			this.Fields.Add(PlayerFields.WaterDamageBonus, new StatsData(this.Owner, PlayerFields.WaterDamageBonus, 0, null));
 			this.Fields.Add(PlayerFields.AirDamageBonus, new StatsData(this.Owner, PlayerFields.AirDamageBonus, 0, null));
 			this.Fields.Add(PlayerFields.FireDamageBonus, new StatsData(this.Owner, PlayerFields.FireDamageBonus, 0, null));
-            Fields.Add(PlayerFields.GlyphBonusPercent, new StatsData(Owner, PlayerFields.GlyphBonusPercent, 0, null));
+            this.Fields.Add(PlayerFields.GlyphBonusPercent, new StatsData(Owner, PlayerFields.GlyphBonusPercent, 0, null)); //Maybe something wrong
 			this.Fields.Add(PlayerFields.DodgeAPProbability, new StatsData(this.Owner, PlayerFields.DodgeAPProbability, 0, StatsFields.FormulasWisdomDependant));
 			this.Fields.Add(PlayerFields.DodgeMPProbability, new StatsData(this.Owner, PlayerFields.DodgeMPProbability, 0, StatsFields.FormulasWisdomDependant));
 			this.Fields.Add(PlayerFields.NeutralResistPercent, new StatsData(this.Owner, PlayerFields.NeutralResistPercent, 0, null));
@@ -182,6 +182,7 @@ namespace Stump.Server.WorldServer.Game.Actors.Stats
 			this.Fields.Add(PlayerFields.AirDamageArmor, new StatsData(this.Owner, PlayerFields.AirDamageArmor, 0, null));
 			this.Fields.Add(PlayerFields.FireDamageArmor, new StatsData(this.Owner, PlayerFields.FireDamageArmor, 0, null));
 			this.Fields.Add(PlayerFields.Erosion, new StatsData(this.Owner, PlayerFields.Erosion, 10, null));
+            this.Fields.Add(PlayerFields.Shield, new StatsData(this.Owner, PlayerFields.Shield, 0, null));
 		}
 		public void Initialize(MonsterGrade record)
 		{
