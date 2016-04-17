@@ -62,8 +62,6 @@ namespace Stump.Server.WorldServer.Game.Effects.Spells.Debuffs
 					case EffectsEnum.Effect_SubVitality:
 					case EffectsEnum.Effect_IncreaseWeight:
 					case EffectsEnum.Effect_DecreaseWeight:
-					case EffectsEnum.Effect_IncreaseAPAvoid:
-					case EffectsEnum.Effect_IncreaseMPAvoid:
 						break;
 					case EffectsEnum.Effect_SubAgility:
 					{

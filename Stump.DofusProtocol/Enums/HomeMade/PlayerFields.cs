@@ -72,6 +72,7 @@ namespace Stump.DofusProtocol.Enums
         AirDamageArmor = 68,
         FireDamageArmor = 69,
         Erosion = 70,
-        GlyphBonusPercent = 71,
+        Shield = 71,
+        GlyphBonusPercent = 72,
     }
 }

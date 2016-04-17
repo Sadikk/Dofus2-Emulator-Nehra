@@ -107,8 +107,6 @@ namespace Stump.Server.WorldServer.AI.Fights.Spells
 					case EffectsEnum.Effect_AddPhysicalDamage_137:
 					case EffectsEnum.Effect_AddPhysicalDamage_142:
 					case EffectsEnum.Effect_Invisibility:
-					case EffectsEnum.Effect_IncreaseAPAvoid:
-					case EffectsEnum.Effect_IncreaseMPAvoid:
 					case EffectsEnum.Effect_AddGlobalDamageReduction:
 					case EffectsEnum.Effect_AddDamageBonusPercent:
 					case EffectsEnum.Effect_AddProspecting:
@@ -184,17 +182,10 @@ namespace Stump.Server.WorldServer.AI.Fights.Spells
 					case (EffectsEnum)207:
 					case (EffectsEnum)208:
 					case (EffectsEnum)209:
-					case EffectsEnum.Effect_220:
-					case EffectsEnum.Effect_221:
-					case EffectsEnum.Effect_222:
 					case (EffectsEnum)223:
 					case (EffectsEnum)224:
-					case EffectsEnum.Effect_AddTrapBonus:
-					case EffectsEnum.Effect_AddTrapBonusPercent:
 					case (EffectsEnum)227:
 					case (EffectsEnum)228:
-					case EffectsEnum.Effect_229:
-					case EffectsEnum.Effect_230:
 					case (EffectsEnum)231:
 					case (EffectsEnum)232:
 					case (EffectsEnum)233:
@@ -271,8 +262,6 @@ namespace Stump.Server.WorldServer.AI.Fights.Spells
 				{
 					switch (effectId)
 					{
-					case EffectsEnum.Effect_411:
-					case EffectsEnum.Effect_413:
 					case EffectsEnum.Effect_SubPushDamageReduction:
 					case EffectsEnum.Effect_SubCriticalDamageBonus:
 					case EffectsEnum.Effect_SubCriticalDamageReduction:
@@ -284,7 +273,6 @@ namespace Stump.Server.WorldServer.AI.Fights.Spells
 					case EffectsEnum.Effect_StealAP_440:
 					case EffectsEnum.Effect_StealMP_441:
 						goto IL_47A;
-					case EffectsEnum.Effect_412:
 					case EffectsEnum.Effect_SubPushDamageBonus:
 					case (EffectsEnum)432:
 					case (EffectsEnum)433:

@@ -658,131 +658,131 @@ namespace Stump.Server.WorldServer.Game.Effects.Handlers.Items
 				new DefaultItemEffect.EffectComputeHandler(DefaultItemEffect.SubMagicDamageReduction)
 			}
 		};
-		private static readonly System.Collections.Generic.Dictionary<EffectsEnum, PlayerFields> m_addEffectsBinds = new System.Collections.Generic.Dictionary<EffectsEnum, PlayerFields>
-		{
+        private static readonly System.Collections.Generic.Dictionary<EffectsEnum, PlayerFields> m_addEffectsBinds = new System.Collections.Generic.Dictionary<EffectsEnum, PlayerFields>
+        {
 
-			{
-				EffectsEnum.Effect_AddHealth,
-				PlayerFields.Health
-			},
+            {
+                EffectsEnum.Effect_AddHealth,
+                PlayerFields.Health
+            },
 
-			{
-				EffectsEnum.Effect_AddInitiative,
-				PlayerFields.Initiative
-			},
+            {
+                EffectsEnum.Effect_AddInitiative,
+                PlayerFields.Initiative
+            },
 
-			{
-				EffectsEnum.Effect_AddProspecting,
-				PlayerFields.Prospecting
-			},
+            {
+                EffectsEnum.Effect_AddProspecting,
+                PlayerFields.Prospecting
+            },
 
-			{
-				EffectsEnum.Effect_AddAP_111,
-				PlayerFields.AP
-			},
+            {
+                EffectsEnum.Effect_AddAP_111,
+                PlayerFields.AP
+            },
 
-			{
-				EffectsEnum.Effect_RegainAP,
-				PlayerFields.AP
-			},
+            {
+                EffectsEnum.Effect_RegainAP,
+                PlayerFields.AP
+            },
 
-			{
-				EffectsEnum.Effect_AddMP,
-				PlayerFields.MP
-			},
+            {
+                EffectsEnum.Effect_AddMP,
+                PlayerFields.MP
+            },
 
-			{
-				EffectsEnum.Effect_AddMP_128,
-				PlayerFields.MP
-			},
+            {
+                EffectsEnum.Effect_AddMP_128,
+                PlayerFields.MP
+            },
 
-			{
-				EffectsEnum.Effect_AddStrength,
-				PlayerFields.Strength
-			},
+            {
+                EffectsEnum.Effect_AddStrength,
+                PlayerFields.Strength
+            },
 
-			{
-				EffectsEnum.Effect_AddVitality,
-				PlayerFields.Vitality
-			},
+            {
+                EffectsEnum.Effect_AddVitality,
+                PlayerFields.Vitality
+            },
 
-			{
-				EffectsEnum.Effect_AddWisdom,
-				PlayerFields.Wisdom
-			},
+            {
+                EffectsEnum.Effect_AddWisdom,
+                PlayerFields.Wisdom
+            },
 
-			{
-				EffectsEnum.Effect_AddChance,
-				PlayerFields.Chance
-			},
+            {
+                EffectsEnum.Effect_AddChance,
+                PlayerFields.Chance
+            },
 
-			{
-				EffectsEnum.Effect_AddAgility,
-				PlayerFields.Agility
-			},
+            {
+                EffectsEnum.Effect_AddAgility,
+                PlayerFields.Agility
+            },
 
-			{
-				EffectsEnum.Effect_AddIntelligence,
-				PlayerFields.Intelligence
-			},
+            {
+                EffectsEnum.Effect_AddIntelligence,
+                PlayerFields.Intelligence
+            },
 
-			{
-				EffectsEnum.Effect_AddRange,
-				PlayerFields.Range
-			},
+            {
+                EffectsEnum.Effect_AddRange,
+                PlayerFields.Range
+            },
 
-			{
-				EffectsEnum.Effect_AddSummonLimit,
-				PlayerFields.SummonLimit
-			},
+            {
+                EffectsEnum.Effect_AddSummonLimit,
+                PlayerFields.SummonLimit
+            },
 
-			{
-				EffectsEnum.Effect_AddDamageReflection,
-				PlayerFields.DamageReflection
-			},
+            {
+                EffectsEnum.Effect_AddDamageReflection,
+                PlayerFields.DamageReflection
+            },
 
-			{
-				EffectsEnum.Effect_AddCriticalHit,
-				PlayerFields.CriticalHit
-			},
+            {
+                EffectsEnum.Effect_AddCriticalHit,
+                PlayerFields.CriticalHit
+            },
 
-			{
-				EffectsEnum.Effect_AddCriticalMiss,
-				PlayerFields.CriticalMiss
-			},
+            {
+                EffectsEnum.Effect_AddCriticalMiss,
+                PlayerFields.CriticalMiss
+            },
 
-			{
-				EffectsEnum.Effect_AddHealBonus,
-				PlayerFields.HealBonus
-			},
+            {
+                EffectsEnum.Effect_AddHealBonus,
+                PlayerFields.HealBonus
+            },
 
-			{
-				EffectsEnum.Effect_AddDamageBonus,
-				PlayerFields.DamageBonus
-			},
+            {
+                EffectsEnum.Effect_AddDamageBonus,
+                PlayerFields.DamageBonus
+            },
 
-			{
-				EffectsEnum.Effect_AddDamageBonus_121,
-				PlayerFields.DamageBonus
-			},
+            {
+                EffectsEnum.Effect_AddDamageBonus_121,
+                PlayerFields.DamageBonus
+            },
 
-			{
-				EffectsEnum.Effect_IncreaseDamage_138,
-				PlayerFields.DamageBonusPercent
-			},
+            {
+                EffectsEnum.Effect_IncreaseDamage_138,
+                PlayerFields.DamageBonusPercent
+            },
 
-			{
-				EffectsEnum.Effect_AddDamageBonusPercent,
-				PlayerFields.DamageBonusPercent
-			},
+            {
+                EffectsEnum.Effect_AddDamageBonusPercent,
+                PlayerFields.DamageBonusPercent
+            },
 
-			{
-				EffectsEnum.Effect_AddTrapBonus,
-				PlayerFields.TrapBonus
-			},
+            {
+                EffectsEnum.Effect_AddTrapBonus,
+                PlayerFields.TrapBonus
+            },
 
-			{
-				EffectsEnum.Effect_AddTrapBonusPercent,
+            {
+                EffectsEnum.Effect_AddTrapGeneralBonusPercent,
 				PlayerFields.TrapBonusPercent
 			},
 

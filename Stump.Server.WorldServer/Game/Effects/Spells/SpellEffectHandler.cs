@@ -13,6 +13,7 @@ using Stump.Server.WorldServer.Game.Maps;
 using Stump.Server.WorldServer.Game.Maps.Cells;
 using Stump.Server.WorldServer.Game.Maps.Cells.Shapes;
 using Stump.Server.WorldServer.Game.Spells;
+using Stump.DofusProtocol.Enums.HomeMade;
 
 namespace Stump.Server.WorldServer.Game.Effects.Spells
 {
@@ -134,6 +135,7 @@ namespace Stump.Server.WorldServer.Game.Effects.Spells
 				return this.Fight.Map;
 			}
 		}
+
 		protected SpellEffectHandler(EffectDice effect, FightActor caster, Spell spell, Cell targetedCell, bool critical) : base(effect)
 		{
 			this.Dice = effect;
@@ -297,7 +299,14 @@ namespace Stump.Server.WorldServer.Game.Effects.Spells
 			target.AddAndApplyBuff(statBuff, true);
 			return statBuff;
 		}
-		public TriggerBuff AddTriggerBuff(FightActor target, bool dispelable, BuffTriggerType trigger, TriggerBuffApplyHandler applyTrigger)
+        public StatBuff AddStatBuff(FightActor target, short value, PlayerFields caracteritic, bool dispelable, CustomActionsEnum customAction)
+        {
+            int id = target.PopNextBuffId();
+            StatBuff statBuff = new StatBuff(id, target, this.Caster, this.Effect, this.Spell, value, caracteritic, this.Critical, dispelable, (short)customAction);
+            target.AddAndApplyBuff(statBuff, true);
+            return statBuff;
+        }
+        public TriggerBuff AddTriggerBuff(FightActor target, bool dispelable, BuffTriggerType trigger, TriggerBuffApplyHandler applyTrigger)
 		{
 			int id = target.PopNextBuffId();
 			TriggerBuff triggerBuff = new TriggerBuff(id, target, this.Caster, this.Dice, this.Spell, this.Critical, dispelable, trigger, applyTrigger);

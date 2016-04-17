@@ -138,6 +138,8 @@
     <Compile Include="Game\Challenges\Checkers\UnwillingVolunteerChallenge.cs" />
     <Compile Include="Game\Challenges\Checkers\ZombieChallenge.cs" />
     <Compile Include="Game\Dialogs\Prisms\PrismInfoDialog.cs" />
+    <Compile Include="Game\Effects\Spells\Shield\ShieldBuff.cs" />
+    <Compile Include="Game\Effects\Spells\Shield\ShieldPercentBuff.cs" />
     <Compile Include="Game\Effects\Spells\Summon\SummonBomb.cs" />
     <Compile Include="Game\Fights\Triggers\BombWall.cs" />
     <Compile Include="Game\Maps\Cells\Shapes\Circle.cs" />
