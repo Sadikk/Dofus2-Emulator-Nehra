@@ -240,39 +240,39 @@ namespace Stump.Server.WorldServer.Game.Maps.Cells
 		}
         public IEnumerable<MapPoint> GetCellsInLine(MapPoint destination)
         {
-            int iteratorVariable0 = Math.Abs((int)(destination.X - this.X));
-            int iteratorVariable1 = Math.Abs((int)(destination.Y - this.Y));
+            int dx = Math.Abs((int)(destination.X - this.X));
+            int dy = Math.Abs((int)(destination.Y - this.Y));
             int x = this.X;
             int y = this.Y;
-            int iteratorVariable4 = (1 + iteratorVariable0) + iteratorVariable1;
-            int iteratorVariable5 = (destination.X > this.X) ? 1 : -1;
-            int iteratorVariable6 = (destination.Y > this.Y) ? 1 : -1;
-            int iteratorVariable7 = iteratorVariable0 - iteratorVariable1;
-            iteratorVariable0 *= 2;
-            iteratorVariable1 *= 2;
-            while (iteratorVariable4 > 0)
+            int n = (1 + dx) + dy;
+            int vectorX = (destination.X > this.X) ? 1 : -1;
+            int vectorY = (destination.Y > this.Y) ? 1 : -1;
+            int error = dx - dy;
+            dx *= 2;
+            dy *= 2;
+            while (n > 0)
             {
                 yield return GetPoint(x, y);
-                if (iteratorVariable7 <= 0)
+                if (error <= 0)
                 {
-                    if (iteratorVariable7 == 0)
+                    if (error == 0)
                     {
-                        x += iteratorVariable5;
-                        y += iteratorVariable6;
-                        iteratorVariable4--;
+                        x += vectorX;
+                        y += vectorY;
+                        n--;
                     }
                     else
                     {
-                        y += iteratorVariable6;
-                        iteratorVariable7 += iteratorVariable0;
+                        y += vectorY;
+                        error += dx;
                     }
                 }
                 else
                 {
-                    x += iteratorVariable5;
-                    iteratorVariable7 -= iteratorVariable1;
+                    x += vectorX;
+                    error -= dy;
                 }
-                iteratorVariable4--;
+                n--;
             }
         }
 
@@ -356,6 +356,19 @@ namespace Stump.Server.WorldServer.Game.Maps.Cells
 		{
 			return x + y >= 0 && x - y >= 0 && (long)(x - y) < 40L && (long)(x + y) < 28L;
 		}
+
+        /// <summary>
+        /// Returns the symetric cell from a cell using this point as symmetric center
+        /// </summary>
+        /// <param name="from">Target cell</param>
+        /// <returns>The symmetric cell</returns>
+        public MapPoint GetSymmetricCell(MapPoint from)
+        {
+            int x = this.X - (from.X - this.X);
+            int y = this.Y - (from.Y - this.Y);
+            return new MapPoint(x, y);
+        }
+
 		public static uint CoordToCellId(int x, int y)
 		{
 			if (!MapPoint.m_initialized)

@@ -82,7 +82,13 @@ namespace Stump.Server.WorldServer.Game.Spells.Casts
 			SpellEffectHandler[] handlers = this.Handlers;
 			for (int i = 0; i < handlers.Length; i++)
 			{
+                
 				SpellEffectHandler spellEffectHandler = handlers[i];
+                if (spellEffectHandler is DefaultSpellEffect)
+                {
+                    string dump = string.Format("{0}[{1}] : EffectId = {2} ; Target = {3} ; AffectedCells = {4} \n", this.Spell.Template.Name, i, spellEffectHandler.Effect.EffectId, spellEffectHandler.Targets.ToString(), string.Join("/", spellEffectHandler.AffectedCells.Select(x => x.Id)));
+                    System.IO.File.AppendAllText("spell_effects.txt", dump);
+                }
 				spellEffectHandler.Apply();
 			}
 		}

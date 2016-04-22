@@ -49,6 +49,9 @@
   <PropertyGroup>
     <RootNamespace>Stump.Server.WorldServer</RootNamespace>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="MongoDB.Bson">
       <HintPath>..\packages\MongoDB.Bson.dll</HintPath>
@@ -138,6 +141,10 @@
     <Compile Include="Game\Challenges\Checkers\UnwillingVolunteerChallenge.cs" />
     <Compile Include="Game\Challenges\Checkers\ZombieChallenge.cs" />
     <Compile Include="Game\Dialogs\Prisms\PrismInfoDialog.cs" />
+    <Compile Include="Game\Effects\Spells\Move\SymmetricTPCaster.cs" />
+    <Compile Include="Game\Effects\Spells\Move\SymmetricTPCenter.cs" />
+    <Compile Include="Game\Effects\Spells\Move\SymmetricTPTarget.cs" />
+    <Compile Include="Game\Effects\Spells\Move\TPPreviousPosition.cs" />
     <Compile Include="Game\Effects\Spells\Others\Carry.cs" />
     <Compile Include="Game\Effects\Spells\Others\Throw.cs" />
     <Compile Include="Game\Effects\Spells\Shield\ShieldBuff.cs" />

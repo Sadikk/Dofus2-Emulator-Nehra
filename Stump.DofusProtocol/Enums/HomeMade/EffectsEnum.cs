@@ -1965,7 +1965,7 @@ namespace Stump.DofusProtocol.Enums
         /// <summary>
         ///Teleports to previous position
         /// </summary>
-        Effect_1100 = 1100,
+        Effect_TPPreviousPosition = 1100,
         /// <summary>
         ///Null Text
         /// </summary>
@@ -1981,15 +1981,15 @@ namespace Stump.DofusProtocol.Enums
         /// <summary>
         ///Teleports the caster to the other side of the target
         /// </summary>
-        Effect_1104 = 1104,
+        Effect_SymmetricTPTarget = 1104,
         /// <summary>
         ///Teleports the target to the other side of the caster
         /// </summary>
-        Effect_1105 = 1105,
+        Effect_SymmetricTPCaster = 1105,
         /// <summary>
         ///Symmetric teleportation
         /// </summary>
-        Effect_SymmetricTp = 1106,
+        Effect_SymmetricTPCenter = 1106,
         /// <summary>
         ///Rename the guild
         /// </summary>
