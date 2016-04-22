@@ -143,6 +143,6 @@
         Corselet,
         Barmy,
         Entangled,
-        Hasty
+        Hasty,
     }
 }

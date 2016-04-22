@@ -226,7 +226,37 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
             get;
             private set;
         }
-        
+        public bool IsCarrying
+        {
+            get
+            {
+                return (this.Carrier == this);
+            }
+        }
+        public bool IsCarried
+        {
+            get
+            {
+                return (this.Carried == this);
+            }
+        }
+        public override ObjectPosition Position
+        {
+            get
+            {
+                return base.Position;
+            }
+
+            protected set
+            {
+                base.Position = value;
+                if(this.IsCarrying)
+                {
+                    this.Carried.Position = value;
+                }
+            }
+        }
+
         // CONSTRUCTORS
         protected FightActor(FightTeam team)
         {
@@ -429,11 +459,19 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
 				mpUsed(this, amount);
 			}
 		}
+        protected virtual void OnStopCarried()
+        {
+            this.Carried.Carrier = null;
+            this.Carried.Carried = null;
+            this.Carrier.Carried = null;
+            this.Carrier.Carrier = null;
+        }
         protected override void OnStartMoving(Path path)
         {
-            if(this.Carried == this)
+            if(this.IsCarried)
             {
-
+                this.Position.Cell = path.SecondCell;
+                this.StopCarry();
             }
             base.OnStartMoving(path);
         }
@@ -764,7 +802,6 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
 			}
 			return result;
 		}
-
         public virtual bool ForceCastSpell(Spell spell, Cell cell)
         {
             bool result;
@@ -1509,6 +1546,14 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
 
             this.Carrier = null;
             this.Carried = null;
+        }
+        public void StopCarry()
+        {
+            var buff = this.GetBuffs().Where((x) => x.Spell.Id == (int)SpellIdEnum.Karcham).First();
+            this.Carrier.RemoveAndDispellBuff(buff);
+            this.Carried.RemoveAndDispellBuff(buff);
+
+            this.OnStopCarried();
         }
 
 	    public IEnumerable<BombFighter> BombsOfType(Database.Monsters.MonsterTemplate monsterTemplate)

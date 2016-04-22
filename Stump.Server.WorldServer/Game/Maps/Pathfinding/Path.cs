@@ -29,6 +29,13 @@ namespace Stump.Server.WorldServer.Game.Maps.Pathfinding
 				return this.m_cellsPath[this.m_cellsPath.Length - 1];
 			}
 		}
+        public Cell SecondCell
+        {
+            get
+            {
+                return this.m_cellsPath[1];
+            }
+        }
 		public ObjectPosition EndPathPosition
 		{
 			get

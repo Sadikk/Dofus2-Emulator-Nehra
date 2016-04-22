@@ -22,7 +22,7 @@ namespace Stump.Server.WorldServer.Game.Spells.Pandawa
         {
             if (this.Caster.Carrier != null && this.Caster.Carrier == this.Caster && this.Caster.Carried != null)
             {
-                var buff = this.Caster.GetBuffs().Where((x) => x.Spell.Id == (int)SpellIdEnum.Karcham).FirstOrDefault();
+                var buff = this.Caster.GetBuffs().Where((x) => x.Spell.Id == (int)SpellIdEnum.Karcham).First();
                 var target = this.Caster.Carried;
 
                 this.Caster.RemoveAndDispellBuff(buff);

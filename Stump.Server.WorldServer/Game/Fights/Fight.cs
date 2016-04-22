@@ -1208,7 +1208,7 @@ namespace Stump.Server.WorldServer.Game.Fights
                 Cell[] path2 = path.GetPath();
                 if (fighter != null)
                 {
-                    List<short> fighterCells = (
+                    List<short> opponentsCells = (
                         from entry in fighter.OpposedTeam.GetAllFighters((FightActor entry) => entry.IsAlive() && entry.IsVisibleFor(fighter))
                         select entry.Cell.Id).ToList<short>();
                     List<short> list = (
@@ -1224,7 +1224,7 @@ namespace Stump.Server.WorldServer.Game.Fights
                         bool arg_223_0;
                         if (i > 0 && fighter is CharacterFighter && fighter.VisibleState == GameActionFightInvisibilityStateEnum.VISIBLE)
                         {
-                            arg_223_0 = !new MapPoint(path2[i]).GetAdjacentCells((short entry) => true).Any((MapPoint entry) => fighterCells.Contains(entry.CellId));
+                            arg_223_0 = !new MapPoint(path2[i]).GetAdjacentCells((short entry) => true).Any((MapPoint entry) => opponentsCells.Contains(entry.CellId));
                         }
                         else
                         {
@@ -1237,12 +1237,19 @@ namespace Stump.Server.WorldServer.Game.Fights
                         }
                         if (list.Contains(path2[i].Id))
                         {
-                            if (character != null)
+                            if (actor is FightActor)
                             {
-                                character.SendInformationMessage(TextInformationTypeEnum.TEXT_INFORMATION_ERROR, 276, new object[0]);
+                                var caster = actor as FightActor;
+                                if (!caster.IsCarrying)
+                                {
+                                    if (character != null)
+                                    {
+                                        character.SendInformationMessage(TextInformationTypeEnum.TEXT_INFORMATION_ERROR, 276, new object[0]);
+                                    }
+                                    path.CutPath(i);
+                                    break;
+                                }
                             }
-                            path.CutPath(i);
-                            break;
                         }
                     }
                 }
@@ -1773,7 +1780,15 @@ namespace Stump.Server.WorldServer.Game.Fights
 
         public FightActor GetOneFighter(Cell cell)
         {
-            return this.Fighters.SingleOrDefault((FightActor entry) => entry.IsAlive() && Equals(entry.Cell, cell));
+            var carrier = this.Fighters.Where((FightActor entry) => entry.IsCarrying && entry.Cell.Id == cell.Id).FirstOrDefault();
+            if(carrier == null)
+            {
+                return this.Fighters.SingleOrDefault((FightActor entry) => entry.IsAlive() && Equals(entry.Cell, cell));
+            }
+            else
+            {
+                return carrier;
+            }
         }
 
         public FightActor GetOneFighter(Predicate<FightActor> predicate)
