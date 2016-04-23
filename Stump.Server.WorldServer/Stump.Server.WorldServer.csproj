@@ -141,9 +141,9 @@
     <Compile Include="Game\Challenges\Checkers\UnwillingVolunteerChallenge.cs" />
     <Compile Include="Game\Challenges\Checkers\ZombieChallenge.cs" />
     <Compile Include="Game\Dialogs\Prisms\PrismInfoDialog.cs" />
-    <Compile Include="Game\Effects\Spells\Move\SymmetricTPCaster.cs" />
-    <Compile Include="Game\Effects\Spells\Move\SymmetricTPCenter.cs" />
-    <Compile Include="Game\Effects\Spells\Move\SymmetricTPTarget.cs" />
+    <Compile Include="Game\Effects\Spells\Move\SymmetricTeleportCaster.cs" />
+    <Compile Include="Game\Effects\Spells\Move\SymmetricTeleportCenter.cs" />
+    <Compile Include="Game\Effects\Spells\Move\SymmetricTeleportTarget.cs" />
     <Compile Include="Game\Effects\Spells\Move\TPPreviousPosition.cs" />
     <Compile Include="Game\Effects\Spells\Others\Carry.cs" />
     <Compile Include="Game\Effects\Spells\Others\Throw.cs" />

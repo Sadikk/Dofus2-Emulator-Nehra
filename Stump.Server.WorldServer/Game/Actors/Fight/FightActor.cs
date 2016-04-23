@@ -32,6 +32,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Stump.Server.WorldServer.Game.Maps.Pathfinding;
+using Stump.DofusProtocol.Enums.HomeMade;
 
 namespace Stump.Server.WorldServer.Game.Actors.Fight
 {
@@ -1585,6 +1586,22 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
 		{
 			return this.m_states.Any((SpellState entry) => entry.PreventsFight);
 		}
+        public void AddTelefragState(FightActor source, Spell spell)
+        {
+            var id = this.PopNextBuffId();
+            var effect = new EffectBase { Duration = -1 };
+            var stateId = (uint)SpellStatesEnum.Telefrag;
+            var state = Singleton<SpellManager>.Instance.GetSpellState(stateId);
+
+            StateBuff casterBuff = new StateBuff(id, source, this, effect, spell, false, state);
+            this.AddAndApplyBuff(casterBuff);
+        }
+        public void RemoveTelefragState()
+        {
+            var buff = this.GetBuffs().Where((x) => x.Id == (int)SpellStatesEnum.Telefrag).FirstOrDefault();
+            if (buff != null)
+                this.RemoveAndDispellBuff(buff);
+        }
 		public void SetInvisibilityState(GameActionFightInvisibilityStateEnum state)
 		{
 			GameActionFightInvisibilityStateEnum visibleState = this.VisibleState;

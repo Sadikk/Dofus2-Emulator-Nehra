@@ -7,6 +7,7 @@ using Stump.Server.WorldServer.Game.Effects.Instances;
 using Stump.Server.WorldServer.Game.Spells;
 using Stump.Server.WorldServer.Handlers.Actions;
 using Stump.Server.WorldServer.Game.Maps.Cells;
+using Stump.DofusProtocol.Enums.HomeMade;
 
 namespace Stump.Server.WorldServer.Game.Effects.Spells.Move
 {
@@ -19,11 +20,11 @@ namespace Stump.Server.WorldServer.Game.Effects.Spells.Move
         public override bool Apply()
         {
             //symmetric tp from the center of the cell ex: temporal dust
-            //todo : it applies only when the target has the state "Telefrag"
+            //it applies only when the target has the state "Telefrag"
             foreach (FightActor fightActor in base.GetAffectedActors())
             {
                 
-                if (fightActor != null)
+                if (fightActor != null && fightActor.HasState((int)SpellStatesEnum.Telefrag))
                 {
                     MapPoint destPoint = new MapPoint(base.TargetedCell).GetSymmetricCell(fightActor.Position.Point);
                     Cell destCell = base.Caster.Map.GetCell(destPoint.CellId);
@@ -31,7 +32,8 @@ namespace Stump.Server.WorldServer.Game.Effects.Spells.Move
                     if (oldFighter != null)
                     {
                         //if there was a fighter on the cell we are going to tp on, we need to move him at our old position
-                        //todo add telefrag state 
+                        oldFighter.AddTelefragState(base.Caster, base.Spell);
+                        base.Caster.AddTelefragState(base.Caster, base.Spell);
                         oldFighter.Position.Cell = fightActor.Position.Cell;
                         ActionsHandler.SendGameActionFightTeleportOnSameMapMessage(base.Fight.Clients, base.Caster, oldFighter, fightActor.Position.Cell);
                     }
