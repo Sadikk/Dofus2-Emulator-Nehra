@@ -1893,7 +1893,7 @@ namespace Stump.DofusProtocol.Enums
         /// <summary>
         ///-#1{~1~2 to -}#2 AP
         /// </summary>
-        Effect_SubAp_1079 = 1079,
+        Effect_SubAPTelefrag = 1079,
         /// <summary>
         ///-#1{~1~2 to -}#2 MP
         /// </summary>

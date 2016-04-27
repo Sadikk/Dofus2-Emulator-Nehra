@@ -250,13 +250,22 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
 
             protected set
             {
+                this.PreviousPosition = base.Position;
                 base.Position = value;
                 if(this.IsCarrying)
                 {
                     this.Carried.Position = value;
                 }
+                
             }
         }
+        public ObjectPosition PreviousPosition
+        {
+            get;
+            private set;
+        }
+
+
 
         // CONSTRUCTORS
         protected FightActor(FightTeam team)
@@ -1593,7 +1602,7 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
             var stateId = (uint)SpellStatesEnum.Telefrag;
             var state = Singleton<SpellManager>.Instance.GetSpellState(stateId);
 
-            StateBuff casterBuff = new StateBuff(id, source, this, effect, spell, false, state);
+            StateBuff casterBuff = new StateBuff(id, this , source, effect, spell, false, state);
             this.AddAndApplyBuff(casterBuff);
         }
         public void RemoveTelefragState()

@@ -29,7 +29,7 @@ namespace Stump.Server.WorldServer.Game.Effects.Spells.Move
                 {
                     //if there was a fighter on the cell we are going to tp on, we need to move him at our old position
                     oldFighter.AddTelefragState(base.Caster, base.Spell);
-                    base.Caster.AddTelefragState(base.Caster, base.Spell);
+                    fightActor.AddTelefragState(base.Caster, base.Spell);
                     oldFighter.Position.Cell = fightActor.Position.Cell;
                     ActionsHandler.SendGameActionFightTeleportOnSameMapMessage(base.Fight.Clients, base.Caster, oldFighter, fightActor.Position.Cell);
                 }

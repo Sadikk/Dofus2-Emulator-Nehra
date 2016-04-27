@@ -23,7 +23,7 @@ namespace Stump.Server.WorldServer.Game.Effects.Spells.Move
             //it applies only when the target has the state "Telefrag"
             foreach (FightActor fightActor in base.GetAffectedActors())
             {
-                
+                //todo caster is not in get affected actors ??
                 if (fightActor != null && fightActor.HasState((int)SpellStatesEnum.Telefrag))
                 {
                     MapPoint destPoint = new MapPoint(base.TargetedCell).GetSymmetricCell(fightActor.Position.Point);
