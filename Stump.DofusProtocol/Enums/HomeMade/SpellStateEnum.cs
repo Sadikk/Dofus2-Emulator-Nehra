@@ -144,5 +144,6 @@
         Barmy,
         Entangled,
         Hasty,
+        Telefrag = 244,
     }
 }

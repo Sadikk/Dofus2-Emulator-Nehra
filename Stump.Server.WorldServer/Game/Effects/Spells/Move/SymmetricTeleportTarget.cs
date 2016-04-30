@@ -11,9 +11,9 @@ using Stump.Server.WorldServer.Game.Maps.Cells;
 namespace Stump.Server.WorldServer.Game.Effects.Spells.Move
 {
     [EffectHandler(EffectsEnum.Effect_SymmetricTPTarget)]
-    public class SymmetricTPTarget : SpellEffectHandler
+    public class SymmetricTeleportTarget : SpellEffectHandler
     {
-        public SymmetricTPTarget(EffectDice effect, FightActor caster, Spell spell, Cell targetedCell, bool critical) : base(effect, caster, spell, targetedCell, critical)
+        public SymmetricTeleportTarget(EffectDice effect, FightActor caster, Spell spell, Cell targetedCell, bool critical) : base(effect, caster, spell, targetedCell, critical)
         {
         }
         public override bool Apply()
@@ -28,8 +28,9 @@ namespace Stump.Server.WorldServer.Game.Effects.Spells.Move
                 if (oldFighter != null)
                 {
                     //if there was a fighter on the cell we are going to tp on, we need to move him at our old position
-                    //todo add telefrag state 
                     oldFighter.Position.Cell = base.Caster.Position.Cell;
+                    oldFighter.AddTelefragState(base.Caster, base.Spell);
+                    base.Caster.AddTelefragState(base.Caster, base.Spell);
                     ActionsHandler.SendGameActionFightTeleportOnSameMapMessage(base.Fight.Clients, base.Caster, oldFighter, base.Caster.Cell);
                 }
                 // not sure if it is the right client !! todo : check

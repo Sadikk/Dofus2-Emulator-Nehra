@@ -84,7 +84,7 @@ namespace Stump.Server.WorldServer.Game.Spells.Casts
 			{
                 
 				SpellEffectHandler spellEffectHandler = handlers[i];
-                if (spellEffectHandler is DefaultSpellEffect)
+                if (spellEffectHandler is DefaultSpellEffect && (int)spellEffectHandler.Effect.EffectId != 1160)
                 {
                     string dump = string.Format("{0}[{1}] : EffectId = {2} ; Target = {3} ; AffectedCells = {4} \n", this.Spell.Template.Name, i, spellEffectHandler.Effect.EffectId, spellEffectHandler.Targets.ToString(), string.Join("/", spellEffectHandler.AffectedCells.Select(x => x.Id)));
                     System.IO.File.AppendAllText("spell_effects.txt", dump);

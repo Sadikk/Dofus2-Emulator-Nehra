@@ -141,9 +141,10 @@
     <Compile Include="Game\Challenges\Checkers\UnwillingVolunteerChallenge.cs" />
     <Compile Include="Game\Challenges\Checkers\ZombieChallenge.cs" />
     <Compile Include="Game\Dialogs\Prisms\PrismInfoDialog.cs" />
-    <Compile Include="Game\Effects\Spells\Move\SymmetricTPCaster.cs" />
-    <Compile Include="Game\Effects\Spells\Move\SymmetricTPCenter.cs" />
-    <Compile Include="Game\Effects\Spells\Move\SymmetricTPTarget.cs" />
+    <Compile Include="Game\Effects\Spells\Debuffs\APDebuffTelefrag.cs" />
+    <Compile Include="Game\Effects\Spells\Move\SymmetricTeleportCaster.cs" />
+    <Compile Include="Game\Effects\Spells\Move\SymmetricTeleportCenter.cs" />
+    <Compile Include="Game\Effects\Spells\Move\SymmetricTeleportTarget.cs" />
     <Compile Include="Game\Effects\Spells\Move\TPPreviousPosition.cs" />
     <Compile Include="Game\Effects\Spells\Others\Carry.cs" />
     <Compile Include="Game\Effects\Spells\Others\Throw.cs" />
@@ -157,7 +158,16 @@
     <Compile Include="Game\Prisms\PrismNpc.cs" />
     <Compile Include="Game\Spells\Pandawa\ChamrakHandler.cs" />
     <Compile Include="Game\Spells\Pandawa\KarchamHandler.cs" />
+<<<<<<< HEAD
     <Compile Include="Game\Spells\Sadida\TreeHandler.cs" />
+=======
+    <Compile Include="Game\Spells\Xelor\ClockHandler.cs" />
+    <Compile Include="Game\Spells\Xelor\DarkRayHandler.cs" />
+    <Compile Include="Game\Spells\Xelor\HandHandler.cs" />
+    <Compile Include="Game\Spells\Xelor\LossOfMotivationHandler.cs" />
+    <Compile Include="Game\Spells\Xelor\TemporalDustHandler.cs" />
+    <Compile Include="Game\Spells\Xelor\XelorsPunchHandler.cs" />
+>>>>>>> f5dfa3b04eca84c222679bdd19357331fca8befd
     <Compile Include="Handlers\Achievements\AchievementHandler.cs" />
     <Compile Include="Handlers\Context\RolePlay\Arenas\ArenaHandler.cs" />
     <Compile Include="Handlers\Web\WebHandler.cs" />
