@@ -1,3 +1,5 @@
+using Stump.Core.Reflection;
+using Stump.Server.WorldServer.Database.I18n;
 using Stump.Server.WorldServer.Database.World;
 using Stump.Server.WorldServer.Game.Fights.Teams;
 using Stump.Server.WorldServer.Game.Spells;
@@ -13,7 +15,7 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
 			get;
 			protected set;
 		}
-		public FightActor Summoner
+        public FightActor Summoner
 		{
 			get;
 			protected set;

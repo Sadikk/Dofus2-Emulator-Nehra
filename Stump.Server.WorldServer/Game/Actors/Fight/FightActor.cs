@@ -101,11 +101,6 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
 		{
 			get;
 		}
-		public FightActor CarriedActor
-		{
-			get;
-			protected set;
-		}
 		public virtual bool IsReady
 		{
 			get;
@@ -459,21 +454,14 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
 				mpUsed(this, amount);
 			}
 		}
-        protected virtual void OnStopCarried()
-        {
-            this.Carried.Carrier = null;
-            this.Carried.Carried = null;
-            this.Carrier.Carried = null;
-            this.Carrier.Carrier = null;
-        }
-        protected override void OnStartMoving(Path path)
+        public override bool StartMove(Path movementPath)
         {
             if(this.IsCarried)
             {
-                this.Position.Cell = path.SecondCell;
-                this.StopCarry();
+                this.Carrier.DepositCarried(movementPath.SecondCell);
+                movementPath = new Path(movementPath.Map, movementPath.GetPath().Skip(1));
             }
-            base.OnStartMoving(path);
+            return base.StartMove(movementPath);
         }
 
         public abstract Spell GetSpell(int id);
@@ -1503,6 +1491,7 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
 			}
 		}
 
+        //ROUBLARD
         public bool CanPutBomb()
         {
             return this.m_bombs.Count < 3;
@@ -1529,6 +1518,7 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
             }
         }
 
+        //PANDAWA
         public void Carry(FightActor target)
         {
             this.Carrier = this;
@@ -1547,13 +1537,25 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
             this.Carrier = null;
             this.Carried = null;
         }
-        public void StopCarry()
+        public void DepositCarried(Cell cell)
         {
             var buff = this.GetBuffs().Where((x) => x.Spell.Id == (int)SpellIdEnum.Karcham).First();
             this.Carrier.RemoveAndDispellBuff(buff);
             this.Carried.RemoveAndDispellBuff(buff);
 
-            this.OnStopCarried();
+            this.Fight.Clients.Send(new GameActionFightThrowCharacterMessage((ushort)ActionsEnum.ACTION_NO_MORE_CARRIED, this.Carried.Id, this.Carried.Id, cell.Id));
+            this.Carried.Cell = cell;
+
+            this.Carried.Carrier = null;
+            this.Carried.Carried = null;
+            this.Carrier.Carried = null;
+            this.Carrier.Carrier = null;
+        }
+
+        //SADIDA
+        public void SpawnTree(Cell cell)
+        {
+
         }
 
 	    public IEnumerable<BombFighter> BombsOfType(Database.Monsters.MonsterTemplate monsterTemplate)
@@ -1814,7 +1816,7 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
 		}
 		public virtual EntityDispositionInformations GetEntityDispositionInformations(WorldClient client = null)
 		{
-			return new FightEntityDispositionInformations(Convert.ToInt16((client != null) ? (this.IsVisibleFor(client.Character) ? base.Cell.Id : -1) : base.Cell.Id), (sbyte)base.Direction, (this.CarriedActor != null) ? this.CarriedActor.Id : 0);
+			return new FightEntityDispositionInformations(Convert.ToInt16((client != null) ? (this.IsVisibleFor(client.Character) ? base.Cell.Id : -1) : base.Cell.Id), (sbyte)base.Direction, (this.Carried != null) ? this.Carried.Id : 0);
 		}
 		public virtual GameFightMinimalStats GetGameFightMinimalStats()
 		{

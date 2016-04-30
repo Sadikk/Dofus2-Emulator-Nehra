@@ -157,6 +157,7 @@
     <Compile Include="Game\Prisms\PrismNpc.cs" />
     <Compile Include="Game\Spells\Pandawa\ChamrakHandler.cs" />
     <Compile Include="Game\Spells\Pandawa\KarchamHandler.cs" />
+    <Compile Include="Game\Spells\Sadida\TreeHandler.cs" />
     <Compile Include="Handlers\Achievements\AchievementHandler.cs" />
     <Compile Include="Handlers\Context\RolePlay\Arenas\ArenaHandler.cs" />
     <Compile Include="Handlers\Web\WebHandler.cs" />

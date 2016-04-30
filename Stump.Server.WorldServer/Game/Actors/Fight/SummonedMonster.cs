@@ -1,4 +1,5 @@
 using Stump.DofusProtocol.Enums;
+using Stump.DofusProtocol.Enums.HomeMade;
 using Stump.DofusProtocol.Types;
 using Stump.Server.WorldServer.Core.Network;
 using Stump.Server.WorldServer.Database.Monsters;
@@ -46,7 +47,6 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
 				return this.Monster.Template.Name;
 			}
 		}
-
         public SummonedMonster(int id, FightTeam team, FightActor summoner, MonsterGrade template, Cell cell)
             : base(id, team, template.Spells.ToArray(), summoner, cell)
         {
