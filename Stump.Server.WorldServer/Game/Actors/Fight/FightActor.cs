@@ -1553,7 +1553,7 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
             this.Carrier.RemoveAndDispellBuff(buff);
             this.Carried.RemoveAndDispellBuff(buff);
 
-            this.Fight.Clients.Send(new GameActionFightThrowCharacterMessage((ushort)ActionsEnum.ACTION_NO_MORE_CARRIED, this.Carried.Id, this.Carried.Id, cell.Id));
+            this.Fight.Clients.Send(new GameActionFightThrowCharacterMessage((ushort)ActionsEnum.ACTION_THROW_CARRIED_CHARACTER, this.Carrier.Id, this.Carried.Id, cell.Id));
             this.Carried.Cell = cell;
 
             this.Carried.Carrier = null;
