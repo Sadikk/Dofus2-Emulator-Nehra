@@ -13,6 +13,7 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
 {
 	public class SummonedMonster : SummonedFighter
 	{
+        //PROPERTIES
 		private readonly StatsFields m_stats;
 		public MonsterGrade Monster
 		{
@@ -47,7 +48,21 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
 				return this.Monster.Template.Name;
 			}
 		}
-        public SummonedMonster(int id, FightTeam team, FightActor summoner, MonsterGrade template, Cell cell)
+        public bool IsTreeSummon
+        {
+            get;
+            private set;
+        }
+        public bool IsSadidaTree
+        {
+            get
+            {
+                return this.Monster.Template.Id == (int)MonsterEnum.SADIDA_TREE;
+            }
+        }
+
+        //CONSTRUCTOR
+        public SummonedMonster(int id, FightTeam team, FightActor summoner, MonsterGrade template, Cell cell, bool treeSummon = false)
             : base(id, team, template.Spells.ToArray(), summoner, cell)
         {
             this.Monster = template;
@@ -55,8 +70,8 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
             this.m_stats = new StatsFields(this);
             this.m_stats.Initialize(template);
             this.AdjustStats();
+            this.IsTreeSummon = treeSummon;
         }
-
 		private void AdjustStats()
 		{
 			this.m_stats.Health.Base = (int)((short)((double)this.m_stats.Health.Base * (1.0 + (double)base.Summoner.Level / 100.0)));

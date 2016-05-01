@@ -1,6 +1,6 @@
 namespace Stump.DofusProtocol.Enums
 {
-    public enum EffectsEnum : short
+    public enum EffectsEnum : int
     {
         /// <summary>
         ///Teleports to the targeted map
@@ -2290,5 +2290,9 @@ namespace Stump.DofusProtocol.Enums
         ///Null Text
         /// </summary>
         Effect_TurtleLightningStrike = 2797,
+        /// <summary>
+        /// Increase the power of the Sadida's tree
+        /// </summary>
+        Effect_Foilage = 134868,
     }
 }

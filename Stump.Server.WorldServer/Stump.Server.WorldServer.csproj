@@ -158,16 +158,13 @@
     <Compile Include="Game\Prisms\PrismNpc.cs" />
     <Compile Include="Game\Spells\Pandawa\ChamrakHandler.cs" />
     <Compile Include="Game\Spells\Pandawa\KarchamHandler.cs" />
-<<<<<<< HEAD
     <Compile Include="Game\Spells\Sadida\TreeHandler.cs" />
-=======
     <Compile Include="Game\Spells\Xelor\ClockHandler.cs" />
     <Compile Include="Game\Spells\Xelor\DarkRayHandler.cs" />
     <Compile Include="Game\Spells\Xelor\HandHandler.cs" />
     <Compile Include="Game\Spells\Xelor\LossOfMotivationHandler.cs" />
     <Compile Include="Game\Spells\Xelor\TemporalDustHandler.cs" />
     <Compile Include="Game\Spells\Xelor\XelorsPunchHandler.cs" />
->>>>>>> f5dfa3b04eca84c222679bdd19357331fca8befd
     <Compile Include="Handlers\Achievements\AchievementHandler.cs" />
     <Compile Include="Handlers\Context\RolePlay\Arenas\ArenaHandler.cs" />
     <Compile Include="Handlers\Web\WebHandler.cs" />

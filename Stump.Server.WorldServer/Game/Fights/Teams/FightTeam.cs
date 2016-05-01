@@ -1,8 +1,11 @@
+using Stump.Core.Reflection;
 using Stump.DofusProtocol.Enums;
+using Stump.DofusProtocol.Enums.HomeMade;
 using Stump.DofusProtocol.Types;
 using Stump.Server.WorldServer.Database.World;
 using Stump.Server.WorldServer.Game.Actors.Fight;
 using Stump.Server.WorldServer.Game.Actors.RolePlay.Characters;
+using Stump.Server.WorldServer.Game.Actors.RolePlay.Monsters;
 using Stump.Server.WorldServer.Game.Maps.Cells;
 using System;
 using System.Linq;
@@ -21,7 +24,8 @@ namespace Stump.Server.WorldServer.Game.Fights.Teams
         //public event Action<FightTeam, FightActor, FightActor> FighterDied;
 
         // PROPERTIES
-		public sbyte Id
+
+        public sbyte Id
 		{
 			get;
 			private set;
@@ -334,6 +338,14 @@ namespace Stump.Server.WorldServer.Game.Fights.Teams
 		{
 			return this.m_leavers.Remove(leaver);
 		}
+        public void AddTree(CharacterFighter source, Cell cell)
+        {
+            var characterSpell = source.Character.Spells.Where((spell) => spell.Template.Id == (int)SpellIdEnum.Tree).First();
+            var monsterGrade = Singleton<MonsterManager>.Instance.GetMonsterGrade((int)MonsterEnum.SADIDA_TREE, characterSpell.CurrentLevel);
+            var tree = new SummonedMonster(this.Fight.GetNextContextualId(), this, source, monsterGrade, cell);
+
+            source.AddSummon(tree);
+        }
 		public FightActor GetOneFighter(int id)
 		{
 			return this.m_fighters.SingleOrDefault((FightActor entry) => entry.Id == id);

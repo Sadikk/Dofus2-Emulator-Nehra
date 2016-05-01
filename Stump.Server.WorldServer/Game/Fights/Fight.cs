@@ -1189,7 +1189,12 @@ namespace Stump.Server.WorldServer.Game.Fights
                     this.RemoveTrigger(markTrigger);
                 }
             }
-
+            if(fighter is SummonedMonster)
+            {
+                var summon = fighter as SummonedMonster;
+                summon.Team
+                
+            }
         }
 
         protected virtual void OnStartMoving(ContextActor actor, Path path)
@@ -1907,9 +1912,8 @@ namespace Stump.Server.WorldServer.Game.Fights
 
         public IEnumerable<int> GetAliveFightersIds()
         {
-            return
-                from entry in this.GetAllFighters<FightActor>((FightActor entry) => entry.IsAlive())
-                select entry.Id;
+            return from entry in this.GetAllFighters<FightActor>((FightActor entry) => entry.IsAlive() && !((entry is SummonedMonster) && (entry as SummonedMonster).IsSadidaTree))
+                   select entry.Id;
         }
 
         public int GetFightBonus()

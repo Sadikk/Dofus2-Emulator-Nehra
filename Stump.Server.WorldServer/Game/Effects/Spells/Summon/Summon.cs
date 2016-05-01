@@ -9,6 +9,7 @@ using Stump.Server.WorldServer.Game.Effects.Handlers;
 using Stump.Server.WorldServer.Game.Effects.Instances;
 using Stump.Server.WorldServer.Game.Spells;
 using Stump.Server.WorldServer.Handlers.Actions;
+using Stump.DofusProtocol.Enums.HomeMade;
 
 namespace Stump.Server.WorldServer.Game.Effects.Spells.Summon
 {
@@ -19,7 +20,8 @@ namespace Stump.Server.WorldServer.Game.Effects.Spells.Summon
 		public Summon(EffectDice effect, FightActor caster, Spell spell, Cell targetedCell, bool critical) : base(effect, caster, spell, targetedCell, critical)
 		{
 		}
-		public override bool Apply()
+
+        public override bool Apply()
 		{
 			MonsterGrade monsterGrade = Singleton<MonsterManager>.Instance.GetMonsterGrade((int)base.Dice.DiceNum, (int)base.Dice.DiceFace);
 			bool result;
@@ -36,7 +38,17 @@ namespace Stump.Server.WorldServer.Game.Effects.Spells.Summon
 				}
 				else
 				{
-					SummonedMonster summonedMonster = new SummonedMonster((int)base.Fight.GetNextContextualId(), base.Caster.Team, base.Caster, monsterGrade, base.TargetedCell);
+                    SummonedMonster summonedMonster = new SummonedMonster((int)base.Fight.GetNextContextualId(), base.Caster.Team, base.Caster, monsterGrade, base.TargetedCell);
+
+                    if (this.Spell.SpellType.Id == (int)SpellTypesEnum.Sadida && this.Spell.Id != (int)SpellIdEnum.Tree)
+                    {
+                        var target = this.Fight.GetOneFighter(this.TargetedCell) as SummonedMonster;
+                        if(target != null && target.IsSadidaTree)
+                        {
+                            this.Caster.Team.RemoveFighter(target);
+                        }
+                    }
+					
 					ActionsHandler.SendGameActionFightSummonMessage(base.Fight.Clients, summonedMonster);
 					base.Caster.AddSummon(summonedMonster);
 					base.Caster.Team.AddFighter(summonedMonster);

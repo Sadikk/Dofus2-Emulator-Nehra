@@ -2623,6 +2623,7 @@ namespace Stump.DofusProtocol.Enums
 		Rudder,
 		Silicurse,
 		Andespite,
-		Silicut
+		Silicut,
+        Foilage = 5567
 	}
 }

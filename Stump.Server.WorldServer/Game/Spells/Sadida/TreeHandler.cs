@@ -27,7 +27,7 @@ namespace Stump.Server.WorldServer.Game.Spells.Sadida
 
         public override void Execute()
         {
-
+            base.Execute();
         }
     }
 }
