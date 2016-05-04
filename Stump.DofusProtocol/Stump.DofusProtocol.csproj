@@ -359,6 +359,7 @@
     <Compile Include="Enums\HomeMade\SpellShapeEnum.cs" />
     <Compile Include="Enums\HomeMade\SpellStateEnum.cs" />
     <Compile Include="Enums\HomeMade\SpellTargetType.cs" />
+    <Compile Include="Enums\HomeMade\SpellTypesEnum.cs" />
     <Compile Include="Enums\HomeMade\StatsBoostTypeEnum.cs" />
     <Compile Include="Messages\BooleanByteWrapper.cs" />
     <Compile Include="Messages\Custom\RawDataMessage.cs" />

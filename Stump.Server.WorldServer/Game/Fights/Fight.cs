@@ -1192,7 +1192,7 @@ namespace Stump.Server.WorldServer.Game.Fights
             if(fighter is SummonedMonster)
             {
                 var summon = fighter as SummonedMonster;
-                summon.Team
+                //summon.Team
                 
             }
         }

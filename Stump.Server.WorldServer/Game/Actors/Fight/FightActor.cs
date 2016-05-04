@@ -1600,7 +1600,7 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
         public void AddTelefragState(FightActor source, Spell spell)
         {
             var id = this.PopNextBuffId();
-            var effect = new EffectBase { Duration = -1 };
+            var effect = new EffectBase { Duration = 1 };
             var stateId = (uint)SpellStatesEnum.Telefrag;
             var state = Singleton<SpellManager>.Instance.GetSpellState(stateId);
 

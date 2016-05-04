@@ -15,7 +15,7 @@ namespace Stump.Server.WorldServer.Game.Spells.Pandawa
     [SpellCastHandler(SpellIdEnum.Hand)]
     public class HandHandler : DefaultSpellCastHandler
     {
-        //aiguillde
+        //aiguille
         public HandHandler(FightActor caster, Spell spell, Cell targetedCell, bool critical) : base(caster, spell, targetedCell, critical)
         {
         }
@@ -29,9 +29,10 @@ namespace Stump.Server.WorldServer.Game.Spells.Pandawa
                 var buff = target.GetBuffs().Where((x) => x.Id == (int)SpellStatesEnum.Telefrag).FirstOrDefault();
                 if (buff != null)
                     target.RemoveAndDispellBuff(buff);
+
             }
             base.Execute();
-            //todo : remove it also on caster ? idk
+            
         }
     }
 }
