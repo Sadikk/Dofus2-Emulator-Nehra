@@ -338,13 +338,14 @@ namespace Stump.Server.WorldServer.Game.Fights.Teams
 		{
 			return this.m_leavers.Remove(leaver);
 		}
-        public void AddTree(CharacterFighter source, Cell cell)
+        public SummonedMonster AddTree(CharacterFighter source, Cell cell)
         {
             var characterSpell = source.Character.Spells.Where((spell) => spell.Template.Id == (int)SpellIdEnum.Tree).First();
             var monsterGrade = Singleton<MonsterManager>.Instance.GetMonsterGrade((int)MonsterEnum.SADIDA_TREE, characterSpell.CurrentLevel);
             var tree = new SummonedMonster(this.Fight.GetNextContextualId(), this, source, monsterGrade, cell);
 
             source.AddSummon(tree);
+            return tree;
         }
 		public FightActor GetOneFighter(int id)
 		{
