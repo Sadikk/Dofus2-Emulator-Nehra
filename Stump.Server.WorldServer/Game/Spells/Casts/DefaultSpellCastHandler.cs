@@ -82,7 +82,6 @@ namespace Stump.Server.WorldServer.Game.Spells.Casts
 			SpellEffectHandler[] handlers = this.Handlers;
 			for (int i = 0; i < handlers.Length; i++)
 			{
-                
 				SpellEffectHandler spellEffectHandler = handlers[i];
                 if (spellEffectHandler is DefaultSpellEffect && (int)spellEffectHandler.Effect.EffectId != 1160)
                 {

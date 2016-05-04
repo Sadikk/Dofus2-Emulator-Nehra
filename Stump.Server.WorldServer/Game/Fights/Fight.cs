@@ -1192,7 +1192,6 @@ namespace Stump.Server.WorldServer.Game.Fights
             if(fighter is SummonedMonster)
             {
                 var summon = fighter as SummonedMonster;
-                summon.Team
                 
             }
         }
@@ -1912,7 +1911,7 @@ namespace Stump.Server.WorldServer.Game.Fights
 
         public IEnumerable<int> GetAliveFightersIds()
         {
-            return from entry in this.GetAllFighters<FightActor>((FightActor entry) => entry.IsAlive() && !((entry is SummonedMonster) && (entry as SummonedMonster).IsSadidaTree))
+            return from entry in this.GetAllFighters<FightActor>((FightActor entry) => entry.IsAlive() && entry.IsVisibleInTimeline)
                    select entry.Id;
         }
 

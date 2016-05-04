@@ -259,7 +259,13 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
             get;
             private set;
         }
-
+        public virtual bool IsVisibleInTimeline
+        {
+            get
+            {
+                return true;
+            }
+        }
 
 
         // CONSTRUCTORS

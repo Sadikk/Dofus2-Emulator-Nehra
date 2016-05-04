@@ -13,9 +13,12 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
 {
 	public class SummonedMonster : SummonedFighter
 	{
+        //FIELDS
+        private readonly StatsFields m_stats;
+        private bool m_isVisibleInTimeLine;
+
         //PROPERTIES
-		private readonly StatsFields m_stats;
-		public MonsterGrade Monster
+        public MonsterGrade Monster
 		{
 			get;
 			private set;
@@ -60,17 +63,24 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
                 return this.Monster.Template.Id == (int)MonsterEnum.SADIDA_TREE;
             }
         }
+        public override bool IsVisibleInTimeline
+        {
+            get
+            {
+                return this.m_isVisibleInTimeLine;
+            }
+        }
 
         //CONSTRUCTOR
-        public SummonedMonster(int id, FightTeam team, FightActor summoner, MonsterGrade template, Cell cell, bool treeSummon = false)
+        public SummonedMonster(int id, FightTeam team, FightActor summoner, MonsterGrade template, Cell cell, bool isVisibleTimeline = true)
             : base(id, team, template.Spells.ToArray(), summoner, cell)
         {
+            this.m_isVisibleInTimeLine = true;
             this.Monster = template;
             this.Look = this.Monster.Template.EntityLook;
             this.m_stats = new StatsFields(this);
             this.m_stats.Initialize(template);
             this.AdjustStats();
-            this.IsTreeSummon = treeSummon;
         }
 		private void AdjustStats()
 		{

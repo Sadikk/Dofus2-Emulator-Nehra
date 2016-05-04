@@ -39,16 +39,6 @@ namespace Stump.Server.WorldServer.Game.Effects.Spells.Summon
 				else
 				{
                     SummonedMonster summonedMonster = new SummonedMonster((int)base.Fight.GetNextContextualId(), base.Caster.Team, base.Caster, monsterGrade, base.TargetedCell);
-
-                    if (this.Spell.SpellType.Id == (int)SpellTypesEnum.Sadida && this.Spell.Id != (int)SpellIdEnum.Tree)
-                    {
-                        var target = this.Fight.GetOneFighter(this.TargetedCell) as SummonedMonster;
-                        if(target != null && target.IsSadidaTree)
-                        {
-                            this.Caster.Team.RemoveFighter(target);
-                        }
-                    }
-					
 					ActionsHandler.SendGameActionFightSummonMessage(base.Fight.Clients, summonedMonster);
 					base.Caster.AddSummon(summonedMonster);
 					base.Caster.Team.AddFighter(summonedMonster);
