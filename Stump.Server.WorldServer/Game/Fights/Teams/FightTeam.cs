@@ -344,7 +344,9 @@ namespace Stump.Server.WorldServer.Game.Fights.Teams
             var monsterGrade = Singleton<MonsterManager>.Instance.GetMonsterGrade((int)MonsterEnum.SADIDA_TREE, characterSpell.CurrentLevel);
             var tree = new SummonedMonster(this.Fight.GetNextContextualId(), this, source, monsterGrade, cell);
 
+            this.AddFighter(tree);
             source.AddSummon(tree);
+
             return tree;
         }
 		public FightActor GetOneFighter(int id)
@@ -404,7 +406,11 @@ namespace Stump.Server.WorldServer.Game.Fights.Teams
 				where predicate(entry)
 				select entry;
 		}
-		public FightTeamInformations GetFightTeamInformations()
+        public SummonedMonster GetOneTree(Cell cell)
+        {
+            return this.Fighters.OfType<SummonedMonster>().Where((x) => x.IsAlive() && x.Cell.Id == cell.Id).SingleOrDefault();
+        }
+        public FightTeamInformations GetFightTeamInformations()
 		{
 			return new FightTeamInformations(this.Id, (this.Leader != null) ? this.Leader.Id : 0, (sbyte)this.AlignmentSide, (sbyte)this.TeamType, 0,
                 from entry in this.m_fighters

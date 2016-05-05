@@ -936,10 +936,15 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
 			}
 			return result;
 		}
+        public virtual void AddContextHealt(int ratio)
+        {
+            var baseHealt = this.Stats[PlayerFields.Health].Base * ratio;
+            this.Stats.Health.Base = baseHealt;
+        }
 		public virtual int HealDirect(int healPoints, FightActor from)
 		{
 			int result;
-			if (this.HasState(76))
+			if (this.HasState((int)SpellStatesEnum.Unhealable))
 			{
 				this.OnLifePointsChanged(0, 0, from);
 				result = 0;
@@ -1815,6 +1820,14 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
 		{
 			return this.IsFighterTurn() && this.IsAlive() && this.MP > 0;
 		}
+        public virtual bool CanBeMove()
+        {
+            var immovabliesStates = from entry
+                                    in this.m_states
+                                    where entry.Id == (int)SpellStatesEnum.Rooted || entry.Id == (int)SpellStatesEnum.Leafy //Should make a better method
+                                    select entry;
+            return immovabliesStates == null;
+        }
 		public virtual bool CanPlay()
 		{
 			return this.IsAlive() && !this.HasLeft();

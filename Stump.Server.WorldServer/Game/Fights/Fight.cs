@@ -1812,42 +1812,34 @@ namespace Stump.Server.WorldServer.Game.Fights
         {
             return this.Fighters.OfType<T>().SingleOrDefault((T entry) => entry.Id == id);
         }
-
         public T GetOneFighter<T>(Cell cell) where T : FightActor
         {
             return this.Fighters.OfType<T>().SingleOrDefault((T entry) => entry.IsAlive() && Equals(entry.Position.Cell, cell));
         }
-
         public T GetOneFighter<T>(Predicate<T> predicate) where T : FightActor
         {
             return this.Fighters.OfType<T>().SingleOrDefault((T entry) => predicate(entry));
         }
-
         public T GetFirstFighter<T>(int id) where T : FightActor
         {
             return this.Fighters.OfType<T>().FirstOrDefault((T entry) => entry.Id == id);
         }
-
         public T GetFirstFighter<T>(Cell cell) where T : FightActor
         {
             return this.Fighters.OfType<T>().FirstOrDefault((T entry) => entry.IsAlive() && Equals(entry.Position.Cell, cell));
         }
-
         public T GetFirstFighter<T>(Predicate<T> predicate) where T : FightActor
         {
             return this.Fighters.OfType<T>().FirstOrDefault((T entry) => predicate(entry));
         }
-
         public System.Collections.ObjectModel.ReadOnlyCollection<FightActor> GetAllFighters()
         {
             return this.Fighters.AsReadOnly();
         }
-
         public System.Collections.ObjectModel.ReadOnlyCollection<FightActor> GetLeavers()
         {
             return this.Leavers.AsReadOnly();
         }
-
         public CharacterFighter GetLeaver(int characterId)
         {
             return this.Leavers.OfType<CharacterFighter>().SingleOrDefault((CharacterFighter x) => x.Id == characterId);

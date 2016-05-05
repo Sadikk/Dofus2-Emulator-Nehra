@@ -27,17 +27,19 @@ namespace Stump.Server.WorldServer.Game.Effects.Spells.Summon
 
         public override bool Apply()
         {
-            var target = this.Fight.GetOneFighter(this.TargetedCell) as SummonedMonster;
-            if (target != null && target.Monster.Template.Id == (int)MonsterEnum.SADIDA_TREE)
+            var target = this.Caster.Team.GetOneTree(this.TargetedCell);
+            if (target != null && target.Summoner.Id == this.Caster.Id)
             {
-                if (this.Caster.Team.RemoveFighter(target))
-                {
-                    var monsterGrade = Singleton<MonsterManager>.Instance.GetMonsterGrade(base.Dice.DiceNum, this.Spell.CurrentLevel);
-                    var summonedMonster = new SummonedMonster(this.Fight.GetNextContextualId(), this.Caster.Team, this.Caster, monsterGrade, target.Cell);
-                    this.Caster.Team.AddFighter(summonedMonster);
+                var monsterGrade = Singleton<MonsterManager>.Instance.GetMonsterGrade(base.Dice.DiceNum, this.Spell.CurrentLevel);
+                var summonedMonster = new SummonedMonster(this.Fight.GetNextContextualId(), this.Caster.Team, this.Caster, monsterGrade, target.Cell);
+                target.Die();
 
-                    return true;
-                }
+                this.Caster.AddSummon(summonedMonster);
+                this.Caster.Team.AddFighter(summonedMonster);
+
+                ActionsHandler.SendGameActionFightSummonMessage(base.Fight.Clients, summonedMonster);
+
+                return true;
             }
 
             return false;

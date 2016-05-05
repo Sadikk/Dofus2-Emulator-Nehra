@@ -38,7 +38,8 @@ namespace Stump.Server.WorldServer.Game.Effects.Spells.Summon
 				}
 				else
 				{
-                    SummonedMonster summonedMonster = new SummonedMonster((int)base.Fight.GetNextContextualId(), base.Caster.Team, base.Caster, monsterGrade, base.TargetedCell);
+                    bool visible = (monsterGrade.Template.Id == (int)MonsterEnum.SADIDA_TREE) ? false : true;
+                    SummonedMonster summonedMonster = new SummonedMonster((int)base.Fight.GetNextContextualId(), base.Caster.Team, base.Caster, monsterGrade, base.TargetedCell, visible);
 					ActionsHandler.SendGameActionFightSummonMessage(base.Fight.Clients, summonedMonster);
 					base.Caster.AddSummon(summonedMonster);
 					base.Caster.Team.AddFighter(summonedMonster);

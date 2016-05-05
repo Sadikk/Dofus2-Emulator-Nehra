@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Stump.DofusProtocol.Enums.HomeMade
 {
-    public enum MonsterEnum
+    public enum MonsterEnum : int
     {
         SADIDA_TREE = 282
     }

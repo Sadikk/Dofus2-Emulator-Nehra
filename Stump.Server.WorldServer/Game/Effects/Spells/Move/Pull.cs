@@ -29,36 +29,39 @@ namespace Stump.Server.WorldServer.Game.Effects.Spells.Move
             {
                 foreach (FightActor target in this.GetAffectedActors())
                 {
-                    MapPoint point1 = (int)this.TargetedCell.Id != (int)target.Cell.Id ? this.TargetedPoint : new MapPoint(this.CastCell);
-                    if ((int)point1.CellId != (int)target.Position.Cell.Id)
+                    if (target.CanBeMove())
                     {
-                        DirectionsEnum direction = target.Position.Point.OrientationTo(point1, false);
-                        MapPoint point2 = target.Position.Point;
-                        MapPoint mapPoint1 = point2;
-                        for (int index = 0; index < (int)effectInteger.Value; ++index)
+                        MapPoint point1 = (int)this.TargetedCell.Id != (int)target.Cell.Id ? this.TargetedPoint : new MapPoint(this.CastCell);
+                        if ((int)point1.CellId != (int)target.Position.Cell.Id)
                         {
-                            MapPoint nearestCellInDirection = mapPoint1.GetNearestCellInDirection(direction);
-                            if (nearestCellInDirection != null)
+                            DirectionsEnum direction = target.Position.Point.OrientationTo(point1, false);
+                            MapPoint point2 = target.Position.Point;
+                            MapPoint mapPoint1 = point2;
+                            for (int index = 0; index < (int)effectInteger.Value; ++index)
                             {
-                                if (!this.Fight.ShouldTriggerOnMove(this.Fight.Map.Cells[(int)nearestCellInDirection.CellId]))
+                                MapPoint nearestCellInDirection = mapPoint1.GetNearestCellInDirection(direction);
+                                if (nearestCellInDirection != null)
                                 {
-                                    if (this.Fight.IsCellFree(this.Map.Cells[(int)nearestCellInDirection.CellId]))
-                                        mapPoint1 = nearestCellInDirection;
+                                    if (!this.Fight.ShouldTriggerOnMove(this.Fight.Map.Cells[(int)nearestCellInDirection.CellId]))
+                                    {
+                                        if (this.Fight.IsCellFree(this.Map.Cells[(int)nearestCellInDirection.CellId]))
+                                            mapPoint1 = nearestCellInDirection;
+                                        else
+                                            break;
+                                    }
                                     else
+                                    {
+                                        mapPoint1 = nearestCellInDirection;
                                         break;
+                                    }
                                 }
                                 else
-                                {
-                                    mapPoint1 = nearestCellInDirection;
                                     break;
-                                }
                             }
-                            else
-                                break;
+                            MapPoint mapPoint2 = mapPoint1;
+                            target.Position.Cell = this.Map.Cells[(int)mapPoint2.CellId];
+                            ActionsHandler.SendGameActionFightSlideMessage((IPacketReceiver)this.Fight.Clients, this.Caster, target, point2.CellId, mapPoint2.CellId);
                         }
-                        MapPoint mapPoint2 = mapPoint1;
-                        target.Position.Cell = this.Map.Cells[(int)mapPoint2.CellId];
-                        ActionsHandler.SendGameActionFightSlideMessage((IPacketReceiver)this.Fight.Clients, this.Caster, target, point2.CellId, mapPoint2.CellId);
                     }
                 }
                 flag = true;

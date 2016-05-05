@@ -145,5 +145,6 @@
         Entangled,
         Hasty,
         Telefrag = 244,
+        Leafy = 256
     }
 }

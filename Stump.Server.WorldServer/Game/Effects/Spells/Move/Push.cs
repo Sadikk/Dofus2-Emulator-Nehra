@@ -27,42 +27,45 @@ namespace Stump.Server.WorldServer.Game.Effects.Spells.Move
             }
             foreach (FightActor actor in base.GetAffectedActors())
             {
-                MapPoint startCell;
-                MapPoint endCell;
-                FightActor actorCopy;
-                MapPoint point = (base.TargetedCell.Id == actor.Cell.Id) ? new MapPoint(base.CastCell) : base.TargetedPoint;
-                if (point.CellId != actor.Position.Cell.Id)
+                if (actor.CanBeMove())
                 {
-                    DirectionsEnum direction = point.OrientationTo(actor.Position.Point, false);
-                    startCell = actor.Position.Point;
-                    MapPoint point2 = startCell;
-                    for (int i = 0; i < integer.Value; i++)
+                    MapPoint startCell;
+                    MapPoint endCell;
+                    FightActor actorCopy;
+                    MapPoint point = (base.TargetedCell.Id == actor.Cell.Id) ? new MapPoint(base.CastCell) : base.TargetedPoint;
+                    if (point.CellId != actor.Position.Cell.Id)
                     {
-                        MapPoint nearestCellInDirection = point2.GetNearestCellInDirection(direction);
-                        if (nearestCellInDirection == null)
+                        DirectionsEnum direction = point.OrientationTo(actor.Position.Point, false);
+                        startCell = actor.Position.Point;
+                        MapPoint point2 = startCell;
+                        for (int i = 0; i < integer.Value; i++)
                         {
-                            break;
-                        }
-                        if (base.Fight.ShouldTriggerOnMove(base.Fight.Map.Cells[nearestCellInDirection.CellId]))
-                        {
+                            MapPoint nearestCellInDirection = point2.GetNearestCellInDirection(direction);
+                            if (nearestCellInDirection == null)
+                            {
+                                break;
+                            }
+                            if (base.Fight.ShouldTriggerOnMove(base.Fight.Map.Cells[nearestCellInDirection.CellId]))
+                            {
+                                point2 = nearestCellInDirection;
+                                break;
+                            }
+                            if ((nearestCellInDirection == null) || !base.Fight.IsCellFree(base.Map.Cells[nearestCellInDirection.CellId]))
+                            {
+                                int damage = (8 + (new AsyncRandom().Next(1, 8) * (base.Caster.Level / 50))) * (integer.Value - i);
+                                actor.InflictDirectDamage(damage, base.Caster);
+                                break;
+                            }
                             point2 = nearestCellInDirection;
-                            break;
                         }
-                        if ((nearestCellInDirection == null) || !base.Fight.IsCellFree(base.Map.Cells[nearestCellInDirection.CellId]))
+                        endCell = point2;
+                        actorCopy = actor;
+                        base.Fight.ForEach(delegate (Character entry)
                         {
-                            int damage = (8 + (new AsyncRandom().Next(1, 8) * (base.Caster.Level / 50))) * (integer.Value - i);
-                            actor.InflictDirectDamage(damage, base.Caster);
-                            break;
-                        }
-                        point2 = nearestCellInDirection;
+                            ActionsHandler.SendGameActionFightSlideMessage(entry.Client, this.Caster, actorCopy, startCell.CellId, endCell.CellId);
+                        });
+                        actor.Position.Cell = base.Map.Cells[endCell.CellId];
                     }
-                    endCell = point2;
-                    actorCopy = actor;
-                    base.Fight.ForEach(delegate(Character entry)
-                    {
-                        ActionsHandler.SendGameActionFightSlideMessage(entry.Client, this.Caster, actorCopy, startCell.CellId, endCell.CellId);
-                    });
-                    actor.Position.Cell = base.Map.Cells[endCell.CellId];
                 }
             }
             return true;
