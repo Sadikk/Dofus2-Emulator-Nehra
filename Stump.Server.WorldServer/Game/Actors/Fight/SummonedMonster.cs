@@ -56,13 +56,6 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
             get;
             private set;
         }
-        public bool IsSadidaTree
-        {
-            get
-            {
-                return this.Monster.Template.Id == (int)MonsterEnum.SADIDA_TREE;
-            }
-        }
         public override bool IsVisibleInTimeline
         {
             get
@@ -72,17 +65,28 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
         }
 
         //CONSTRUCTOR
-        public SummonedMonster(int id, FightTeam team, FightActor summoner, MonsterGrade template, Cell cell, bool isVisibleTimeline = true)
+        public SummonedMonster(int id, FightTeam team, FightActor summoner, MonsterGrade template, Cell cell, bool isVisibleTimeline = true, bool treeSummon = false)
             : base(id, team, template.Spells.ToArray(), summoner, cell)
         {
             this.m_isVisibleInTimeLine = isVisibleTimeline;
+            this.IsTreeSummon = treeSummon;
             this.Monster = template;
             this.Look = this.Monster.Template.EntityLook;
             this.m_stats = new StatsFields(this);
             this.m_stats.Initialize(template);
             this.AdjustStats();
         }
-		private void AdjustStats()
+        public SummonedMonster(int id, FightTeam team, FightActor summoner, MonsterGrade template, Cell cell)
+            : base(id, team, template.Spells.ToArray(), summoner, cell)
+        {
+            this.Monster = template;
+            this.Look = this.Monster.Template.EntityLook;
+            this.m_stats = new StatsFields(this);
+            this.m_stats.Initialize(template);
+            this.AdjustStats();
+        }
+
+        private void AdjustStats()
 		{
 			this.m_stats.Health.Base = (int)((short)((double)this.m_stats.Health.Base * (1.0 + (double)base.Summoner.Level / 100.0)));
 			this.m_stats.Intelligence.Base = (int)((short)((double)this.m_stats.Intelligence.Base * (1.0 + (double)base.Summoner.Level / 100.0)));
@@ -112,5 +116,12 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
         {
             return new GameFightFighterMonsterLightInformations(false, IsAlive(), Id, 0, (ushort)Level, 0, (ushort)Monster.Template.Id);
         }
-	}
+        protected override void PostDead()
+        {
+            if(this.IsTreeSummon)
+            {
+                this.Summoner.SpawnTreeAfterSummonDeath(this.Cell);
+            }
+        }
+    }
 }

@@ -41,10 +41,16 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
 		}
 		protected override void OnDead(FightActor killedBy)
 		{
-			base.OnDead(killedBy);
+            base.OnDead(killedBy);
 			base.Fight.TimeLine.RemoveFighter(this);
 			this.Summoner.RemoveSummon(this);
-			ContextHandler.SendGameFightTurnListMessage(base.Fight.Clients, base.Fight);
-		}
+
+            this.PostDead();
+            ContextHandler.SendGameFightTurnListMessage(base.Fight.Clients, base.Fight);
+        }
+        protected virtual void PostDead()
+        {
+            return;
+        }
 	}
 }

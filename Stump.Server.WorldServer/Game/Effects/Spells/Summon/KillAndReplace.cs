@@ -31,7 +31,7 @@ namespace Stump.Server.WorldServer.Game.Effects.Spells.Summon
             if (target != null && target.Summoner.Id == this.Caster.Id)
             {
                 var monsterGrade = Singleton<MonsterManager>.Instance.GetMonsterGrade(base.Dice.DiceNum, this.Spell.CurrentLevel);
-                var summonedMonster = new SummonedMonster(this.Fight.GetNextContextualId(), this.Caster.Team, this.Caster, monsterGrade, target.Cell);
+                var summonedMonster = new SummonedMonster(this.Fight.GetNextContextualId(), this.Caster.Team, this.Caster, monsterGrade, target.Cell, true, true);
                 target.Die();
 
                 this.Caster.AddSummon(summonedMonster);

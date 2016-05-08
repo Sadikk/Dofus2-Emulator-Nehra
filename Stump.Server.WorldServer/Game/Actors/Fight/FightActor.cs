@@ -33,6 +33,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Stump.Server.WorldServer.Game.Maps.Pathfinding;
 using Stump.DofusProtocol.Enums.HomeMade;
+using Stump.Server.WorldServer.Game.Actors.RolePlay.Monsters;
 
 namespace Stump.Server.WorldServer.Game.Actors.Fight
 {
@@ -1574,9 +1575,15 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
         }
 
         //SADIDA
-        public void SpawnTree(Cell cell)
+        public void SpawnTreeAfterSummonDeath(Cell cell)
         {
-
+            var spellLevel = this.GetSpell((int)SpellIdEnum.Tree).CurrentLevel;
+            var monsterGrade = Singleton<MonsterManager>.Instance.GetMonsterGrade((int)MonsterEnum.SADIDA_TREE, spellLevel);
+            var summon = new SummonedMonster(Fight.GetNextContextualId(), this.Team, this, monsterGrade, cell, false);
+            summon.Stats.Health.Base /= 2;
+            this.AddSummon(summon);
+            this.Team.AddFighter(summon);
+            ActionsHandler.SendGameActionFightSummonMessage(this.Fight.Clients, summon);
         }
 
 	    public IEnumerable<BombFighter> BombsOfType(Database.Monsters.MonsterTemplate monsterTemplate)
