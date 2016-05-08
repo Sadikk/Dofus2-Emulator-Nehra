@@ -28,7 +28,7 @@ namespace Stump.Server.WorldServer.Game.Effects.Spells.Summon
         public override bool Apply()
         {
             var target = this.Caster.Team.GetOneTree(this.TargetedCell);
-            if (target != null && target.Summoner.Id == this.Caster.Id)
+            if (target != null && target.Summoner.Id == this.Caster.Id && target.HasState((int)SpellStatesEnum.Leafy))
             {
                 var monsterGrade = Singleton<MonsterManager>.Instance.GetMonsterGrade(base.Dice.DiceNum, this.Spell.CurrentLevel);
                 var summonedMonster = new SummonedMonster(this.Fight.GetNextContextualId(), this.Caster.Team, this.Caster, monsterGrade, target.Cell, true, true);

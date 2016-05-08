@@ -34,6 +34,7 @@ using System.Linq;
 using Stump.Server.WorldServer.Game.Maps.Pathfinding;
 using Stump.DofusProtocol.Enums.HomeMade;
 using Stump.Server.WorldServer.Game.Actors.RolePlay.Monsters;
+using Stump.Server.WorldServer.Game.Spells.Sadida;
 
 namespace Stump.Server.WorldServer.Game.Actors.Fight
 {
@@ -1539,6 +1540,10 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
                 bombFighter.Die();
             }
         }
+        public IEnumerable<BombFighter> BombsOfType(Database.Monsters.MonsterTemplate monsterTemplate)
+        {
+            return this.m_bombs.Where(entry => entry.Monster.Template == monsterTemplate);
+        }
 
         //PANDAWA
         public void Carry(FightActor target)
@@ -1577,19 +1582,24 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
         //SADIDA
         public void SpawnTreeAfterSummonDeath(Cell cell)
         {
-            var spellLevel = this.GetSpell((int)SpellIdEnum.Tree).CurrentLevel;
-            var monsterGrade = Singleton<MonsterManager>.Instance.GetMonsterGrade((int)MonsterEnum.SADIDA_TREE, spellLevel);
+            var spell = this.GetSpell((int)SpellIdEnum.Tree);
+            var monsterGrade = Singleton<MonsterManager>.Instance.GetMonsterGrade((int)MonsterEnum.SADIDA_TREE, spell.CurrentLevel);
             var summon = new SummonedMonster(Fight.GetNextContextualId(), this.Team, this, monsterGrade, cell, false);
-            summon.Stats.Health.Base /= 2;
+            summon.Stats.Health.Base /= TreeHandler.LIFE_RATIO;
+
             this.AddSummon(summon);
             this.Team.AddFighter(summon);
-            ActionsHandler.SendGameActionFightSummonMessage(this.Fight.Clients, summon);
-        }
 
-	    public IEnumerable<BombFighter> BombsOfType(Database.Monsters.MonsterTemplate monsterTemplate)
-	    {
-	        return this.m_bombs.Where(entry => entry.Monster.Template == monsterTemplate);
-	    }
+            ActionsHandler.SendGameActionFightSummonMessage(this.Fight.Clients, summon);
+
+            var id = summon.PopNextBuffId();
+            var effect = new EffectDice() { Duration = TreeHandler.DURATION }; //TODO : Add EffectId
+            var actionId = (short)ActionsEnum.ACTION_793;
+            var buff = new TriggerBuff(id, summon, summon, effect, spell, false, true, BuffTriggerType.TURN_END, new TriggerBuffApplyHandler(TreeHandler.TreeTrigger), actionId);
+
+            summon.AddAndApplyBuff(buff);
+            ContextHandler.SendGameActionFightDispellableEffectMessage(this.Fight.Clients, buff);
+        }
 
 	    public void AddState(SpellState state)
 		{

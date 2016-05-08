@@ -19,16 +19,9 @@ namespace Stump.Server.WorldServer.Game.Spells.Sadida
     class TreeHandler : DefaultSpellCastHandler
     {
         //CONSTANTS
-        // Need to find the using of them
-        private const int arg1 = 5567; //diceNum
-        private const int arg2 = 2; //diceSide or DiceFace?
-        private const int delay = 1; //value
-        //(this._effect as EffectInstanceDice).diceNum = param1;
-        //    (this._effect as EffectInstanceDice).diceSide = param2;
-        //    (this._effect as EffectInstanceDice).value = param3;
-        private const int BONES_ID = 3164;
-        private const int DURATION = 1;
-        private const int IMPROVEMENT_LIFE_RATIO = 2;
+        public const int BONES_ID = 3164;
+        public const int DURATION = 1;
+        public const int LIFE_RATIO = 2;
 
         public TreeHandler(FightActor caster, Spell spell, Cell targetedCell, bool critical) : base(caster, spell, targetedCell, critical)
         {
@@ -43,18 +36,18 @@ namespace Stump.Server.WorldServer.Game.Spells.Sadida
             if (target != null)
             {
                 var id = target.PopNextBuffId();
-                var effect = new EffectDice() { Duration = DURATION };
+                var effect = new EffectDice() { Duration = DURATION }; //TODO : Add EffectId
                 var actionId = (short)ActionsEnum.ACTION_793;
-                var buff = new TriggerBuff(id, target, target, effect, base.Spell, false, true, BuffTriggerType.TURN_END, new TriggerBuffApplyHandler(this.TreeTrigger), actionId);
+                var buff = new TriggerBuff(id, target, target, effect, base.Spell, false, true, BuffTriggerType.TURN_END, new TriggerBuffApplyHandler(TreeTrigger), actionId);
 
                 target.AddAndApplyBuff(buff);
                 ContextHandler.SendGameActionFightDispellableEffectMessage(base.Caster.Fight.Clients, buff);
             }
         }
 
-        private void TreeTrigger(TriggerBuff buff, BuffTriggerType trigger, object token)
+        public static void TreeTrigger(TriggerBuff buff, BuffTriggerType trigger, object token)
         {
-            buff.Target.Stats.Health.Base *= IMPROVEMENT_LIFE_RATIO;
+            buff.Target.Stats.Health.Base *= LIFE_RATIO;
 
             var actorLook = buff.Target.Look.Clone();
             actorLook.BonesID = BONES_ID;

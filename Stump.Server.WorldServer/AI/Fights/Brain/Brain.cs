@@ -40,6 +40,17 @@ namespace Stump.Server.WorldServer.AI.Fights.Brain
 		public virtual void Play()
 		{
 			this.SpellSelector.AnalysePossibilities();
+            if (this.SpellSelector.Possibilities.Count == 0)
+            {
+                var target = this.Environment.GetNearestEnnemy();
+                Pathfinder finder = new Pathfinder(this.Environment.CellInformationProvider);
+                Path path = finder.FindPath(this.Fighter.Cell.Id, target.Cell.Id, false, this.Fighter.MP);
+
+                this.Fighter.Fight.StartSequence(SequenceTypeEnum.SEQUENCE_MOVE);
+                this.Fighter.StartMove(path);
+                this.Fighter.Fight.EndSequence(SequenceTypeEnum.SEQUENCE_MOVE);
+                return;
+            }
 			foreach (SpellCast current in this.SpellSelector.EnumerateSpellsCast())
 			{
 				if (current.MoveBefore != null)
@@ -80,12 +91,12 @@ namespace Stump.Server.WorldServer.AI.Fights.Brain
 					num2++;
 				}
 			}
-			if (this.Fighter.CanMove())
-			{
-				foreach (RunStatus arg_26E_0 in new MoveNearTo(this.Fighter, this.Environment.GetNearestEnnemy()).Execute(this))
-				{
-				}
-			}
+			//if (this.Fighter.CanMove())
+			//{
+			//	foreach (RunStatus runStatut in new MoveNearTo(this.Fighter, this.Environment.GetNearestEnnemy()).Execute(this))
+			//	{
+			//	}
+			//}
 		}
 		public void Log(string log, params object[] args)
 		{
