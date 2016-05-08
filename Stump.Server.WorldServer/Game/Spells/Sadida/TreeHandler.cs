@@ -45,7 +45,7 @@ namespace Stump.Server.WorldServer.Game.Spells.Sadida
                 var id = target.PopNextBuffId();
                 var effect = new EffectDice() { Duration = DURATION };
                 var actionId = (short)ActionsEnum.ACTION_793;
-                var buff = new TriggerBuff(id, target, target, effect, base.Spell, false, true, BuffTriggerType.BUFF_ADDED, new TriggerBuffApplyHandler(this.TreeTrigger), actionId);
+                var buff = new TriggerBuff(id, target, target, effect, base.Spell, false, true, BuffTriggerType.TURN_END, new TriggerBuffApplyHandler(this.TreeTrigger), actionId);
 
                 target.AddAndApplyBuff(buff);
                 ContextHandler.SendGameActionFightDispellableEffectMessage(base.Caster.Fight.Clients, buff);
@@ -54,9 +54,11 @@ namespace Stump.Server.WorldServer.Game.Spells.Sadida
 
         private void TreeTrigger(TriggerBuff buff, BuffTriggerType trigger, object token)
         {
-            var num = buff.Target.Stats.Health.Context;
             buff.Target.Stats.Health.Base *= IMPROVEMENT_LIFE_RATIO;
-            buff.Target.Look.BonesID = BONES_ID;
+
+            var actorLook = buff.Target.Look.Clone();
+            actorLook.BonesID = BONES_ID;
+            buff.Target.Look = actorLook;
 
             var state = Singleton<SpellManager>.Instance.GetSpellState((uint)SpellStatesEnum.Leafy);
             buff.Target.AddState(state);

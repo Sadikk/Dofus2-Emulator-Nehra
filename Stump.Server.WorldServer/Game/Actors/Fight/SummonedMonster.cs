@@ -75,7 +75,7 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
         public SummonedMonster(int id, FightTeam team, FightActor summoner, MonsterGrade template, Cell cell, bool isVisibleTimeline = true)
             : base(id, team, template.Spells.ToArray(), summoner, cell)
         {
-            this.m_isVisibleInTimeLine = true;
+            this.m_isVisibleInTimeLine = isVisibleTimeline;
             this.Monster = template;
             this.Look = this.Monster.Template.EntityLook;
             this.m_stats = new StatsFields(this);
