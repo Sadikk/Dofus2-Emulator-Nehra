@@ -293,5 +293,7 @@ namespace Stump.Server.WorldServer.Database.Spells
 			this.m_effectsBin = Singleton<EffectManager>.Instance.SerializeEffects(this.Effects);
 			this.m_criticalEffectsBin = Singleton<EffectManager>.Instance.SerializeEffects(this.CriticalEffects);
 		}
+
+
 	}
 }

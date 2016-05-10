@@ -198,6 +198,40 @@ namespace Stump.Server.WorldServer.Game.Maps.Cells
 			return (DirectionsEnum)((uint)num7);
 		}
 
+
+        public IEnumerable<MapPoint> GetCellsInDirection(DirectionsEnum direction, short minDistance, short maxDistance)
+        {
+            for (short distance = minDistance; distance <= maxDistance; distance++)
+            {
+                MapPoint cell = GetCellInDirection(direction, distance);
+                if (cell != null)
+                    yield return cell;
+            }
+        }
+        public IEnumerable<int> GetCellsInDirections(IEnumerable<DirectionsEnum> directions, short minDistance, short maxDistance)
+        {
+            foreach (DirectionsEnum direction in directions)
+                foreach (MapPoint cell in GetCellsInDirection(direction, minDistance, maxDistance))
+                    yield return cell.CellId;
+        }
+        public IEnumerable<int> GetAdjacentCells(bool diagonals = false)
+        {
+            return GetAdjacentCells(IsInMap, diagonals);
+        }
+        public IEnumerable<MapPoint> GetAllCellsInRange(int minRange, int maxRange, bool ignoreThis, Func<MapPoint, bool> predicate)
+        {
+            for (int x = X - maxRange; x <= X + maxRange; x++)
+                for (int y = Y - maxRange; y <= Y + maxRange; y++)
+                    if (!ignoreThis || x != X || y != Y)
+                    {
+                        int distance = Math.Abs(x - X) + Math.Abs(y - Y);
+                        if (IsInMap(x, y) && distance <= maxRange && distance >= minRange)
+                        {
+                            MapPoint cell = new MapPoint(x, y);
+                            if (cell != null && (predicate == null || predicate(cell))) yield return cell;
+                        }
+                    }
+        }
         public IEnumerable<MapPoint> GetAllCellsInRectangle(MapPoint oppositeCell, bool skipStartAndEndCells = true, Func<MapPoint, bool> predicate = null)
         {
             int iteratorVariable0 = Math.Min(oppositeCell.X, this.X);
@@ -328,34 +362,117 @@ namespace Stump.Server.WorldServer.Game.Maps.Cells
 		{
 			return this.GetCellInDirection(direction, 1);
 		}
-		public System.Collections.Generic.IEnumerable<MapPoint> GetAdjacentCells(Func<short, bool> predicate)
+		public IEnumerable<MapPoint> GetAdjacentCells(Func<short, bool> predicate, bool diagonal = false)
 		{
-			MapPoint mapPoint = new MapPoint(this.m_x + 1, this.m_y);
-			if (MapPoint.IsInMap(mapPoint.X, mapPoint.Y) && predicate(mapPoint.CellId))
-			{
-				yield return mapPoint;
-			}
-			MapPoint mapPoint2 = new MapPoint(this.m_x, this.m_y - 1);
-			if (MapPoint.IsInMap(mapPoint2.X, mapPoint2.Y) && predicate(mapPoint2.CellId))
-			{
-				yield return mapPoint2;
-			}
-			MapPoint mapPoint3 = new MapPoint(this.m_x, this.m_y + 1);
-			if (MapPoint.IsInMap(mapPoint3.X, mapPoint3.Y) && predicate(mapPoint3.CellId))
-			{
-				yield return mapPoint3;
-			}
-			MapPoint mapPoint4 = new MapPoint(this.m_x - 1, this.m_y);
-			if (MapPoint.IsInMap(mapPoint4.X, mapPoint4.Y) && predicate(mapPoint4.CellId))
-			{
-				yield return mapPoint4;
-			}
-			yield break;
-		}
-		public static bool IsInMap(int x, int y)
+            MapPoint northEast = new MapPoint(X, Y + 1);
+            if (northEast != null && IsInMap(northEast.X, northEast.Y) && predicate(northEast.CellId))
+                yield return northEast;
+            MapPoint northWest = new MapPoint(X - 1, Y);
+            if (northWest != null && IsInMap(northWest.X, northWest.Y) && predicate(northWest.CellId))
+                yield return northWest;
+
+            MapPoint southEast = new MapPoint(X + 1, Y);
+            if (southEast != null && IsInMap(southEast.X, southEast.Y) && predicate(southEast.CellId))
+                yield return southEast;
+
+            MapPoint southWest = new MapPoint(X, Y - 1);
+            if (southWest != null && IsInMap(southWest.X, southWest.Y) && predicate(southWest.CellId))
+                yield return southWest;
+
+            if (diagonal)
+            {
+                MapPoint north = new MapPoint(X - 1, Y + 1);
+                if (north != null && IsInMap(north.X, north.Y) && predicate(north.CellId))
+                    yield return north;
+
+                MapPoint east = new MapPoint(X + 1, Y + 1);
+                if (east != null && IsInMap(east.X, east.Y) && predicate(east.CellId))
+                    yield return east;
+
+                MapPoint south = new MapPoint(X + 1, Y - 1);
+                if (south != null && IsInMap(south.X, south.Y) && predicate(south.CellId))
+                    yield return south;
+
+                MapPoint west = new MapPoint(X - 1, Y - 1);
+                if (west != null && IsInMap(west.X, west.Y) && predicate(west.CellId))
+                    yield return west;
+            }
+        }
+        public IEnumerable<int> GetAdjacentCells(Func<MapPoint, bool> predicate, bool diagonal = false)
+        {
+            MapPoint northEast = new MapPoint(X, Y + 1);
+            if (northEast != null && IsInMap(northEast.X, northEast.Y) && predicate(northEast))
+                yield return northEast.CellId;
+            MapPoint northWest = new MapPoint(X - 1, Y);
+            if (northWest != null && IsInMap(northWest.X, northWest.Y) && predicate(northWest))
+                yield return northWest.CellId;
+
+            MapPoint southEast = new MapPoint(X + 1, Y);
+            if (southEast != null && IsInMap(southEast.X, southEast.Y) && predicate(southEast))
+                yield return southEast.CellId;
+
+            MapPoint southWest = new MapPoint(X, Y - 1);
+            if (southWest != null && IsInMap(southWest.X, southWest.Y) && predicate(southWest))
+                yield return southWest.CellId;
+
+            if (diagonal)
+            {
+                MapPoint north = new MapPoint(X - 1, Y + 1);
+                if (north != null && IsInMap(north.X, north.Y) && predicate(north))
+                    yield return north.CellId;
+
+                MapPoint east = new MapPoint(X + 1, Y + 1);
+                if (east != null && IsInMap(east.X, east.Y) && predicate(east))
+                    yield return east.CellId;
+
+                MapPoint south = new MapPoint(X + 1, Y - 1);
+                if (south != null && IsInMap(south.X, south.Y) && predicate(south))
+                    yield return south.CellId;
+
+                MapPoint west = new MapPoint(X - 1, Y - 1);
+                if (west != null && IsInMap(west.X, west.Y) && predicate(west))
+                    yield return west.CellId;
+            }
+        }
+
+        public MapPoint[] GetCellsBetween(MapPoint cell, bool includeVertex = true)
+        {
+            int dx = cell.X - X;
+            int dy = cell.Y - Y;
+
+            double distance = Math.Sqrt(dx * dx + dy * dy);
+            double vx = dx / distance;
+            double vy = dy / distance;
+            int roundedDistance = (int)distance;
+
+            var result = new MapPoint[includeVertex ? roundedDistance + 1 : roundedDistance - 1];
+            int i = 0;
+            if (includeVertex)
+                result[i++] = this;
+
+            double x = X + vx;
+            double y = Y + vx;
+
+            while (i < roundedDistance)
+            {
+                x += vx;
+                y += vy;
+                result[i++] = new MapPoint((int)x, (int)y);
+            }
+
+            if (includeVertex)
+                result[i] = cell;
+
+            return result;
+        }
+        public static bool IsInMap(int x, int y)
 		{
 			return x + y >= 0 && x - y >= 0 && (long)(x - y) < 40L && (long)(x + y) < 28L;
 		}
+        public static bool IsInMap(MapPoint cell)
+        {
+            return IsInMap(cell.X, cell.Y);
+        }
 
         /// <summary>
         /// Returns the symetric cell from a cell using this point as symmetric center

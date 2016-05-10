@@ -20,11 +20,14 @@ namespace Stump.Server.WorldServer.Game.Effects.Spells.Debuffs
         }
         public override bool Apply()
         {
+            
             bool result;
             foreach (FightActor current in base.GetAffectedActors())
             {
-                if (current.HasState((int)SpellStatesEnum.Telefrag))
+                if (base.Caster.Fight.VerifyTargetMask(base.Caster.Id, current.Id, Effect, TargetedCell.Id))
                 {
+                    //if (current.HasState((int)SpellStatesEnum.Telefrag))
+                    //{
                     EffectInteger effectInteger = base.GenerateEffect();
                     if (effectInteger == null)
                     {
@@ -47,6 +50,7 @@ namespace Stump.Server.WorldServer.Game.Effects.Spells.Debuffs
                     {
                         fightActor.LostAP(effectInteger.Value);
                     }
+                    //}
                 }
             }
             result = true;

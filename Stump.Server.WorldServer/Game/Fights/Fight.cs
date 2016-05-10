@@ -32,6 +32,7 @@ using Stump.Server.WorldServer.Handlers.Context;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Stump.Server.WorldServer.Game.Fights
 {
@@ -1937,6 +1938,251 @@ namespace Stump.Server.WorldServer.Game.Fights
                     this.GameFightReconnectMessage(characterFighter);
                 }
             }
+        }
+
+        public bool VerifyTargetMask(int pCasterId, int pTargetId, Effects.Instances.EffectBase pEffect, int pSpellImpactCell, double pTriggeringSpellCasterId = 0)
+        {
+            //HOLY SHIT THAT'S AWFUL 
+
+            Regex r = null;
+            //exclusiveMasks = null;
+            //string exclusiveMask = null;
+            string exclusiveMaskParam = null;
+            bool exclusiveMaskCasterOnly = false;
+            bool verify = false;
+            //var summonedTargetCanPlay:* = false;
+            int maskState = 0;
+            Dictionary<string, int> multipleMasks = null;
+            List<string> masksTypes= null;
+            string maskType = null;
+            List<string> verifiedMasks = null;
+            bool isMultipleMask = false;
+            string lastMaskType = null;
+            int multipleMaskCount = 0;
+            //var fef:FightEntitiesFrame = Kernel.getWorker().getFrame(FightEntitiesFrame) as FightEntitiesFrame;
+            //if (!fef)
+            //{
+            //    return true;
+            //}
+            if ((pEffect == null) || (pEffect.Delay > 0) || (string.IsNullOrEmpty(pEffect.TargetMask)))
+            {
+                return false;
+            }
+            //var target:TiphonSprite = DofusEntities.getEntity(pTargetId) as AnimatedCharacter;
+            bool targetIsCaster = pTargetId == pCasterId;
+
+            FightActor casterInfos = GetOneFighter(pCasterId);
+            FightActor targetInfos = GetOneFighter(pTargetId);
+            FightActor monsterInfo = targetInfos as MonsterFighter;
+            bool targetIsCarried = targetInfos.IsCarried;
+            //var casterStates = casterInfos.sta
+            //var casterStates:Array = FightersStateManager.getInstance().getStates(pCasterId);
+            //var targetStates:Array = FightersStateManager.getInstance().getStates(pTargetId);
+            bool isTargetAlly = targetInfos.Team.Id == casterInfos.Team.Id;
+            string targetMaskPattern = "";
+            //if ((pCasterId == CurrentPlayedFighterManager.getInstance().currentFighterId) /*&& (pEffect.category == 0)*/ && (pEffect.targetMask == "C"))
+            //{
+            //    return true;
+            //}
+            if (targetIsCaster)
+            {
+                if (pEffect.EffectId == EffectsEnum.Effect_GiveHPPercent) //90
+                {
+                    return true;
+                }
+                if (pEffect.TargetMask.IndexOf("g") == -1)
+                {
+                    /*if (verifySpellEffectZone(pCasterId, pEffect, pSpellImpactCell, targetInfos.Position.Cell.Id))
+                    {
+                        targetMaskPattern = "caC";
+                    }
+                    else
+                    {
+                        targetMaskPattern = "C";
+                    }*/
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                if ((targetIsCarried) && (!(pEffect.ZoneShape == SpellShapeEnum.A))) /*&& (!(pEffect.ZoneShape == SpellShapeEnum.a)))*/
+                {
+                    return false;
+                }
+                /*if ((targetInfos.Stats.summoned) && (monsterInfo) && (!Monster.getMonsterById(monsterInfo.creatureGenericId).canPlay))
+                {
+                    targetMaskPattern = isTargetAlly ? "sj" : "SJ";
+                }
+                else if (targetInfos.stats.summoned)
+                {
+                    targetMaskPattern = isTargetAlly ? "ij" : "IJ";
+                    summonedTargetCanPlay = true;
+                }
+                else if (targetInfos is GameFightCompanionInformations)
+                {
+                    targetMaskPattern = isTargetAlly ? "dl" : "DL";
+                }*/
+
+
+                if (monsterInfo != null)
+                {
+                    targetMaskPattern = targetMaskPattern + (isTargetAlly ? "ag" : "A");
+                    /*if (!summonedTargetCanPlay)
+                    {
+                        targetMaskPattern = targetMaskPattern + (isTargetAlly ? "m" : "M");
+                    }*/
+                }
+                else
+                {
+                    targetMaskPattern = targetMaskPattern + (isTargetAlly ? "aghl" : "AHL");
+                }
+            }
+            var AT_LEAST_MASK_TYPES = new string[] { "B", "F", "Z" };
+            r = new Regex("[" + targetMaskPattern + "]");
+            Regex exclusiveTargetMasks = new Regex("\\*?[bBeEfFzZKoOPpTWUvV][0 - 9]*");
+            verify = r.IsMatch(pEffect.TargetMask);
+            if (verify)
+            {
+                var exclusiveMasks = exclusiveTargetMasks.Matches(pEffect.TargetMask);
+                if (exclusiveMasks.Count > 0)
+                {
+                    verify = false;
+                    multipleMasks = new Dictionary<string, int>();
+                    masksTypes = new List<string>();
+                    foreach(Match exclusiveMask in exclusiveMasks)
+                    {
+                        maskType = Convert.ToString(exclusiveMask.Value[0]);
+                        if (maskType == "*")
+                        {
+                            maskType = exclusiveMask.Value.Substring(0, 2);
+                        }
+                        if (AT_LEAST_MASK_TYPES.Any(x => x == maskType))
+                        {
+                            if (masksTypes.Any(x => x == maskType))
+                            {
+                                if (!multipleMasks.ContainsKey(maskType))
+                                {
+                                    multipleMasks.Add(maskType, 2);
+                                }
+                                else
+                                {
+                                    multipleMasks[maskType]++;
+                                }
+                            }
+                            else
+                            {
+                                masksTypes.Add(maskType);
+                            }
+                        }
+                    }
+                    verifiedMasks = new List<string>();
+                    foreach(Match exclusiveMask in exclusiveMasks)
+                    {
+                        exclusiveMaskCasterOnly = exclusiveMask.Value[0] == '*';
+                        string eM = exclusiveMaskCasterOnly ? exclusiveMask.Value.Substring(1, exclusiveMask.Length - 1) : exclusiveMask.Value;
+                        exclusiveMaskParam = eM.Length > 1 ? eM.Substring(1, eM.Length - 1) : null;
+                        eM = Convert.ToString(eM[0]);
+                        switch (eM)
+                        {
+                            case "b":
+                                break;
+                            case "B":
+                                break;
+                            case "e":
+                                maskState = Int32.Parse(exclusiveMaskParam);
+                                if (exclusiveMaskCasterOnly)
+                                {
+                                    verify = !casterInfos.HasState(maskState);
+                                }
+                                else
+                                {
+                                    verify = !targetInfos.HasState(maskState);
+                                }
+                                break;
+                            case "E":
+                                maskState = Int32.Parse(exclusiveMaskParam);
+                                if (exclusiveMaskCasterOnly)
+                                {
+                                    verify = casterInfos.HasState(maskState);
+                                }
+                                else
+                                {
+                                    verify = targetInfos.HasState(maskState);
+                                }
+                                break;
+                            case "f":
+                                //verify = (monsterInfo != null) || (!(monsterInfo.GenericId == Int32.Parse(exclusiveMaskParam)));
+                                break;
+                            case "F":
+                                //verify = (monsterInfo != null) && (monsterInfo.creatureGenericId == Int32.Parse(exclusiveMaskParam));
+                                break;
+                            case "z":
+                                break;
+                            case "Z":
+                                break;
+                            case "K":
+                                break;
+                            case "o":
+                                verify = (!(pTriggeringSpellCasterId == 0)) && (pTargetId == pTriggeringSpellCasterId); /* && (verifySpellEffectZone(pTriggeringSpellCasterId, pEffect, pSpellImpactCell, casterInfos.disposition.cellId));*/
+                                break;
+                            case "O":
+                                verify = (!(pTriggeringSpellCasterId == 0)) && (pTargetId == pTriggeringSpellCasterId);
+                                break;
+                            case "p":
+                                break;
+                            case "P":
+                                break;
+                            case "T":
+                                break;
+                            case "W":
+                                break;
+                            case "U":
+                                break;
+                            case "v":
+                                verify = targetInfos.Stats.Health.TotalMax / targetInfos.Stats.Health.TotalMax * 100 > Int32.Parse(exclusiveMaskParam);
+                                break;
+                            case "V":
+                                verify = targetInfos.Stats.Health.TotalMax / targetInfos.Stats.Health.TotalMax * 100 <= Int32.Parse(exclusiveMaskParam);
+                                break;
+                        }
+                        maskType = exclusiveMaskCasterOnly ? "*" + eM : eM;
+                        isMultipleMask = Convert.ToBoolean(multipleMasks[maskType]);
+                        if ((!string.IsNullOrEmpty(lastMaskType)) || (maskType == lastMaskType))
+                        {
+                            multipleMaskCount++;
+                        }
+                        else
+                        {
+                            multipleMaskCount = 0;
+                        }
+                        lastMaskType = maskType;
+                        if ((verify) && (isMultipleMask) && (verifiedMasks.Any(x => x == maskType)))
+                        {
+                            verifiedMasks.Add(maskType);
+                        }
+                        if (!verify)
+                        {
+                            if (!isMultipleMask)
+                            {
+                                return false;
+                            }
+                            if (verifiedMasks.Any(x => x == maskType))
+                            {
+                                verify = true;
+                            }
+                            else if (multipleMasks[maskType] == multipleMaskCount)
+                            {
+                                return false;
+                            }
+
+                        }
+                    }
+                }
+            }
+            return verify;
         }
     }
 }
