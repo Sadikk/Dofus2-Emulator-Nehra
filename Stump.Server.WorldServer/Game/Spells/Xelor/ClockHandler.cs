@@ -22,7 +22,7 @@ namespace Stump.Server.WorldServer.Game.Spells.Pandawa
 
         public override void Execute()
         {
-
+            
             var target = this.Fight.GetOneFighter(this.TargetedCell);
             if (target != null && target.HasState((int)SpellStatesEnum.Telefrag))
             {
