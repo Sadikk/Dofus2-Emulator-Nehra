@@ -1839,11 +1839,8 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
 		}
         public virtual bool CanBeMove()
         {
-            var immovabliesStates = from entry
-                                    in this.m_states
-                                    where entry.Id == (int)SpellStatesEnum.Rooted || entry.Id == (int)SpellStatesEnum.Leafy //Should make a better method
-                                    select entry;
-            return immovabliesStates == null;
+            var immovabliesStates = this.m_states.Where((x) => x.Id == (int)SpellStatesEnum.Leafy || x.Id == (int)SpellStatesEnum.Rooted).SingleOrDefault();
+            return (immovabliesStates == null);
         }
 		public virtual bool CanPlay()
 		{

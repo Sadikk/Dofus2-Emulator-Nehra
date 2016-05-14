@@ -58,12 +58,12 @@ namespace Stump.Server.WorldServer.Game.Maps.Cells
 		{
 			get
 			{
-				MapPoint arg_1E_0;
-				if ((arg_1E_0 = this.m_point) == null)
+				MapPoint result;
+				if ((result = this.m_point) == null)
 				{
-					arg_1E_0 = (this.m_point = MapPoint.GetPoint(this.Cell));
+                    result = (this.m_point = MapPoint.GetPoint(this.Cell));
 				}
-				return arg_1E_0;
+				return result;
 			}
 		}
 		private void NotifyPositionChanged()
