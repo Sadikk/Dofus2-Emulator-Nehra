@@ -152,6 +152,9 @@
     <Compile Include="Game\Effects\Spells\Shield\ShieldPercentBuff.cs" />
     <Compile Include="Game\Effects\Spells\Summon\KillAndReplace.cs" />
     <Compile Include="Game\Effects\Spells\Summon\SummonBomb.cs" />
+    <Compile Include="Game\Effects\Spells\TargetMask\DefaultTargetMaskHandlerAttribute.cs" />
+    <Compile Include="Game\Effects\Spells\TargetMask\TargetMaskHandlerAttribute.cs" />
+    <Compile Include="Game\Effects\Spells\TargetMask\TargetMaskStateHandlers.cs" />
     <Compile Include="Game\Fights\Triggers\BombWall.cs" />
     <Compile Include="Game\Maps\Cells\Shapes\Circle.cs" />
     <Compile Include="Game\Parties\ArenaParty.cs" />

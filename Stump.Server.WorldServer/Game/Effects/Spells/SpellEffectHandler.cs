@@ -14,6 +14,9 @@ using Stump.Server.WorldServer.Game.Maps.Cells;
 using Stump.Server.WorldServer.Game.Maps.Cells.Shapes;
 using Stump.Server.WorldServer.Game.Spells;
 using Stump.DofusProtocol.Enums.HomeMade;
+using System.Collections.Generic;
+using System;
+using Stump.Core.Reflection;
 
 namespace Stump.Server.WorldServer.Game.Effects.Spells
 {
@@ -151,7 +154,9 @@ namespace Stump.Server.WorldServer.Game.Effects.Spells
 
 		public bool IsValidTarget(FightActor actor)
 		{
-			bool result;
+            //todo : we redo it each time, parse once and save result
+            var targetMasks = ParseTargetMask(this.Effect.TargetMask);
+            bool result;
 			if (this.Targets == SpellTargetType.NONE)
 			{
 				result = true;
@@ -207,7 +212,15 @@ namespace Stump.Server.WorldServer.Game.Effects.Spells
 					}
 				}
 			}
-			return result;
+            foreach (KeyValuePair<char, object> pair in targetMasks)
+            {
+                foreach (var handler in Singleton<EffectManager>.Instance.GetTargetMaskHandlers(pair.Key, Caster).ToArray())
+                {
+                    if (handler.Func(handler.Container, Caster, actor, Effect, pair.Value))
+                        return true;
+                }
+            }
+            return result;
 		}
 		public void RefreshZone()
 		{
@@ -215,6 +228,7 @@ namespace Stump.Server.WorldServer.Game.Effects.Spells
 		}
 		public System.Collections.Generic.IEnumerable<FightActor> GetAffectedActors()
 		{
+            
 			System.Collections.Generic.IEnumerable<FightActor> result;
 			if (this.m_customAffectedActors != null)
 			{
@@ -331,5 +345,15 @@ namespace Stump.Server.WorldServer.Game.Effects.Spells
 		{
 			return false;
 		}
+        private Dictionary<char, object> ParseTargetMask(string pattern)
+        {
+            Dictionary<char, object> result = new Dictionary<char, object>();
+            var splitted = pattern.Replace(" ", "").Split(',');
+            foreach (string mask in splitted)
+            {
+                result.Add(mask[0], mask.Remove(0, 1));
+            }
+            return result;
+        }
 	}
 }

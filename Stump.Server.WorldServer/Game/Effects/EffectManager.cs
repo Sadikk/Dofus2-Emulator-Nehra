@@ -18,12 +18,63 @@ using System;
 using System.Linq;
 using System.Reflection;
 using Stump.Server.WorldServer.Game.Effects.Spells;
+using Stump.Server.WorldServer.Game.Effects.Spells.TargetMask;
+using System.Collections.Generic;
 
 namespace Stump.Server.WorldServer.Game.Effects
 {
 	public class EffectManager : DataManager<EffectManager>
 	{
-		private delegate ItemEffectHandler ItemEffectConstructor(EffectBase effect, Character target, BasePlayerItem item);
+        public class TargetMaskHandler
+        {
+            public TargetMaskHandler(object container, Type containerType, char pattern, TargetMaskHandlerAttribute handlerAttribute, Func<object, FightActor, FightActor, EffectBase, object, bool> func, Type tokenType)
+            {
+                Container = container;
+                ContainerType = containerType;
+                Pattern = pattern;
+                Attribute = handlerAttribute;
+                Func = func;
+                TokenType = tokenType;
+            }
+
+            public object Container
+            {
+                get;
+                private set;
+            }
+
+            public Type ContainerType
+            {
+                get;
+                private set;
+            }
+
+            public char Pattern
+            {
+                get;
+                private set;
+            }
+
+            public TargetMaskHandlerAttribute Attribute
+            {
+                get;
+                private set;
+            }
+
+            public Func<object, FightActor, FightActor, EffectBase, object, bool> Func
+            {
+                get;
+                private set;
+            }
+
+            public Type TokenType
+            {
+                get;
+                private set;
+            }
+        }
+
+        private delegate ItemEffectHandler ItemEffectConstructor(EffectBase effect, Character target, BasePlayerItem item);
 		private delegate ItemEffectHandler ItemSetEffectConstructor(EffectBase effect, Character target, ItemSetTemplate itemSet, bool apply);
 		private delegate UsableEffectHandler UsableEffectConstructor(EffectBase effect, Character target, BasePlayerItem item);
 		private delegate SpellEffectHandler SpellEffectConstructor(EffectDice effect, FightActor caster, Stump.Server.WorldServer.Game.Spells.Spell spell, Cell targetedCell, bool critical);
@@ -49,13 +100,73 @@ namespace Stump.Server.WorldServer.Game.Effects
 			EffectsEnum.Effect_RemoveAP,
 			EffectsEnum.Effect_RemainingFights
 		};
-		[Initialization(InitializationPass.Third)]
+        private readonly System.Collections.Generic.Dictionary<char, System.Collections.Generic.List<TargetMaskHandler>> m_targetMaskHandlers = new System.Collections.Generic.Dictionary<char, System.Collections.Generic.List<TargetMaskHandler>>();
+        [Initialization(InitializationPass.Third)]
 		public override void Initialize()
 		{
 			this.m_effects = base.Database.Fetch<EffectTemplate>(EffectTemplateRelator.FetchQuery, new object[0]).ToDictionary((EffectTemplate entry) => (short)entry.Id);
-			this.InitializeHandlers();
+			this.InitializeEffectHandlers();
+            this.InitializeTargetMaskHandlers();
 		}
-		private void InitializeHandlers()
+
+        private void InitializeTargetMaskHandlers()
+        {
+            foreach (System.Type type in
+                from entry in System.Reflection.Assembly.GetExecutingAssembly().GetTypes()
+                select entry
+                )
+            {
+                var methods = type.GetMethods(BindingFlags.Static | BindingFlags.Instance |
+                    BindingFlags.Public | BindingFlags.NonPublic);
+                object container = null;
+                foreach (var method in methods)
+                {
+                    var attributes = method.GetCustomAttributes(typeof(TargetMaskHandlerAttribute), false) as TargetMaskHandlerAttribute[];
+
+                    if (attributes == null || attributes.Length == 0)
+                        continue;
+                    var parameters = method.GetParameters();
+
+                    if (parameters.Length != 4)
+                    {
+                        throw new ArgumentException(string.Format("Method handler {0} has incorrect parameters. Right definition is Handler(FightActor, FightActor, EffectBase, object)", method));
+                    }
+
+                    if (!method.IsStatic && container == null || method.IsStatic && container != null)
+                        return;
+
+                    Func<object, FightActor, FightActor, EffectBase, object, bool> handlerDelegate;
+                    try
+                    {
+                        handlerDelegate = (Func<object, FightActor, FightActor, EffectBase, object, bool>)method.CreateFuncDelegate(typeof(bool), typeof(FightActor), typeof(FightActor), typeof(EffectBase), typeof(object));
+                    }
+                    catch (Exception)
+                    {
+                        throw new ArgumentException(string.Format("Method handler {0} has incorrect parameters. Right definition is Handler(FightActor, FightActor, EffectBase, object))", method));
+                    }
+
+                    foreach (var attribute in attributes)
+                    {
+                        RegisterShared(attribute.Pattern, method.DeclaringType, attribute, handlerDelegate, parameters[0].ParameterType, method.IsStatic ? null : container);
+                    }
+                }
+            }
+        }
+
+        private void RegisterShared(char pattern, Type containerType, TargetMaskHandlerAttribute attribute, Func<object, FightActor, FightActor, EffectBase, object, bool> action, Type tokenType, object container = null)
+        {
+            if (attribute == null) throw new ArgumentNullException("attribute");
+            if (action == null) throw new ArgumentNullException("action");
+
+            if (!m_targetMaskHandlers.ContainsKey(pattern))
+                m_targetMaskHandlers.Add(pattern, new System.Collections.Generic.List<TargetMaskHandler>());
+
+            m_targetMaskHandlers[pattern].Add(new TargetMaskHandler(container, containerType, pattern, attribute, action, tokenType));
+        }
+
+
+
+        private void InitializeEffectHandlers()
 		{
 			foreach (System.Type current in 
 				from entry in System.Reflection.Assembly.GetExecutingAssembly().GetTypes()
@@ -373,7 +484,16 @@ namespace Stump.Server.WorldServer.Game.Effects
 			}
 			return result;
 		}
-		public bool IsEffectHandledBy(EffectsEnum effect, System.Type handlerType)
+        public IEnumerable<TargetMaskHandler> GetTargetMaskHandlers(char pattern, object token)
+        {
+            List<TargetMaskHandler> handlersList;
+            if (m_targetMaskHandlers.TryGetValue(pattern, out handlersList))
+                foreach (var handler in handlersList)
+                    if (token == null || handler.TokenType.IsInstanceOfType(token))
+                        yield return handler;
+
+        }
+        public bool IsEffectHandledBy(EffectsEnum effect, System.Type handlerType)
 		{
 			return this.m_effectsHandlers.ContainsKey(effect) && this.m_effectsHandlers[effect].Contains(handlerType);
 		}
