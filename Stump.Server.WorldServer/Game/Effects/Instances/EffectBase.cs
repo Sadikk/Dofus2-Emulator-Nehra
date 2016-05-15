@@ -4,6 +4,7 @@ using Stump.DofusProtocol.Classes;
 using Stump.DofusProtocol.Enums;
 using Stump.DofusProtocol.Types;
 using Stump.Server.WorldServer.Database.Effects;
+using System.Collections.Generic;
 
 namespace Stump.Server.WorldServer.Game.Effects.Instances
 {
@@ -228,11 +229,17 @@ namespace Stump.Server.WorldServer.Game.Effects.Instances
             set
             {
                 this.m_targetMask = value;
+                this.ParsedTargetMask = this.ParseTargetMask(value);
                 this.IsDirty = true;
             }
         }
+        public Dictionary<char, object> ParsedTargetMask
+        {
+            get;
+            private set;
+        }
 
-		public EffectBase()
+        public EffectBase()
 		{
 		}
 		public EffectBase(EffectBase effect)
@@ -439,7 +446,18 @@ namespace Stump.Server.WorldServer.Game.Effects.Instances
 			}
 		}
 
-		public override bool Equals(object obj)
+        protected Dictionary<char, object> ParseTargetMask(string pattern)
+        {
+            Dictionary<char, object> result = new Dictionary<char, object>();
+            var splitted = pattern.Replace(" ", "").Split(',');
+            foreach (string mask in splitted)
+            {
+                result.Add(mask[0], mask.Remove(0, 1));
+            }
+            return result;
+        }
+
+        public override bool Equals(object obj)
 		{
 			return !object.ReferenceEquals(null, obj) && (object.ReferenceEquals(this, obj) || (!(obj.GetType() != typeof(EffectBase)) && this.Equals((EffectBase)obj)));
 		}

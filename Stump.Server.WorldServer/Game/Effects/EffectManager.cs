@@ -27,14 +27,13 @@ namespace Stump.Server.WorldServer.Game.Effects
 	{
         public class TargetMaskHandler
         {
-            public TargetMaskHandler(object container, Type containerType, char pattern, TargetMaskHandlerAttribute handlerAttribute, Func<object, FightActor, FightActor, EffectBase, object, bool> func, Type tokenType)
+            public TargetMaskHandler(object container, Type containerType, char pattern, TargetMaskHandlerAttribute handlerAttribute, Func<object, FightActor, FightActor, EffectBase, object, bool> func)
             {
                 Container = container;
                 ContainerType = containerType;
                 Pattern = pattern;
                 Attribute = handlerAttribute;
                 Func = func;
-                TokenType = tokenType;
             }
 
             public object Container
@@ -62,12 +61,6 @@ namespace Stump.Server.WorldServer.Game.Effects
             }
 
             public Func<object, FightActor, FightActor, EffectBase, object, bool> Func
-            {
-                get;
-                private set;
-            }
-
-            public Type TokenType
             {
                 get;
                 private set;
@@ -147,24 +140,23 @@ namespace Stump.Server.WorldServer.Game.Effects
 
                     foreach (var attribute in attributes)
                     {
-                        RegisterShared(attribute.Pattern, method.DeclaringType, attribute, handlerDelegate, parameters[0].ParameterType, method.IsStatic ? null : container);
+                        if (attribute == null)
+                        {
+                            throw new ArgumentNullException("Attribute");
+                        }
+                        if(handlerDelegate == null)
+                        {
+                            throw new ArgumentNullException("Handler");
+                        }
+
+                        if (!m_targetMaskHandlers.ContainsKey(attribute.Pattern))
+                            m_targetMaskHandlers.Add(attribute.Pattern, new System.Collections.Generic.List<TargetMaskHandler>());
+
+                        m_targetMaskHandlers[attribute.Pattern].Add(new TargetMaskHandler(container, method.DeclaringType, attribute.Pattern, attribute, handlerDelegate));
                     }
                 }
             }
         }
-
-        private void RegisterShared(char pattern, Type containerType, TargetMaskHandlerAttribute attribute, Func<object, FightActor, FightActor, EffectBase, object, bool> action, Type tokenType, object container = null)
-        {
-            if (attribute == null) throw new ArgumentNullException("attribute");
-            if (action == null) throw new ArgumentNullException("action");
-
-            if (!m_targetMaskHandlers.ContainsKey(pattern))
-                m_targetMaskHandlers.Add(pattern, new System.Collections.Generic.List<TargetMaskHandler>());
-
-            m_targetMaskHandlers[pattern].Add(new TargetMaskHandler(container, containerType, pattern, attribute, action, tokenType));
-        }
-
-
 
         private void InitializeEffectHandlers()
 		{
@@ -488,10 +480,15 @@ namespace Stump.Server.WorldServer.Game.Effects
         {
             List<TargetMaskHandler> handlersList;
             if (m_targetMaskHandlers.TryGetValue(pattern, out handlersList))
+            {
                 foreach (var handler in handlersList)
-                    if (token == null || handler.TokenType.IsInstanceOfType(token))
+                {
+                    if (token != null && handler.TokenType.IsInstanceOfType(token))
+                    {
                         yield return handler;
-
+                    }
+                }
+            }
         }
         public bool IsEffectHandledBy(EffectsEnum effect, System.Type handlerType)
 		{

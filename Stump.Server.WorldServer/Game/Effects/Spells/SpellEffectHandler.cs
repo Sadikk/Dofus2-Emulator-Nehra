@@ -152,72 +152,72 @@ namespace Stump.Server.WorldServer.Game.Effects.Spells
             SpellEffectHandler.logger.Debug<EffectsEnum, SpellTemplate>("Handle '{0}' effect for the spell '{1}'.", effect.EffectId, spell.Template);
 		}
 
-		public bool IsValidTarget(FightActor actor)
-		{
-            //todo : we redo it each time, parse once and save result
-            var targetMasks = ParseTargetMask(this.Effect.TargetMask);
+        public bool IsValidTarget(FightActor actor)
+        {
             bool result;
-			if (this.Targets == SpellTargetType.NONE)
-			{
-				result = true;
-			}
-			else
-			{
-				if (this.Targets == SpellTargetType.ALL)
-				{
-					result = true;
-				}
-				else
-				{
-					if (this.Caster == actor && this.Targets.HasFlag(SpellTargetType.SELF))
-					{
-						result = true;
-					}
-					else
-					{
-						if (this.Targets.HasFlag(SpellTargetType.ONLY_SELF) && actor != this.Caster)
-						{
-							result = false;
-						}
-						else
-						{
-							if (this.Caster.IsFriendlyWith(actor) && this.Caster != actor)
-							{
-								if ((this.Targets.HasFlag(SpellTargetType.ALLY_1) || this.Targets.HasFlag(SpellTargetType.ALLY_2) || this.Targets.HasFlag(SpellTargetType.ALLY_3) || this.Targets.HasFlag(SpellTargetType.ALLY_4) || this.Targets.HasFlag(SpellTargetType.ALLY_5)) && !(actor is SummonedFighter))
-								{
-									result = true;
-									return result;
-								}
-								if ((this.Targets.HasFlag(SpellTargetType.ALLY_SUMMONS) || this.Targets.HasFlag(SpellTargetType.ALLY_STATIC_SUMMONS)) && actor is SummonedFighter)
-								{
-									result = true;
-									return result;
-								}
-							}
-							if (this.Caster.IsEnnemyWith(actor))
-							{
-								if ((this.Targets.HasFlag(SpellTargetType.ENNEMY_1) || this.Targets.HasFlag(SpellTargetType.ENNEMY_2) || this.Targets.HasFlag(SpellTargetType.ENNEMY_3) || this.Targets.HasFlag(SpellTargetType.ENNEMY_4) || this.Targets.HasFlag(SpellTargetType.ENNEMY_5)) && !(actor is SummonedFighter))
-								{
-									result = true;
-									return result;
-								}
-								if ((this.Targets.HasFlag(SpellTargetType.ENNEMY_SUMMONS) || this.Targets.HasFlag(SpellTargetType.ENNEMY_STATIC_SUMMONS)) && actor is SummonedFighter)
-								{
-									result = true;
-									return result;
-								}
-							}
-							result = false;
-						}
-					}
-				}
-			}
-            foreach (KeyValuePair<char, object> pair in targetMasks)
+            if (this.Targets == SpellTargetType.NONE)
+            {
+                result = true;
+            }
+            else
+            {
+                if (this.Targets == SpellTargetType.ALL)
+                {
+                    result = true;
+                }
+                else
+                {
+                    if (this.Caster == actor && this.Targets.HasFlag(SpellTargetType.SELF))
+                    {
+                        result = true;
+                    }
+                    else
+                    {
+                        if (this.Targets.HasFlag(SpellTargetType.ONLY_SELF) && actor != this.Caster)
+                        {
+                            result = false;
+                        }
+                        else
+                        {
+                            if (this.Caster.IsFriendlyWith(actor) && this.Caster != actor)
+                            {
+                                if ((this.Targets.HasFlag(SpellTargetType.ALLY_1) || this.Targets.HasFlag(SpellTargetType.ALLY_2) || this.Targets.HasFlag(SpellTargetType.ALLY_3) || this.Targets.HasFlag(SpellTargetType.ALLY_4) || this.Targets.HasFlag(SpellTargetType.ALLY_5)) && !(actor is SummonedFighter))
+                                {
+                                    result = true;
+                                    return result;
+                                }
+                                if ((this.Targets.HasFlag(SpellTargetType.ALLY_SUMMONS) || this.Targets.HasFlag(SpellTargetType.ALLY_STATIC_SUMMONS)) && actor is SummonedFighter)
+                                {
+                                    result = true;
+                                    return result;
+                                }
+                            }
+                            if (this.Caster.IsEnnemyWith(actor))
+                            {
+                                if ((this.Targets.HasFlag(SpellTargetType.ENNEMY_1) || this.Targets.HasFlag(SpellTargetType.ENNEMY_2) || this.Targets.HasFlag(SpellTargetType.ENNEMY_3) || this.Targets.HasFlag(SpellTargetType.ENNEMY_4) || this.Targets.HasFlag(SpellTargetType.ENNEMY_5)) && !(actor is SummonedFighter))
+                                {
+                                    result = true;
+                                    return result;
+                                }
+                                if ((this.Targets.HasFlag(SpellTargetType.ENNEMY_SUMMONS) || this.Targets.HasFlag(SpellTargetType.ENNEMY_STATIC_SUMMONS)) && actor is SummonedFighter)
+                                {
+                                    result = true;
+                                    return result;
+                                }
+                            }
+                            result = false;
+                        }
+                    }
+                }
+            }
+            foreach (KeyValuePair<char, object> pair in this.Effect.ParsedTargetMask)
             {
                 foreach (var handler in Singleton<EffectManager>.Instance.GetTargetMaskHandlers(pair.Key, Caster).ToArray())
                 {
                     if (handler.Func(handler.Container, Caster, actor, Effect, pair.Value))
+                    {
                         return true;
+                    }
                 }
             }
             return result;
