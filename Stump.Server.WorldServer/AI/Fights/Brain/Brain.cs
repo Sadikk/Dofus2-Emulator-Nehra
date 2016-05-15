@@ -95,6 +95,7 @@ namespace Stump.Server.WorldServer.AI.Fights.Brain
             {
                 foreach (RunStatus runStatut in new MoveNearTo(this.Fighter, this.Environment.GetNearestEnnemy()).Execute(this))
                 {
+
                 }
             }
         }

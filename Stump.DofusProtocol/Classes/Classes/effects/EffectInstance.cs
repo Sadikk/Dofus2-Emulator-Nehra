@@ -26,7 +26,6 @@ namespace Stump.DofusProtocol.Classes
 {
 
     [D2OClass("EffectInstance"), Serializable]
-
     public class EffectInstance : IDataObject
     {
 

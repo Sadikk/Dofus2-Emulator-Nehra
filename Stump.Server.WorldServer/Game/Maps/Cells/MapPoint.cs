@@ -358,22 +358,11 @@ namespace Stump.Server.WorldServer.Game.Maps.Cells
 			}
 			return result;
 		}
-        public MapPoint GetCellsInLineAround(DirectionsEnum drection, short count)
-        {
-            for(int i = 0; i < count; i++)
-            {
-
-            }
-        }
-		public MapPoint GetNearestCellInDirection(DirectionsEnum direction)
+        public MapPoint GetNearestCellInDirection(DirectionsEnum direction)
 		{
 			return this.GetCellInDirection(direction, 1);
 		}
-<<<<<<< HEAD
-		public IEnumerable<MapPoint> GetAdjacentCells(Func<short, bool> predicate)
-=======
 		public IEnumerable<MapPoint> GetAdjacentCells(Func<short, bool> predicate, bool diagonal = false)
->>>>>>> 5634c143904cb8bcc57144a5f0bd5a542dbafb34
 		{
             MapPoint northEast = new MapPoint(X, Y + 1);
             if (northEast != null && IsInMap(northEast.X, northEast.Y) && predicate(northEast.CellId))
