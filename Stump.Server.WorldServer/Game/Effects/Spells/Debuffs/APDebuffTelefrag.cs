@@ -24,34 +24,32 @@ namespace Stump.Server.WorldServer.Game.Effects.Spells.Debuffs
             bool result;
             foreach (FightActor current in base.GetAffectedActors())
             {
-                if (base.Caster.Fight.VerifyTargetMask(base.Caster.Id, current.Id, Effect, TargetedCell.Id))
+                //if (current.HasState((int)SpellStatesEnum.Telefrag))
+                //{
+                EffectInteger effectInteger = base.GenerateEffect();
+                if (effectInteger == null)
                 {
-                    //if (current.HasState((int)SpellStatesEnum.Telefrag))
-                    //{
-                    EffectInteger effectInteger = base.GenerateEffect();
-                    if (effectInteger == null)
-                    {
-                        result = false;
-                        return result;
-                    }
-                    FightActor fightActor = current;
-                    SpellReflectionBuff bestReflectionBuff = current.GetBestReflectionBuff();
-                    if (bestReflectionBuff != null && bestReflectionBuff.ReflectedLevel >= (int)base.Spell.CurrentLevel && base.Spell.Template.Id != 0)
-                    {
-                        this.NotifySpellReflected(current);
-                        current.RemoveAndDispellBuff(bestReflectionBuff);
-                        fightActor = base.Caster;
-                    }
-                    if (this.Effect.Duration > 1)
-                    {
-                        base.AddStatBuff(fightActor, Convert.ToInt16(-effectInteger.Value), PlayerFields.AP, true, 168);
-                    }
-                    else
-                    {
-                        fightActor.LostAP(effectInteger.Value);
-                    }
-                    //}
+                    result = false;
+                    return result;
                 }
+                FightActor fightActor = current;
+                SpellReflectionBuff bestReflectionBuff = current.GetBestReflectionBuff();
+                if (bestReflectionBuff != null && bestReflectionBuff.ReflectedLevel >= (int)base.Spell.CurrentLevel && base.Spell.Template.Id != 0)
+                {
+                    this.NotifySpellReflected(current);
+                    current.RemoveAndDispellBuff(bestReflectionBuff);
+                    fightActor = base.Caster;
+                }
+                if (this.Effect.Duration > 1)
+                {
+                    base.AddStatBuff(fightActor, Convert.ToInt16(-effectInteger.Value), PlayerFields.AP, true, 168);
+                }
+                else
+                {
+                    fightActor.LostAP(effectInteger.Value);
+                }
+                //}
+
             }
             result = true;
             return result;
