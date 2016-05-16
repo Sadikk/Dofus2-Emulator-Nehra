@@ -23,8 +23,8 @@ using System.Collections.Generic;
 
 namespace Stump.Server.WorldServer.Game.Effects
 {
-	public class EffectManager : DataManager<EffectManager>
-	{
+    public class EffectManager : DataManager<EffectManager>
+    {
         public class TargetMaskHandler
         {
             public TargetMaskHandler(object container, Type containerType, char pattern, TargetMaskHandlerAttribute handlerAttribute, Func<object, FightActor, FightActor, EffectBase, object, bool> func)
@@ -68,39 +68,39 @@ namespace Stump.Server.WorldServer.Game.Effects
         }
 
         private delegate ItemEffectHandler ItemEffectConstructor(EffectBase effect, Character target, BasePlayerItem item);
-		private delegate ItemEffectHandler ItemSetEffectConstructor(EffectBase effect, Character target, ItemSetTemplate itemSet, bool apply);
-		private delegate UsableEffectHandler UsableEffectConstructor(EffectBase effect, Character target, BasePlayerItem item);
-		private delegate SpellEffectHandler SpellEffectConstructor(EffectDice effect, FightActor caster, Stump.Server.WorldServer.Game.Spells.Spell spell, Cell targetedCell, bool critical);
-		private static readonly Logger logger = LogManager.GetCurrentClassLogger();
-		private System.Collections.Generic.Dictionary<short, EffectTemplate> m_effects = new System.Collections.Generic.Dictionary<short, EffectTemplate>();
-		private readonly System.Collections.Generic.Dictionary<EffectsEnum, EffectManager.ItemEffectConstructor> m_itemsEffectHandler = new System.Collections.Generic.Dictionary<EffectsEnum, EffectManager.ItemEffectConstructor>();
-		private readonly System.Collections.Generic.Dictionary<EffectsEnum, EffectManager.ItemSetEffectConstructor> m_itemsSetEffectHandler = new System.Collections.Generic.Dictionary<EffectsEnum, EffectManager.ItemSetEffectConstructor>();
-		private readonly System.Collections.Generic.Dictionary<EffectsEnum, EffectManager.UsableEffectConstructor> m_usablesEffectHandler = new System.Collections.Generic.Dictionary<EffectsEnum, EffectManager.UsableEffectConstructor>();
-		private readonly System.Collections.Generic.Dictionary<EffectsEnum, EffectManager.SpellEffectConstructor> m_spellsEffectHandler = new System.Collections.Generic.Dictionary<EffectsEnum, EffectManager.SpellEffectConstructor>();
-		private readonly System.Collections.Generic.Dictionary<EffectsEnum, System.Collections.Generic.List<System.Type>> m_effectsHandlers = new System.Collections.Generic.Dictionary<EffectsEnum, System.Collections.Generic.List<System.Type>>();
-		private readonly EffectsEnum[] m_unRandomablesEffects = new EffectsEnum[]
-		{
-			EffectsEnum.Effect_DamageWater,
-			EffectsEnum.Effect_DamageEarth,
-			EffectsEnum.Effect_DamageAir,
-			EffectsEnum.Effect_DamageFire,
-			EffectsEnum.Effect_DamageNeutral,
-			EffectsEnum.Effect_StealHPWater,
-			EffectsEnum.Effect_StealHPEarth,
-			EffectsEnum.Effect_StealHPAir,
-			EffectsEnum.Effect_StealHPFire,
-			EffectsEnum.Effect_StealHPNeutral,
-			EffectsEnum.Effect_RemoveAP,
-			EffectsEnum.Effect_RemainingFights
-		};
+        private delegate ItemEffectHandler ItemSetEffectConstructor(EffectBase effect, Character target, ItemSetTemplate itemSet, bool apply);
+        private delegate UsableEffectHandler UsableEffectConstructor(EffectBase effect, Character target, BasePlayerItem item);
+        private delegate SpellEffectHandler SpellEffectConstructor(EffectDice effect, FightActor caster, Stump.Server.WorldServer.Game.Spells.Spell spell, Cell targetedCell, bool critical);
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private System.Collections.Generic.Dictionary<short, EffectTemplate> m_effects = new System.Collections.Generic.Dictionary<short, EffectTemplate>();
+        private readonly System.Collections.Generic.Dictionary<EffectsEnum, EffectManager.ItemEffectConstructor> m_itemsEffectHandler = new System.Collections.Generic.Dictionary<EffectsEnum, EffectManager.ItemEffectConstructor>();
+        private readonly System.Collections.Generic.Dictionary<EffectsEnum, EffectManager.ItemSetEffectConstructor> m_itemsSetEffectHandler = new System.Collections.Generic.Dictionary<EffectsEnum, EffectManager.ItemSetEffectConstructor>();
+        private readonly System.Collections.Generic.Dictionary<EffectsEnum, EffectManager.UsableEffectConstructor> m_usablesEffectHandler = new System.Collections.Generic.Dictionary<EffectsEnum, EffectManager.UsableEffectConstructor>();
+        private readonly System.Collections.Generic.Dictionary<EffectsEnum, EffectManager.SpellEffectConstructor> m_spellsEffectHandler = new System.Collections.Generic.Dictionary<EffectsEnum, EffectManager.SpellEffectConstructor>();
+        private readonly System.Collections.Generic.Dictionary<EffectsEnum, System.Collections.Generic.List<System.Type>> m_effectsHandlers = new System.Collections.Generic.Dictionary<EffectsEnum, System.Collections.Generic.List<System.Type>>();
+        private readonly EffectsEnum[] m_unRandomablesEffects = new EffectsEnum[]
+        {
+            EffectsEnum.Effect_DamageWater,
+            EffectsEnum.Effect_DamageEarth,
+            EffectsEnum.Effect_DamageAir,
+            EffectsEnum.Effect_DamageFire,
+            EffectsEnum.Effect_DamageNeutral,
+            EffectsEnum.Effect_StealHPWater,
+            EffectsEnum.Effect_StealHPEarth,
+            EffectsEnum.Effect_StealHPAir,
+            EffectsEnum.Effect_StealHPFire,
+            EffectsEnum.Effect_StealHPNeutral,
+            EffectsEnum.Effect_RemoveAP,
+            EffectsEnum.Effect_RemainingFights
+        };
         private readonly System.Collections.Generic.Dictionary<char, System.Collections.Generic.List<TargetMaskHandler>> m_targetMaskHandlers = new System.Collections.Generic.Dictionary<char, System.Collections.Generic.List<TargetMaskHandler>>();
         [Initialization(InitializationPass.Third)]
-		public override void Initialize()
-		{
-			this.m_effects = base.Database.Fetch<EffectTemplate>(EffectTemplateRelator.FetchQuery, new object[0]).ToDictionary((EffectTemplate entry) => (short)entry.Id);
-			this.InitializeEffectHandlers();
+        public override void Initialize()
+        {
+            this.m_effects = base.Database.Fetch<EffectTemplate>(EffectTemplateRelator.FetchQuery, new object[0]).ToDictionary((EffectTemplate entry) => (short)entry.Id);
+            this.InitializeEffectHandlers();
             this.InitializeTargetMaskHandlers();
-		}
+        }
 
         private void InitializeTargetMaskHandlers()
         {
@@ -144,7 +144,7 @@ namespace Stump.Server.WorldServer.Game.Effects
                         {
                             throw new ArgumentNullException("Attribute");
                         }
-                        if(handlerDelegate == null)
+                        if (handlerDelegate == null)
                         {
                             throw new ArgumentNullException("Handler");
                         }
@@ -159,323 +159,323 @@ namespace Stump.Server.WorldServer.Game.Effects
         }
 
         private void InitializeEffectHandlers()
-		{
-			foreach (System.Type current in 
-				from entry in System.Reflection.Assembly.GetExecutingAssembly().GetTypes()
-				where entry.IsSubclassOf(typeof(EffectHandler)) && !entry.IsAbstract
-				select entry)
-			{
-				if (current.GetCustomAttribute<DefaultEffectHandlerAttribute>() == null)
-				{
-					EffectHandlerAttribute[] array = current.GetCustomAttributes<EffectHandlerAttribute>().ToArray<EffectHandlerAttribute>();
-					if (array.Length == 0)
-					{
-						EffectManager.logger.Error("EffectHandler '{0}' has no EffectHandlerAttribute", current.Name);
-					}
-					else
-					{
-						foreach (EffectsEnum current2 in array.Select((EffectHandlerAttribute entry) => entry.Effect))
-						{
-							if (current.IsSubclassOf(typeof(ItemEffectHandler)))
-							{
-								System.Reflection.ConstructorInfo constructor = current.GetConstructor(new System.Type[]
-								{
-									typeof(EffectBase),
-									typeof(Character),
-									typeof(BasePlayerItem)
-								});
-								this.m_itemsEffectHandler.Add(current2, constructor.CreateDelegate<EffectManager.ItemEffectConstructor>());
-								System.Reflection.ConstructorInfo constructor2 = current.GetConstructor(new System.Type[]
-								{
-									typeof(EffectBase),
-									typeof(Character),
-									typeof(ItemSetTemplate),
-									typeof(bool)
-								});
-								if (constructor2 != null)
-								{
-									this.m_itemsSetEffectHandler.Add(current2, constructor2.CreateDelegate<EffectManager.ItemSetEffectConstructor>());
-								}
-							}
-							else
-							{
-								if (current.IsSubclassOf(typeof(UsableEffectHandler)))
-								{
-									System.Reflection.ConstructorInfo constructor = current.GetConstructor(new System.Type[]
-									{
-										typeof(EffectBase),
-										typeof(Character),
-										typeof(BasePlayerItem)
-									});
-									this.m_usablesEffectHandler.Add(current2, constructor.CreateDelegate<EffectManager.UsableEffectConstructor>());
-								}
-								else
-								{
-									if (current.IsSubclassOf(typeof(SpellEffectHandler)))
-									{
-										System.Reflection.ConstructorInfo constructor = current.GetConstructor(new System.Type[]
-										{
-											typeof(EffectDice),
-											typeof(FightActor),
-											typeof(Stump.Server.WorldServer.Game.Spells.Spell),
-											typeof(Cell),
-											typeof(bool)
-										});
-										this.m_spellsEffectHandler.Add(current2, constructor.CreateDelegate<EffectManager.SpellEffectConstructor>());
-									}
-								}
-							}
-							if (!this.m_effectsHandlers.ContainsKey(current2))
-							{
-								this.m_effectsHandlers.Add(current2, new System.Collections.Generic.List<System.Type>());
-							}
-							this.m_effectsHandlers[current2].Add(current);
-						}
-					}
-				}
-			}
-		}
-		public EffectBase ConvertExportedEffect(EffectInstance effect)
-		{
-			EffectBase result;
-			if (effect is EffectInstanceLadder)
-			{
-				result = new EffectLadder(effect as EffectInstanceLadder);
-			}
-			else
-			{
-				if (effect is EffectInstanceCreature)
-				{
-					result = new EffectCreature(effect as EffectInstanceCreature);
-				}
-				else
-				{
-					if (effect is EffectInstanceDate)
-					{
-						result = new EffectDate(effect as EffectInstanceDate);
-					}
-					else
-					{
-						if (effect is EffectInstanceDice)
-						{
-							result = new EffectDice(effect as EffectInstanceDice);
-						}
-						else
-						{
-							if (effect is EffectInstanceDuration)
-							{
-								result = new EffectDuration(effect as EffectInstanceDuration);
-							}
-							else
-							{
-								if (effect is EffectInstanceMinMax)
-								{
-									result = new EffectMinMax(effect as EffectInstanceMinMax);
-								}
-								else
-								{
-									if (effect is EffectInstanceMount)
-									{
-										result = new EffectMount(effect as EffectInstanceMount);
-									}
-									else
-									{
-										if (effect is EffectInstanceString)
-										{
-											result = new EffectString(effect as EffectInstanceString);
-										}
-										else
-										{
-											if (effect is EffectInstanceInteger)
-											{
-												result = new EffectInteger(effect as EffectInstanceInteger);
-											}
-											else
-											{
-												result = new EffectBase(effect);
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			return result;
-		}
-		public System.Collections.Generic.IEnumerable<EffectBase> ConvertExportedEffect(System.Collections.Generic.IEnumerable<EffectInstance> effects)
-		{
-			return effects.Select(new Func<EffectInstance, EffectBase>(this.ConvertExportedEffect));
-		}
-		public EffectTemplate GetTemplate(short id)
-		{
-			return (!this.m_effects.ContainsKey(id)) ? null : this.m_effects[id];
-		}
-		public System.Collections.Generic.IEnumerable<EffectTemplate> GetTemplates()
-		{
-			return this.m_effects.Values;
-		}
-		public void AddItemEffectHandler(ItemEffectHandler handler)
-		{
-			System.Type type = handler.GetType();
-			if (type.GetCustomAttribute<DefaultEffectHandlerAttribute>() != null)
-			{
-				throw new System.Exception("Default handler cannot be added");
-			}
-			EffectHandlerAttribute[] array = type.GetCustomAttributes<EffectHandlerAttribute>().ToArray<EffectHandlerAttribute>();
-			if (array.Length == 0)
-			{
-				throw new System.Exception(string.Format("EffectHandler '{0}' has no EffectHandlerAttribute", type.Name));
-			}
-			System.Reflection.ConstructorInfo constructor = type.GetConstructor(new System.Type[]
-			{
-				typeof(EffectBase),
-				typeof(Character),
-				typeof(BasePlayerItem)
-			});
-			if (constructor == null)
-			{
-				throw new System.Exception("No valid constructors found !");
-			}
-			foreach (EffectsEnum current in 
-				from entry in array
-				select entry.Effect)
-			{
-				this.m_itemsEffectHandler.Add(current, constructor.CreateDelegate<EffectManager.ItemEffectConstructor>());
-				if (!this.m_effectsHandlers.ContainsKey(current))
-				{
-					this.m_effectsHandlers.Add(current, new System.Collections.Generic.List<System.Type>());
-				}
-				this.m_effectsHandlers[current].Add(type);
-			}
-		}
-		public ItemEffectHandler GetItemEffectHandler(EffectBase effect, Character target, BasePlayerItem item)
-		{
-			EffectManager.ItemEffectConstructor itemEffectConstructor;
-			ItemEffectHandler result;
-			if (this.m_itemsEffectHandler.TryGetValue(effect.EffectId, out itemEffectConstructor))
-			{
-				result = itemEffectConstructor(effect, target, item);
-			}
-			else
-			{
-				result = new DefaultItemEffect(effect, target, item);
-			}
-			return result;
-		}
-		public ItemEffectHandler GetItemEffectHandler(EffectBase effect, Character target, ItemSetTemplate itemSet, bool apply)
-		{
-			EffectManager.ItemSetEffectConstructor itemSetEffectConstructor;
-			ItemEffectHandler result;
-			if (this.m_itemsSetEffectHandler.TryGetValue(effect.EffectId, out itemSetEffectConstructor))
-			{
-				result = itemSetEffectConstructor(effect, target, itemSet, apply);
-			}
-			else
-			{
-				result = new DefaultItemEffect(effect, target, itemSet, apply);
-			}
-			return result;
-		}
-		public void AddUsableEffectHandler(UsableEffectHandler handler)
-		{
-			System.Type type = handler.GetType();
-			if (type.GetCustomAttribute<DefaultEffectHandlerAttribute>() != null)
-			{
-				throw new System.Exception("Default handler cannot be added");
-			}
-			EffectHandlerAttribute[] array = type.GetCustomAttributes<EffectHandlerAttribute>().ToArray<EffectHandlerAttribute>();
-			if (array.Length == 0)
-			{
-				throw new System.Exception(string.Format("EffectHandler '{0}' has no EffectHandlerAttribute", type.Name));
-			}
-			System.Reflection.ConstructorInfo constructor = type.GetConstructor(new System.Type[]
-			{
-				typeof(EffectBase),
-				typeof(Character),
-				typeof(BasePlayerItem)
-			});
-			if (constructor == null)
-			{
-				throw new System.Exception("No valid constructors found !");
-			}
-			foreach (EffectsEnum current in 
-				from entry in array
-				select entry.Effect)
-			{
-				this.m_usablesEffectHandler.Add(current, constructor.CreateDelegate<EffectManager.UsableEffectConstructor>());
-				if (!this.m_effectsHandlers.ContainsKey(current))
-				{
-					this.m_effectsHandlers.Add(current, new System.Collections.Generic.List<System.Type>());
-				}
-				this.m_effectsHandlers[current].Add(type);
-			}
-		}
-		public UsableEffectHandler GetUsableEffectHandler(EffectBase effect, Character target, BasePlayerItem item)
-		{
-			EffectManager.UsableEffectConstructor usableEffectConstructor;
-			UsableEffectHandler result;
-			if (this.m_usablesEffectHandler.TryGetValue(effect.EffectId, out usableEffectConstructor))
-			{
-				result = usableEffectConstructor(effect, target, item);
-			}
-			else
-			{
-				result = new DefaultUsableEffectHandler(effect, target, item);
-			}
-			return result;
-		}
-		public void AddSpellEffectHandler(SpellEffectHandler handler)
-		{
-			System.Type type = handler.GetType();
-			if (type.GetCustomAttribute<DefaultEffectHandlerAttribute>() != null)
-			{
-				throw new System.Exception("Default handler cannot be added");
-			}
-			EffectHandlerAttribute[] array = type.GetCustomAttributes<EffectHandlerAttribute>().ToArray<EffectHandlerAttribute>();
-			if (array.Length == 0)
-			{
-				throw new System.Exception(string.Format("EffectHandler '{0}' has no EffectHandlerAttribute", type.Name));
-			}
-			System.Reflection.ConstructorInfo constructor = type.GetConstructor(new System.Type[]
-			{
-				typeof(EffectDice),
-				typeof(FightActor),
-				typeof(Stump.Server.WorldServer.Game.Spells.Spell),
-				typeof(Cell),
-				typeof(bool)
-			});
-			if (constructor == null)
-			{
-				throw new System.Exception("No valid constructors found !");
-			}
-			foreach (EffectsEnum current in 
-				from entry in array
-				select entry.Effect)
-			{
-				this.m_spellsEffectHandler.Add(current, constructor.CreateDelegate<EffectManager.SpellEffectConstructor>());
-				if (!this.m_effectsHandlers.ContainsKey(current))
-				{
-					this.m_effectsHandlers.Add(current, new System.Collections.Generic.List<System.Type>());
-				}
-				this.m_effectsHandlers[current].Add(type);
-			}
-		}
-		public SpellEffectHandler GetSpellEffectHandler(EffectDice effect, FightActor caster, Stump.Server.WorldServer.Game.Spells.Spell spell, Cell targetedCell, bool critical)
-		{
-			EffectManager.SpellEffectConstructor spellEffectConstructor;
-			SpellEffectHandler result;
-			if (this.m_spellsEffectHandler.TryGetValue(effect.EffectId, out spellEffectConstructor))
-			{
-				result = spellEffectConstructor(effect, caster, spell, targetedCell, critical);
-			}
-			else
-			{
-				result = new DefaultSpellEffect(effect, caster, spell, targetedCell, critical);
-			}
-			return result;
-		}
+        {
+            foreach (System.Type current in
+                from entry in System.Reflection.Assembly.GetExecutingAssembly().GetTypes()
+                where entry.IsSubclassOf(typeof(EffectHandler)) && !entry.IsAbstract
+                select entry)
+            {
+                if (current.GetCustomAttribute<DefaultEffectHandlerAttribute>() == null)
+                {
+                    EffectHandlerAttribute[] array = current.GetCustomAttributes<EffectHandlerAttribute>().ToArray<EffectHandlerAttribute>();
+                    if (array.Length == 0)
+                    {
+                        EffectManager.logger.Error("EffectHandler '{0}' has no EffectHandlerAttribute", current.Name);
+                    }
+                    else
+                    {
+                        foreach (EffectsEnum current2 in array.Select((EffectHandlerAttribute entry) => entry.Effect))
+                        {
+                            if (current.IsSubclassOf(typeof(ItemEffectHandler)))
+                            {
+                                System.Reflection.ConstructorInfo constructor = current.GetConstructor(new System.Type[]
+                                {
+                                    typeof(EffectBase),
+                                    typeof(Character),
+                                    typeof(BasePlayerItem)
+                                });
+                                this.m_itemsEffectHandler.Add(current2, constructor.CreateDelegate<EffectManager.ItemEffectConstructor>());
+                                System.Reflection.ConstructorInfo constructor2 = current.GetConstructor(new System.Type[]
+                                {
+                                    typeof(EffectBase),
+                                    typeof(Character),
+                                    typeof(ItemSetTemplate),
+                                    typeof(bool)
+                                });
+                                if (constructor2 != null)
+                                {
+                                    this.m_itemsSetEffectHandler.Add(current2, constructor2.CreateDelegate<EffectManager.ItemSetEffectConstructor>());
+                                }
+                            }
+                            else
+                            {
+                                if (current.IsSubclassOf(typeof(UsableEffectHandler)))
+                                {
+                                    System.Reflection.ConstructorInfo constructor = current.GetConstructor(new System.Type[]
+                                    {
+                                        typeof(EffectBase),
+                                        typeof(Character),
+                                        typeof(BasePlayerItem)
+                                    });
+                                    this.m_usablesEffectHandler.Add(current2, constructor.CreateDelegate<EffectManager.UsableEffectConstructor>());
+                                }
+                                else
+                                {
+                                    if (current.IsSubclassOf(typeof(SpellEffectHandler)))
+                                    {
+                                        System.Reflection.ConstructorInfo constructor = current.GetConstructor(new System.Type[]
+                                        {
+                                            typeof(EffectDice),
+                                            typeof(FightActor),
+                                            typeof(Stump.Server.WorldServer.Game.Spells.Spell),
+                                            typeof(Cell),
+                                            typeof(bool)
+                                        });
+                                        this.m_spellsEffectHandler.Add(current2, constructor.CreateDelegate<EffectManager.SpellEffectConstructor>());
+                                    }
+                                }
+                            }
+                            if (!this.m_effectsHandlers.ContainsKey(current2))
+                            {
+                                this.m_effectsHandlers.Add(current2, new System.Collections.Generic.List<System.Type>());
+                            }
+                            this.m_effectsHandlers[current2].Add(current);
+                        }
+                    }
+                }
+            }
+        }
+        public EffectBase ConvertExportedEffect(EffectInstance effect)
+        {
+            EffectBase result;
+            if (effect is EffectInstanceLadder)
+            {
+                result = new EffectLadder(effect as EffectInstanceLadder);
+            }
+            else
+            {
+                if (effect is EffectInstanceCreature)
+                {
+                    result = new EffectCreature(effect as EffectInstanceCreature);
+                }
+                else
+                {
+                    if (effect is EffectInstanceDate)
+                    {
+                        result = new EffectDate(effect as EffectInstanceDate);
+                    }
+                    else
+                    {
+                        if (effect is EffectInstanceDice)
+                        {
+                            result = new EffectDice(effect as EffectInstanceDice);
+                        }
+                        else
+                        {
+                            if (effect is EffectInstanceDuration)
+                            {
+                                result = new EffectDuration(effect as EffectInstanceDuration);
+                            }
+                            else
+                            {
+                                if (effect is EffectInstanceMinMax)
+                                {
+                                    result = new EffectMinMax(effect as EffectInstanceMinMax);
+                                }
+                                else
+                                {
+                                    if (effect is EffectInstanceMount)
+                                    {
+                                        result = new EffectMount(effect as EffectInstanceMount);
+                                    }
+                                    else
+                                    {
+                                        if (effect is EffectInstanceString)
+                                        {
+                                            result = new EffectString(effect as EffectInstanceString);
+                                        }
+                                        else
+                                        {
+                                            if (effect is EffectInstanceInteger)
+                                            {
+                                                result = new EffectInteger(effect as EffectInstanceInteger);
+                                            }
+                                            else
+                                            {
+                                                result = new EffectBase(effect);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+        public System.Collections.Generic.IEnumerable<EffectBase> ConvertExportedEffect(System.Collections.Generic.IEnumerable<EffectInstance> effects)
+        {
+            return effects.Select(new Func<EffectInstance, EffectBase>(this.ConvertExportedEffect));
+        }
+        public EffectTemplate GetTemplate(short id)
+        {
+            return (!this.m_effects.ContainsKey(id)) ? null : this.m_effects[id];
+        }
+        public System.Collections.Generic.IEnumerable<EffectTemplate> GetTemplates()
+        {
+            return this.m_effects.Values;
+        }
+        public void AddItemEffectHandler(ItemEffectHandler handler)
+        {
+            System.Type type = handler.GetType();
+            if (type.GetCustomAttribute<DefaultEffectHandlerAttribute>() != null)
+            {
+                throw new System.Exception("Default handler cannot be added");
+            }
+            EffectHandlerAttribute[] array = type.GetCustomAttributes<EffectHandlerAttribute>().ToArray<EffectHandlerAttribute>();
+            if (array.Length == 0)
+            {
+                throw new System.Exception(string.Format("EffectHandler '{0}' has no EffectHandlerAttribute", type.Name));
+            }
+            System.Reflection.ConstructorInfo constructor = type.GetConstructor(new System.Type[]
+            {
+                typeof(EffectBase),
+                typeof(Character),
+                typeof(BasePlayerItem)
+            });
+            if (constructor == null)
+            {
+                throw new System.Exception("No valid constructors found !");
+            }
+            foreach (EffectsEnum current in
+                from entry in array
+                select entry.Effect)
+            {
+                this.m_itemsEffectHandler.Add(current, constructor.CreateDelegate<EffectManager.ItemEffectConstructor>());
+                if (!this.m_effectsHandlers.ContainsKey(current))
+                {
+                    this.m_effectsHandlers.Add(current, new System.Collections.Generic.List<System.Type>());
+                }
+                this.m_effectsHandlers[current].Add(type);
+            }
+        }
+        public ItemEffectHandler GetItemEffectHandler(EffectBase effect, Character target, BasePlayerItem item)
+        {
+            EffectManager.ItemEffectConstructor itemEffectConstructor;
+            ItemEffectHandler result;
+            if (this.m_itemsEffectHandler.TryGetValue(effect.EffectId, out itemEffectConstructor))
+            {
+                result = itemEffectConstructor(effect, target, item);
+            }
+            else
+            {
+                result = new DefaultItemEffect(effect, target, item);
+            }
+            return result;
+        }
+        public ItemEffectHandler GetItemEffectHandler(EffectBase effect, Character target, ItemSetTemplate itemSet, bool apply)
+        {
+            EffectManager.ItemSetEffectConstructor itemSetEffectConstructor;
+            ItemEffectHandler result;
+            if (this.m_itemsSetEffectHandler.TryGetValue(effect.EffectId, out itemSetEffectConstructor))
+            {
+                result = itemSetEffectConstructor(effect, target, itemSet, apply);
+            }
+            else
+            {
+                result = new DefaultItemEffect(effect, target, itemSet, apply);
+            }
+            return result;
+        }
+        public void AddUsableEffectHandler(UsableEffectHandler handler)
+        {
+            System.Type type = handler.GetType();
+            if (type.GetCustomAttribute<DefaultEffectHandlerAttribute>() != null)
+            {
+                throw new System.Exception("Default handler cannot be added");
+            }
+            EffectHandlerAttribute[] array = type.GetCustomAttributes<EffectHandlerAttribute>().ToArray<EffectHandlerAttribute>();
+            if (array.Length == 0)
+            {
+                throw new System.Exception(string.Format("EffectHandler '{0}' has no EffectHandlerAttribute", type.Name));
+            }
+            System.Reflection.ConstructorInfo constructor = type.GetConstructor(new System.Type[]
+            {
+                typeof(EffectBase),
+                typeof(Character),
+                typeof(BasePlayerItem)
+            });
+            if (constructor == null)
+            {
+                throw new System.Exception("No valid constructors found !");
+            }
+            foreach (EffectsEnum current in
+                from entry in array
+                select entry.Effect)
+            {
+                this.m_usablesEffectHandler.Add(current, constructor.CreateDelegate<EffectManager.UsableEffectConstructor>());
+                if (!this.m_effectsHandlers.ContainsKey(current))
+                {
+                    this.m_effectsHandlers.Add(current, new System.Collections.Generic.List<System.Type>());
+                }
+                this.m_effectsHandlers[current].Add(type);
+            }
+        }
+        public UsableEffectHandler GetUsableEffectHandler(EffectBase effect, Character target, BasePlayerItem item)
+        {
+            EffectManager.UsableEffectConstructor usableEffectConstructor;
+            UsableEffectHandler result;
+            if (this.m_usablesEffectHandler.TryGetValue(effect.EffectId, out usableEffectConstructor))
+            {
+                result = usableEffectConstructor(effect, target, item);
+            }
+            else
+            {
+                result = new DefaultUsableEffectHandler(effect, target, item);
+            }
+            return result;
+        }
+        public void AddSpellEffectHandler(SpellEffectHandler handler)
+        {
+            System.Type type = handler.GetType();
+            if (type.GetCustomAttribute<DefaultEffectHandlerAttribute>() != null)
+            {
+                throw new System.Exception("Default handler cannot be added");
+            }
+            EffectHandlerAttribute[] array = type.GetCustomAttributes<EffectHandlerAttribute>().ToArray<EffectHandlerAttribute>();
+            if (array.Length == 0)
+            {
+                throw new System.Exception(string.Format("EffectHandler '{0}' has no EffectHandlerAttribute", type.Name));
+            }
+            System.Reflection.ConstructorInfo constructor = type.GetConstructor(new System.Type[]
+            {
+                typeof(EffectDice),
+                typeof(FightActor),
+                typeof(Stump.Server.WorldServer.Game.Spells.Spell),
+                typeof(Cell),
+                typeof(bool)
+            });
+            if (constructor == null)
+            {
+                throw new System.Exception("No valid constructors found !");
+            }
+            foreach (EffectsEnum current in
+                from entry in array
+                select entry.Effect)
+            {
+                this.m_spellsEffectHandler.Add(current, constructor.CreateDelegate<EffectManager.SpellEffectConstructor>());
+                if (!this.m_effectsHandlers.ContainsKey(current))
+                {
+                    this.m_effectsHandlers.Add(current, new System.Collections.Generic.List<System.Type>());
+                }
+                this.m_effectsHandlers[current].Add(type);
+            }
+        }
+        public SpellEffectHandler GetSpellEffectHandler(EffectDice effect, FightActor caster, Stump.Server.WorldServer.Game.Spells.Spell spell, Cell targetedCell, bool critical)
+        {
+            EffectManager.SpellEffectConstructor spellEffectConstructor;
+            SpellEffectHandler result;
+            if (this.m_spellsEffectHandler.TryGetValue(effect.EffectId, out spellEffectConstructor))
+            {
+                result = spellEffectConstructor(effect, caster, spell, targetedCell, critical);
+            }
+            else
+            {
+                result = new DefaultSpellEffect(effect, caster, spell, targetedCell, critical);
+            }
+            return result;
+        }
         public IEnumerable<TargetMaskHandler> GetTargetMaskHandlers(char pattern, object token)
         {
             List<TargetMaskHandler> handlersList;
@@ -483,13 +483,10 @@ namespace Stump.Server.WorldServer.Game.Effects
             {
                 foreach (var handler in handlersList)
                 {
-                    if (token != null && handler.TokenType.IsInstanceOfType(token))
-                    {
-                        yield return handler;
-                    }
+                    yield return handler;
                 }
             }
-        }
+        } 
         public bool IsEffectHandledBy(EffectsEnum effect, System.Type handlerType)
 		{
 			return this.m_effectsHandlers.ContainsKey(effect) && this.m_effectsHandlers[effect].Contains(handlerType);

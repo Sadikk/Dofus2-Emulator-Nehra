@@ -210,13 +210,16 @@ namespace Stump.Server.WorldServer.Game.Effects.Spells
                     }
                 }
             }
-            foreach (KeyValuePair<char, object> pair in this.Effect.ParsedTargetMask)
+            if (this.Effect != null && this.Effect.ParsedTargetMask != null)
             {
-                foreach (var handler in Singleton<EffectManager>.Instance.GetTargetMaskHandlers(pair.Key, Caster).ToArray())
+                foreach (KeyValuePair<char, object> pair in this.Effect.ParsedTargetMask)
                 {
-                    if (handler.Func(handler.Container, Caster, actor, Effect, pair.Value))
+                    foreach (var handler in Singleton<EffectManager>.Instance.GetTargetMaskHandlers(pair.Key, Caster).ToArray())
                     {
-                        return true;
+                        if (handler.Func(handler.Container, Caster, actor, Effect, pair.Value))
+                        {
+                            return true;
+                        }
                     }
                 }
             }
@@ -341,7 +344,17 @@ namespace Stump.Server.WorldServer.Game.Effects.Spells
 			target.AddAndApplyBuff(stateBuff, true);
 			return stateBuff;
 		}
-		public virtual bool RequireSilentCast()
+        public bool RemoveStateBuff(FightActor target, int stateId)
+        {
+            var stateBuff = target.GetBuffs().Where(x => x is StateBuff && (x as StateBuff).State.Id == stateId).FirstOrDefault();
+            if (stateBuff != null)
+            {
+                target.RemoveAndDispellBuff(stateBuff);
+                return true;
+            }
+            return false;
+        }
+        public virtual bool RequireSilentCast()
 		{
 			return false;
 		}

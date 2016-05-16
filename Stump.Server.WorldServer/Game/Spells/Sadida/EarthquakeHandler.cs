@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace Stump.Server.WorldServer.Game.Spells.Sadida
 {
+    [SpellCastHandler(SpellIdEnum.Earthquake)]
     class EarthquakeHandler : DefaultSpellCastHandler
     {
         public EarthquakeHandler(FightActor caster, Spell spell, Cell targetedCell, bool critical) : base(caster, spell, targetedCell, critical)
