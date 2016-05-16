@@ -31,23 +31,27 @@ namespace Stump.Server.WorldServer.Game.Effects.Spells.Move
                 {
                     if (target.CanBeMove())
                     {
-                        MapPoint point1 = (int)this.TargetedCell.Id != (int)target.Cell.Id ? this.TargetedPoint : new MapPoint(this.CastCell);
-                        if ((int)point1.CellId != (int)target.Position.Cell.Id)
+                        MapPoint point1 = this.TargetedCell.Id != target.Cell.Id ? this.TargetedPoint : new MapPoint(this.CastCell);
+                        if (point1.CellId != target.Position.Cell.Id)
                         {
                             DirectionsEnum direction = target.Position.Point.OrientationTo(point1, false);
                             MapPoint point2 = target.Position.Point;
                             MapPoint mapPoint1 = point2;
-                            for (int index = 0; index < (int)effectInteger.Value; ++index)
+                            for (int index = 0; index < effectInteger.Value; ++index)
                             {
                                 MapPoint nearestCellInDirection = mapPoint1.GetNearestCellInDirection(direction);
                                 if (nearestCellInDirection != null)
                                 {
-                                    if (!this.Fight.ShouldTriggerOnMove(this.Fight.Map.Cells[(int)nearestCellInDirection.CellId]))
+                                    if (!this.Fight.ShouldTriggerOnMove(this.Fight.Map.Cells[nearestCellInDirection.CellId]))
                                     {
-                                        if (this.Fight.IsCellFree(this.Map.Cells[(int)nearestCellInDirection.CellId]))
+                                        if (this.Fight.IsCellFree(this.Map.Cells[nearestCellInDirection.CellId]))
+                                        {
                                             mapPoint1 = nearestCellInDirection;
+                                        }
                                         else
+                                        {
                                             break;
+                                        }
                                     }
                                     else
                                     {

@@ -50,7 +50,8 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
 		private readonly System.Collections.Generic.List<SummonedFighter> m_summons = new System.Collections.Generic.List<SummonedFighter>();
         private readonly System.Collections.Generic.List<BombFighter> m_bombs = new System.Collections.Generic.List<BombFighter>();
 		private readonly System.Collections.Generic.List<SpellState> m_states = new System.Collections.Generic.List<SpellState>();
-		private bool m_left;
+        private readonly System.Collections.Generic.List<SummonedMonster> m_trees = new System.Collections.Generic.List<SummonedMonster>();
+        private bool m_left;
         protected uint? _waitTime;
         
 		public event Action<FightActor, bool> ReadyStateChanged;
@@ -1484,14 +1485,20 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
 		{
 			return this.SummonedCount < this.Stats[PlayerFields.SummonLimit].Total;
 		}
-		public void AddSummon(SummonedFighter summon)
-		{
-			if (summon is SummonedMonster && (summon as SummonedMonster).Monster.Template.UseSummonSlot)
-			{
-				this.SummonedCount++;
-			}
-			this.m_summons.Add(summon);
-		}
+        public void AddSummon(SummonedFighter summon)
+        {
+            var monsterSummmon = summon as SummonedMonster;
+            if (monsterSummmon.IsTreeSummon)
+            {
+                this.m_trees.Add(monsterSummmon);
+                return;
+            }
+            if (summon is SummonedMonster && (summon as SummonedMonster).Monster.Template.UseSummonSlot)
+            {
+                this.SummonedCount++;
+            }
+            this.m_summons.Add(summon);
+        }
 		public void RemoveSummon(SummonedFighter summon)
 		{
 			if (summon is SummonedMonster && (summon as SummonedMonster).Monster.Template.UseSummonSlot)
@@ -1600,6 +1607,10 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
             summon.AddAndApplyBuff(buff);
             ContextHandler.SendGameActionFightDispellableEffectMessage(this.Fight.Clients, buff);
         }
+        public IEnumerable<SummonedMonster> GetTrees()
+        {
+            return this.m_trees.AsReadOnly();
+        }
 
 	    public void AddState(SpellState state)
 		{
@@ -1617,6 +1628,10 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
 		{
 			return this.HasState(state.Id);
 		}
+        public bool HasState(SpellStatesEnum state)
+        {
+            return this.HasState((int)state);
+        }
 		public bool HasSpellBlockerState()
 		{
 			return this.m_states.Any((SpellState entry) => entry.PreventsSpellCast);

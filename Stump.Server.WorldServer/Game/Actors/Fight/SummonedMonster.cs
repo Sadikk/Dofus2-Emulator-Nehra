@@ -56,6 +56,13 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
             get;
             private set;
         }
+        public bool IsLeafyTree
+        {
+            get
+            {
+                return this.HasState(SpellStatesEnum.Leafy);
+            }
+        }
         public override bool IsVisibleInTimeline
         {
             get

@@ -362,14 +362,6 @@ namespace Stump.Server.WorldServer.Game.Maps.Cells
 		{
 			return this.GetCellInDirection(direction, 1);
 		}
-        public MapPoint GetCellsInLineAround(DirectionsEnum drection, short count)
-        {
-            return null;
-            for(int i = 0; i < count; i++)
-            {
-               //todo if you could commit completed code, that would be great...  
-            }
-        }
         
 		public IEnumerable<MapPoint> GetAdjacentCells(Func<short, bool> predicate, bool diagonal = false)
 		{
