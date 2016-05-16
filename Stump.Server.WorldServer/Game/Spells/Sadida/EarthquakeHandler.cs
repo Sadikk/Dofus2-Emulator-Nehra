@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace Stump.Server.WorldServer.Game.Spells.Sadida
 {
+    [SpellCastHandler(SpellIdEnum.Earthquake)]
     class EarthquakeHandler : DefaultSpellCastHandler
     {
         //CONST
