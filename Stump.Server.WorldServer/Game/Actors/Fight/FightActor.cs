@@ -50,7 +50,6 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
 		private readonly System.Collections.Generic.List<SummonedFighter> m_summons = new System.Collections.Generic.List<SummonedFighter>();
         private readonly System.Collections.Generic.List<BombFighter> m_bombs = new System.Collections.Generic.List<BombFighter>();
 		private readonly System.Collections.Generic.List<SpellState> m_states = new System.Collections.Generic.List<SpellState>();
-        private readonly System.Collections.Generic.List<SummonedMonster> m_trees = new System.Collections.Generic.List<SummonedMonster>();
         private bool m_left;
         protected uint? _waitTime;
         
@@ -1488,12 +1487,7 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
         public void AddSummon(SummonedFighter summon)
         {
             var monsterSummmon = summon as SummonedMonster;
-            if (monsterSummmon.IsTreeSummon)
-            {
-                this.m_trees.Add(monsterSummmon);
-                return;
-            }
-            if (summon is SummonedMonster && (summon as SummonedMonster).Monster.Template.UseSummonSlot)
+            if (monsterSummmon != null && monsterSummmon.Monster.Template.UseSummonSlot && !monsterSummmon.IsTree)
             {
                 this.SummonedCount++;
             }
@@ -1606,10 +1600,6 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
 
             summon.AddAndApplyBuff(buff);
             ContextHandler.SendGameActionFightDispellableEffectMessage(this.Fight.Clients, buff);
-        }
-        public IEnumerable<SummonedMonster> GetTrees()
-        {
-            return this.m_trees.AsReadOnly();
         }
 
 	    public void AddState(SpellState state)
@@ -1854,7 +1844,7 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
 		}
         public virtual bool CanBeMove()
         {
-            var immovabliesStates = this.m_states.Where((x) => x.Id == (int)SpellStatesEnum.Leafy || x.Id == (int)SpellStatesEnum.Rooted).SingleOrDefault();
+            var immovabliesStates = this.m_states.Where((x) => x.Id == (int)SpellStatesEnum.Leafy || x.Id == (int)SpellStatesEnum.Rooted).SingleOrDefault(); //need to make a better method
             return (immovabliesStates == null);
         }
 		public virtual bool CanPlay()

@@ -1788,15 +1788,8 @@ namespace Stump.Server.WorldServer.Game.Fights
 
         public FightActor GetOneFighter(Cell cell)
         {
-            var carrier = this.Fighters.Where((FightActor entry) => entry.IsCarrying && entry.Cell.Id == cell.Id).FirstOrDefault();
-            if(carrier == null)
-            {
-                return this.Fighters.SingleOrDefault((FightActor entry) => entry.IsAlive() && Equals(entry.Cell, cell));
-            }
-            else
-            {
-                return carrier;
-            }
+            var result = this.Fighters.SingleOrDefault((FightActor entry) => entry.IsAlive() && Equals(entry.Cell, cell));
+            return result != null && result.IsCarried ? result.Carrier : result;
         }
 
         public FightActor GetOneFighter(Predicate<FightActor> predicate)

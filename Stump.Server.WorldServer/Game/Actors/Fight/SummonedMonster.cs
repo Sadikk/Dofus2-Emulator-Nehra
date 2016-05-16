@@ -56,6 +56,13 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
             get;
             private set;
         }
+        public bool IsTree
+        {
+            get
+            {
+                return (this.Monster.Template.Id == (int)MonsterEnum.SADIDA_TREE);
+            }
+        }
         public bool IsLeafyTree
         {
             get
