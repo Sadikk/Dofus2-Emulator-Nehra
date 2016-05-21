@@ -1,10 +1,10 @@
 # Todo list : #
-# Spells #
+### Spells ###
 * Sadida
 * Féca
 * Xélor
 
-# Common #
+### Common ###
 * IA
 * Donjon spawns
 * Password hash
