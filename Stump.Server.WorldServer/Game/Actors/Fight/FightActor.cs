@@ -878,9 +878,10 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
 				this.OnBeforeDamageInflicted(damage);
 				this.TriggerBuffs(BuffTriggerType.BEFORE_ATTACKED, damage);
 				damage.GenerateDamages();
+
                 if (!damage.IgnoreDamageReduction)
                     damage.Amount = Convert.ToInt32(damage.Amount * DamageMultiplicator);
-                if (this.HasState(56))
+				if (this.HasState(SpellStatesEnum.Invulnerable))
 				{
 					this.OnDamageReducted(damage.Source, damage.Amount);
 					this.TriggerBuffs(BuffTriggerType.AFTER_ATTACKED, damage);

@@ -1788,7 +1788,7 @@ namespace Stump.Server.WorldServer.Game.Fights
 
         public FightActor GetOneFighter(Cell cell)
         {
-            var result = this.Fighters.SingleOrDefault((FightActor entry) => entry.IsAlive() && Equals(entry.Cell, cell));
+            var result = this.Fighters.FirstOrDefault((FightActor entry) => entry.IsAlive() && Equals(entry.Cell, cell));
             return result != null && result.IsCarried ? result.Carrier : result;
         }
 
