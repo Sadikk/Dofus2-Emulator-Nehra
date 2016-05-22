@@ -42,37 +42,12 @@ namespace Stump.Server.WorldServer.Game.Spells.Sadida
                                     select this.Fight.Cells.Where((x) => x.Id == mapPoint.CellId).First();
                 var affectedActors = this.Fight.GetAllFighters(affectedCells);
 
-                var damages = this.Handlers.Where((x) => x.Effect.EffectId == EffectsEnum.Effect_DamageFire).First();
-                var revealsInvisible = this.Handlers.Where((x) => x.Effect.EffectId == EffectsEnum.Effect_RevealsInvisible).First();
-                var pull = this.Handlers.Where((x) => x.Effect.EffectId == EffectsEnum.Effect_PullForward).First();
-
-                damages.SetAffectedActors(affectedActors);
-                revealsInvisible.SetAffectedActors(affectedActors);
-                pull.SetAffectedActors(affectedActors);
-
-                //foreach (var actor in affectedActors)
-                //{
-                //    if (actor != null)
-                //    {
-                //        var orientation = actor.Position.Point.OrientationTo(tree.Position.Point).GetPullableDirection();
-
-                //        var newCellId = actor.Position.Point.GetNearestCellInDirection(orientation).CellId;
-                //        var newCell = this.Fight.Cells.Where(cell => cell.Id == newCellId).First();
-
-                //        if (this.Fight.IsCellFree(newCell) && actor.CanBeMove())
-                //        {
-                //            ActionsHandler.SendGameActionFightSlideMessage(this.Fight.Clients, tree, actor, actor.Cell.Id, newCellId);
-                //            actor.Cell = newCell;
-                //        }
-
-                //        damages.Apply();
-                //        revealsInvisible.Apply();
-                //    }
-                //}
-
-                damages.Apply();
-                revealsInvisible.Apply();
-                pull.Apply();
+                for(int i = 0; i < this.Handlers.Length; i++)
+                {
+                    var handler = this.Handlers[i];
+                    handler.SetAffectedActors(affectedActors);
+                    handler.Apply();
+                }
             }
         }
     }
