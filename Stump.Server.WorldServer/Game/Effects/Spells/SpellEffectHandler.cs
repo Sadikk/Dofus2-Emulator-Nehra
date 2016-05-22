@@ -112,12 +112,12 @@ namespace Stump.Server.WorldServer.Game.Effects.Spells
 		{
 			get
 			{
-				Cell[] arg_2A_0;
-				if ((arg_2A_0 = this.m_affectedCells) == null)
+				Cell[] result;
+				if ((result = this.m_affectedCells) == null)
 				{
-					arg_2A_0 = (this.m_affectedCells = this.EffectZone.GetCells(this.TargetedCell, this.Map));
+                    result = (this.m_affectedCells = this.EffectZone.GetCells(this.TargetedCell, this.Map));
 				}
-				return arg_2A_0;
+				return result;
 			}
 			private set
 			{

@@ -31,7 +31,6 @@ namespace Stump.Server.WorldServer.Game.Spells.Sadida
         public override void Execute()
         {
             base.Execute();
-
             var target = this.Caster.Team.GetOneTree(this.TargetedCell);
             if (target != null)
             {
@@ -47,14 +46,16 @@ namespace Stump.Server.WorldServer.Game.Spells.Sadida
 
         public static void TreeTrigger(TriggerBuff buff, BuffTriggerType trigger, object token)
         {
-            buff.Target.Stats.Health.Base *= LIFE_RATIO;
+            var summonedMonster = buff.Target as SummonedMonster;
+            if (summonedMonster != null && !summonedMonster.IsLeafyTree)
+            {
+                var actorLook = buff.Target.Look.Clone();
+                actorLook.BonesID = BONES_ID;
+                buff.Target.Look = actorLook;
 
-            var actorLook = buff.Target.Look.Clone();
-            actorLook.BonesID = BONES_ID;
-            buff.Target.Look = actorLook;
-
-            var state = Singleton<SpellManager>.Instance.GetSpellState((uint)SpellStatesEnum.Leafy);
-            buff.Target.AddState(state);
+                var state = Singleton<SpellManager>.Instance.GetSpellState((uint)SpellStatesEnum.Leafy);
+                buff.Target.AddState(state);
+            }
         }
     }
 }
