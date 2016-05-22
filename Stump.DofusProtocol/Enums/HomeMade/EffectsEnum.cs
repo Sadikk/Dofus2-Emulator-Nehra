@@ -2285,7 +2285,7 @@ namespace Stump.DofusProtocol.Enums
         /// <summary>
         ///[!] Tue la cible pour la remplacer par l'invocation : #1
         /// </summary>
-        Effect_2796 = 2796,
+        Effect_KillAndSummon = 2796,
         /// <summary>
         ///Null Text
         /// </summary>
