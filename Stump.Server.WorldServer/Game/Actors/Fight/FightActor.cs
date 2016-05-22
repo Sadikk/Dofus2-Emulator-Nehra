@@ -1480,6 +1480,10 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
 			return this.m_summons.AsReadOnly();
 		}
 
+        public bool CanSummon(int monsterId)
+        {
+            return monsterId == (int)MonsterEnum.SADIDA_TREE ? true : this.CanSummon();
+        }
 		public bool CanSummon()
 		{
 			return this.SummonedCount < this.Stats[PlayerFields.SummonLimit].Total;
