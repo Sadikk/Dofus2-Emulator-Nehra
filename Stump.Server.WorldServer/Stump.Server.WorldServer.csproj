@@ -168,6 +168,7 @@
     <Compile Include="Game\Spells\Pandawa\ChamrakHandler.cs" />
     <Compile Include="Game\Spells\Pandawa\KarchamHandler.cs" />
     <Compile Include="Game\Spells\Sadida\EarthquakeHandler.cs" />
+    <Compile Include="Game\Spells\Sadida\TearHandler.cs" />
     <Compile Include="Game\Spells\Sadida\TreeHandler.cs" />
     <Compile Include="Game\Spells\Xelor\ClockHandler.cs" />
     <Compile Include="Game\Spells\Xelor\DarkRayHandler.cs" />
