@@ -24,12 +24,15 @@ namespace Stump.Server.WorldServer.Game.Effects.Spells.Others
         {
             System.Collections.Generic.IEnumerable<Glyph> enumerable =
                 from entry in base.Fight.GetTriggers().OfType<Glyph>()
-                where base.Caster.IsEnnemyWith(entry.Caster) && entry.Shapes.Any((MarkShape subentry) => base.AffectedCells.Contains(subentry.Cell))
+                where entry.Shapes.Any((MarkShape subentry) => base.AffectedCells.Contains(subentry.Cell))
                 select entry;
             foreach (Glyph current in enumerable)
             {
                 //todo check if we trigger on all fighters or if we need to add a check if the fighter is in the trigger
-                base.Fight.Fighters.ForEach(current.Trigger);
+                foreach (FightActor fighter in base.Fight.Fighters.Where(x => current.ContainsCell(x.Cell)))
+                {
+                    current.Trigger(fighter);
+                }
             }
             return true;
         }
