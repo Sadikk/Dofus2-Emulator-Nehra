@@ -653,5 +653,15 @@ namespace Stump.Server.WorldServer.Handlers.Context
                 (sbyte)actor.SummonedCount,
                 (sbyte)actor.BombsCount));
         }
+        public static void SendSlaveSwitchContextMessage(IPacketReceiver client, FightActor source, FightActor target)
+        {
+            var spells = (target as SummonedMonster).Monster.Spells.Select(x => x.GetSpellItem());
+            List<Shortcut> shortcuts = new List<Shortcut>();
+            for (sbyte i = 0; i < spells.Count(); i++)
+            {
+                shortcuts.Add(new ShortcutSpell(i, (ushort)spells.ElementAt(i).spellId));
+            }
+            client.Send(new SlaveSwitchContextMessage(source.Id, target.Id, spells, target.GetSlaveStats(source), shortcuts));
+        }
     }
 }

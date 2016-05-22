@@ -31,7 +31,7 @@ namespace Stump.Server.WorldServer.Game.Effects.Spells.Armor
                     result = false;
                     return result;
                 }
-                base.AddTriggerBuff(current, true, BuffTriggerType.BEFORE_ATTACKED, new TriggerBuffApplyHandler(DamageArmor.ApplyArmorBuff));
+                base.AddTriggerBuff(current, true, BuffTriggerType.BUFF_ADDED, new TriggerBuffApplyHandler(DamageSustained.ApplyArmorBuff), new TriggerBuffRemoveHandler(DamageSustained.RemoveArmorBuff));
             }
             result = true;
             return result;
@@ -41,12 +41,13 @@ namespace Stump.Server.WorldServer.Game.Effects.Spells.Armor
             EffectInteger effectInteger = buff.GenerateEffect();
             if (!(effectInteger == null))
             {
-                Fights.Damage damage = token as Fights.Damage;
-                if (damage != null)
-                {
-                    damage.Amount = damage.Amount * effectInteger.Value;
-                }
+                buff.Target.DamageMultiplicator = effectInteger.Value / 100;
             }
+        }
+
+        public static void RemoveArmorBuff(TriggerBuff buff)
+        {
+            buff.Target.DamageMultiplicator = 1.0;
         }
     }
 }

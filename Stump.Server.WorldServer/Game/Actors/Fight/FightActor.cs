@@ -261,6 +261,11 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
             get;
             private set;
         }
+        public double DamageMultiplicator
+        {
+            get;
+            set;
+        }
         public virtual bool IsVisibleInTimeline
         {
             get
@@ -279,6 +284,7 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
             this.Loot = new Stump.Server.WorldServer.Game.Fights.Results.FightLoot();
             this.SpellHistory = new SpellHistory(this);
             this._waitTime = null;
+            this.DamageMultiplicator = 1.0;
         }
 
         // METHODS
@@ -860,6 +866,7 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
 		}
 		public virtual int InflictDamage(Damage damage)
 		{
+            
 			FractionGlyph fractionGlyph = this.Fight.GetTriggers().FirstOrDefault((MarkTrigger x) => x is FractionGlyph && x.ContainsCell(base.Cell)) as FractionGlyph;
 			int result;
 			if (fractionGlyph != null && !(damage.MarkTrigger is FractionGlyph))
@@ -871,7 +878,9 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
 				this.OnBeforeDamageInflicted(damage);
 				this.TriggerBuffs(BuffTriggerType.BEFORE_ATTACKED, damage);
 				damage.GenerateDamages();
-				if (this.HasState(56))
+                if (!damage.IgnoreDamageReduction)
+                    damage.Amount = Convert.ToInt32(damage.Amount * DamageMultiplicator);
+                if (this.HasState(56))
 				{
 					this.OnDamageReducted(damage.Source, damage.Amount);
 					this.TriggerBuffs(BuffTriggerType.AFTER_ATTACKED, damage);
@@ -1633,7 +1642,7 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
         public void AddTelefragState(FightActor source, Spell spell)
         {
             var id = this.PopNextBuffId();
-            var effect = new EffectBase { Duration = -1 };
+            var effect = new EffectBase { Duration = 1 };
             var stateId = (uint)SpellStatesEnum.Telefrag;
             var state = Singleton<SpellManager>.Instance.GetSpellState(stateId);
 
@@ -1923,5 +1932,83 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
 
         public virtual void RefreshWaitTime(uint remainingDurationSeconds) { }
         public virtual void RefreshFighterStatsListMessage() { }
+
+        public virtual CharacterCharacteristicsInformations GetSlaveStats(FightActor master)
+        {
+            return new CharacterCharacteristicsInformations(0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  new ActorExtendedAlignmentInformations(),
+                  (uint)Stats.Health.Total,
+                  (uint)Stats.Health.TotalMax,
+                  0,
+                  0,
+                  (short)Stats[PlayerFields.AP].Total,
+                  (short)Stats[PlayerFields.MP].Total,
+                  Stats[PlayerFields.Initiative],
+                  Stats[PlayerFields.Prospecting],
+                  Stats[PlayerFields.AP],
+                  Stats[PlayerFields.MP],
+                  Stats[PlayerFields.Strength],
+                  Stats[PlayerFields.Vitality],
+                  Stats[PlayerFields.Wisdom],
+                  Stats[PlayerFields.Chance],
+                  Stats[PlayerFields.Agility],
+                  Stats[PlayerFields.Intelligence],
+                  Stats[PlayerFields.Range],
+                  Stats[PlayerFields.SummonLimit],
+                  Stats[PlayerFields.DamageReflection],
+                  Stats[PlayerFields.CriticalHit],
+                  (ushort)0,
+                  Stats[PlayerFields.CriticalMiss],
+                  Stats[PlayerFields.HealBonus],
+                  Stats[PlayerFields.DamageBonus],
+                  Stats[PlayerFields.WeaponDamageBonus],
+                  Stats[PlayerFields.DamageBonusPercent],
+                  Stats[PlayerFields.TrapBonus],
+                  Stats[PlayerFields.TrapBonusPercent],
+                  Stats[PlayerFields.GlyphBonusPercent],
+                  Stats[PlayerFields.PermanentDamagePercent],
+                  Stats[PlayerFields.TackleBlock],
+                  Stats[PlayerFields.TackleEvade],
+                  Stats[PlayerFields.APAttack],
+                  Stats[PlayerFields.MPAttack],
+                  Stats[PlayerFields.PushDamageBonus],
+                  Stats[PlayerFields.CriticalDamageBonus],
+                  Stats[PlayerFields.NeutralDamageBonus],
+                  Stats[PlayerFields.EarthDamageBonus],
+                  Stats[PlayerFields.WaterDamageBonus],
+                  Stats[PlayerFields.AirDamageBonus],
+                  Stats[PlayerFields.FireDamageBonus],
+                  Stats[PlayerFields.DodgeAPProbability],
+                  Stats[PlayerFields.DodgeMPProbability],
+                  Stats[PlayerFields.NeutralResistPercent],
+                  Stats[PlayerFields.EarthResistPercent],
+                  Stats[PlayerFields.WaterResistPercent],
+                  Stats[PlayerFields.AirResistPercent],
+                  Stats[PlayerFields.FireResistPercent],
+                  Stats[PlayerFields.NeutralElementReduction],
+                  Stats[PlayerFields.EarthElementReduction],
+                  Stats[PlayerFields.WaterElementReduction],
+                  Stats[PlayerFields.AirElementReduction],
+                  Stats[PlayerFields.FireElementReduction],
+                  Stats[PlayerFields.PushDamageReduction],
+                  Stats[PlayerFields.CriticalDamageReduction],
+                  Stats[PlayerFields.PvpNeutralResistPercent],
+                  Stats[PlayerFields.PvpEarthResistPercent],
+                  Stats[PlayerFields.PvpWaterResistPercent],
+                  Stats[PlayerFields.PvpAirResistPercent],
+                  Stats[PlayerFields.PvpFireResistPercent],
+                  Stats[PlayerFields.PvpNeutralElementReduction],
+                  Stats[PlayerFields.PvpEarthElementReduction],
+                  Stats[PlayerFields.PvpWaterElementReduction],
+                  Stats[PlayerFields.PvpAirElementReduction],
+                  Stats[PlayerFields.PvpFireElementReduction],
+                  new List<CharacterSpellModification>(), 0);
+        }
     }
 }

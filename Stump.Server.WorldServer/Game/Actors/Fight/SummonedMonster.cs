@@ -137,5 +137,6 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
                 this.Summoner.SpawnTreeAfterSummonDeath(this.Cell);
             }
         }
+        
     }
 }
