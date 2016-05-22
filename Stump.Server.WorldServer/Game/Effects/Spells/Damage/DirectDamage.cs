@@ -1,4 +1,5 @@
 using Stump.DofusProtocol.Enums;
+using Stump.DofusProtocol.Enums.HomeMade;
 using Stump.Server.WorldServer.Database.World;
 using Stump.Server.WorldServer.Game.Actors.Fight;
 using Stump.Server.WorldServer.Game.Effects.Handlers;
@@ -25,8 +26,18 @@ namespace Stump.Server.WorldServer.Game.Effects.Spells.Damage
 		}
 		public override bool Apply()
 		{
-			foreach (FightActor current in base.GetAffectedActors())
+            if (this.Spell.SpellType.Id == (int)SpellTypesEnum.Sadida)
+            {
+                var isTargetEnnemy = this.Fight.GetOneFighter(this.TargetedCell).Team != this.Caster.Team;
+                if (isTargetEnnemy)
+                {
+                    var affectedActors = this.Fight.GetAllFighters((x) => x.Team != this.Caster.Team && x.HasState(SpellStatesEnum.Infected));
+                    this.SetAffectedActors(affectedActors);
+                }
+            }
+            foreach (FightActor current in base.GetAffectedActors())
 			{
+                
 				if (this.Effect.Duration > 0)
 				{
 					base.AddTriggerBuff(current, true, this.BuffTriggerType, new TriggerBuffApplyHandler(DirectDamage.DamageBuffTrigger));
