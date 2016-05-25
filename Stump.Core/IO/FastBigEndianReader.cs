@@ -128,7 +128,7 @@ namespace Stump.Core.IO
 
         public byte[] ReadBytes(int n)
         {
-            if (this.BytesAvailable < (long)n)
+            if (this.BytesAvailable < n)
             {
                 throw new InvalidOperationException("Buffer overflow");
             }

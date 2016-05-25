@@ -145,6 +145,7 @@
         Entangled,
         Hasty,
         Telefrag = 244,
-        Leafy = 256
+        Leafy = 256,
+        Infected = 263,
     }
 }

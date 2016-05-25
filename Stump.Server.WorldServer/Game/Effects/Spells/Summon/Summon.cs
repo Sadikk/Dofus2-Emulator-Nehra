@@ -23,7 +23,7 @@ namespace Stump.Server.WorldServer.Game.Effects.Spells.Summon
 
         public override bool Apply()
 		{
-			MonsterGrade monsterGrade = Singleton<MonsterManager>.Instance.GetMonsterGrade((int)base.Dice.DiceNum, (int)base.Dice.DiceFace);
+			MonsterGrade monsterGrade = Singleton<MonsterManager>.Instance.GetMonsterGrade(base.Dice.DiceNum, base.Dice.DiceFace);
 			bool result;
 			if (monsterGrade == null)
 			{
@@ -32,14 +32,14 @@ namespace Stump.Server.WorldServer.Game.Effects.Spells.Summon
 			}
 			else
 			{
-				if (!base.Caster.CanSummon())
+				if (!base.Caster.CanSummon(base.Dice.DiceNum))
 				{
 					result = false;
 				}
 				else
 				{
-                    bool visible = (monsterGrade.Template.Id == (int)MonsterEnum.SADIDA_TREE) ? false : true;
-                    SummonedMonster summonedMonster = new SummonedMonster((int)base.Fight.GetNextContextualId(), base.Caster.Team, base.Caster, monsterGrade, base.TargetedCell, visible);
+                    bool visible = (monsterGrade.Template.Id == (int)MonsterEnum.SADIDA_TREE) ? false : true; //Need to make a better method
+                    SummonedMonster summonedMonster = new SummonedMonster(base.Fight.GetNextContextualId(), base.Caster.Team, base.Caster, monsterGrade, base.TargetedCell, visible);
 					ActionsHandler.SendGameActionFightSummonMessage(base.Fight.Clients, summonedMonster);
 					base.Caster.AddSummon(summonedMonster);
 					base.Caster.Team.AddFighter(summonedMonster);

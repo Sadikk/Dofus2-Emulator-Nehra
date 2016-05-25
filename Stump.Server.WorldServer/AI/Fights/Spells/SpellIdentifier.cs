@@ -21,8 +21,9 @@ namespace Stump.Server.WorldServer.AI.Fights.Spells
 					result = SpellCategory.Teleport;
 					return result;
 				case EffectsEnum.Effect_PushBack:
-					goto IL_47A;
-				default:
+                        result = SpellCategory.Curse;
+                        return result;
+                    default:
 					if (effectId == EffectsEnum.Effect_Dodge)
 					{
 						goto IL_496;
@@ -83,8 +84,9 @@ namespace Stump.Server.WorldServer.AI.Fights.Spells
 					case EffectsEnum.Effect_277:
 					case EffectsEnum.Effect_278:
 					case EffectsEnum.Effect_279:
-						goto IL_47A;
-					case EffectsEnum.Effect_AddMP:
+                                result = SpellCategory.Curse;
+                                return result;
+                    case EffectsEnum.Effect_AddMP:
 					case EffectsEnum.Effect_AddGlobalDamageReduction_105:
 					case EffectsEnum.Effect_ReflectSpell:
 					case EffectsEnum.Effect_AddDamageReflection:
@@ -272,8 +274,9 @@ namespace Stump.Server.WorldServer.AI.Fights.Spells
 					case EffectsEnum.Effect_SubNeutralDamageBonus:
 					case EffectsEnum.Effect_StealAP_440:
 					case EffectsEnum.Effect_StealMP_441:
-						goto IL_47A;
-					case EffectsEnum.Effect_SubPushDamageBonus:
+                            result = SpellCategory.Curse;
+                            return result;
+                    case EffectsEnum.Effect_SubPushDamageBonus:
 					case (EffectsEnum)432:
 					case (EffectsEnum)433:
 					case (EffectsEnum)434:
@@ -313,6 +316,11 @@ namespace Stump.Server.WorldServer.AI.Fights.Spells
 					{
 						goto IL_49A;
 					}
+                    if(effectId == EffectsEnum.Effect_SubAPTelefrag)
+                    {
+                        result = SpellCategory.Curse;
+                        return result;
+                    }
 					if (effectId != EffectsEnum.Effect_AddVitalityPercent)
 					{
 						goto IL_492;
@@ -321,9 +329,6 @@ namespace Stump.Server.WorldServer.AI.Fights.Spells
 				}
 			}
 			result = SpellCategory.Summoning;
-			return result;
-			IL_47A:
-			result = SpellCategory.Curse;
 			return result;
 			IL_492:
 			result = SpellCategory.None;
