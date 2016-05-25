@@ -17,6 +17,8 @@ using Stump.DofusProtocol.Enums.HomeMade;
 using Stump.Core.Reflection;
 using Stump.Server.WorldServer.Game.Fights.Buffs;
 using Stump.Server.WorldServer.Handlers.Context;
+using Stump.Server.WorldServer.Handlers.Shortcuts;
+using Stump.Server.WorldServer.Handlers.Inventory;
 
 namespace Stump.Server.WorldServer.Game.Effects.Spells.Summon
 {
@@ -35,12 +37,13 @@ namespace Stump.Server.WorldServer.Game.Effects.Spells.Summon
                 var monsterGrade = Singleton<MonsterManager>.Instance.GetMonsterGrade(base.Dice.DiceNum, this.Spell.CurrentLevel);
                 var summonedMonster = new SummonedMonster(this.Fight.GetNextContextualId(), this.Caster.Team, this.Caster, monsterGrade, target.Cell, true, true);
                 target.Die();
-
                 this.Caster.AddSummon(summonedMonster);
                 this.Caster.Team.AddFighter(summonedMonster);
-
+                summonedMonster.Frozen = true;
                 ActionsHandler.SendGameActionFightSummonMessage(base.Fight.Clients, summonedMonster);
                 base.AddTriggerBuff(base.Caster, true, BuffTriggerType.TURN_END, new TriggerBuffApplyHandler(KillAndSummon.ApplySwitchBuff));
+                var buff = new TriggerBuff(summonedMonster.PopNextBuffId(), summonedMonster, base.Caster, new EffectDice() { Duration = 1 }, base.Spell, false, false, BuffTriggerType.TURN_END, new TriggerBuffApplyHandler(KillAndSummon.ApplySuicideBuff), (short)ActionsEnum.ACTION_FIGHT_KILL_AND_SUMMON);
+                summonedMonster.AddAndApplyBuff(buff);
                 return true;
             }     
             return false;
@@ -49,6 +52,14 @@ namespace Stump.Server.WorldServer.Game.Effects.Spells.Summon
         {
             ContextHandler.SendSlaveSwitchContextMessage(buff.Target.Fight.Clients, buff.Target, buff.Target.GetSummons().Where(x => (x as SummonedMonster).Monster.Template.Id == 4010).FirstOrDefault());
         }
-        
+        public static void ApplySuicideBuff(TriggerBuff buff, BuffTriggerType trigger, object token)
+        {
+            var target = buff.Target as SummonedMonster;
+            InventoryHandler.SendSpellListMessage(target.Summoner.CharacterContainer.Clients.FirstOrDefault(), true);
+            ShortcutHandler.SendShortcutBarContentMessage(target.Summoner.CharacterContainer.Clients.FirstOrDefault(), ShortcutBarEnum.SPELL_SHORTCUT_BAR);
+            //ContextHandler.SendSlaveSwitchContextMessage(buff.Target.s);
+            target.Die();
+        }
+
     }
 }

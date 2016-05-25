@@ -37,6 +37,16 @@ namespace Stump.Server.WorldServer.Handlers.Context
 				{
 					client.Character.Fighter.CastSpell(spell, client.Character.Fight.Map.Cells[(int)message.cellId]);
 				}
+                else
+                {
+                    var summons = client.Character.Fighter.GetSummons();
+                    var caster = summons.Where(x => x.GetSpell((int)message.spellId) != null).FirstOrDefault();
+                    if (caster != null)
+                    {
+                        Spell sp = caster.GetSpell(message.spellId);
+                        caster.CastSpell(sp, client.Character.Fight.Map.Cells[(int)message.cellId]);
+                    }
+                }
 			}
 		}
         [WorldHandler(GameActionFightCastOnTargetRequestMessage.Id)]
@@ -655,13 +665,17 @@ namespace Stump.Server.WorldServer.Handlers.Context
         }
         public static void SendSlaveSwitchContextMessage(IPacketReceiver client, FightActor source, FightActor target)
         {
-            var spells = (target as SummonedMonster).Monster.Spells.Select(x => x.GetSpellItem());
-            List<Shortcut> shortcuts = new List<Shortcut>();
-            for (sbyte i = 0; i < spells.Count(); i++)
+            if (target is SummonedMonster)
             {
-                shortcuts.Add(new ShortcutSpell(i, (ushort)spells.ElementAt(i).spellId));
+                var spells = (target as SummonedMonster).Monster.Spells.Select(x => x.GetSpellItem());
+                List<Shortcut> shortcuts = new List<Shortcut>();
+                for (sbyte i = 0; i < spells.Count(); i++)
+                {
+                    shortcuts.Add(new ShortcutSpell(i, (ushort)spells.ElementAt(i).spellId));
+                }
+                target.Stats.Initialize((target as SummonedMonster).Monster);
+                client.Send(new SlaveSwitchContextMessage(source.Id, target.Id, spells, target.GetSlaveStats(source), shortcuts));
             }
-            client.Send(new SlaveSwitchContextMessage(source.Id, target.Id, spells, target.GetSlaveStats(source), shortcuts));
         }
     }
 }

@@ -70,7 +70,7 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
         }
         private void OnTurnStarted(Fights.Fight fight, FightActor currentfighter)
         {
-            if (base.IsFighterTurn())
+            if (base.IsFighterTurn() && !this.Frozen) 
             {
                 this.PlayIA();
             }
@@ -80,10 +80,7 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
         {
             try
             {
-                if (!this.Frozen)
-                {
-                    this.Brain.Play();
-                }
+                this.Brain.Play();
             }
             catch (System.Exception ex)
             {

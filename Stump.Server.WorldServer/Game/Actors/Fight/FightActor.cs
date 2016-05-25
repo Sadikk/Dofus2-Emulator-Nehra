@@ -485,7 +485,15 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
                 this.Carrier.DepositCarried(movementPath.SecondCell);
                 movementPath = new Path(movementPath.Map, movementPath.GetPath().Skip(1));
             }
-            return base.StartMove(movementPath);
+            if (this.Fight.FighterPlaying == this)
+            {
+                return base.StartMove(movementPath);
+            }
+            else if (this.GetSummons().Any(x => x == this.Fight.FighterPlaying))
+            {
+                return this.Fight.FighterPlaying.StartMove(movementPath);
+            }
+            return false;
         }
 
         public abstract Spell GetSpell(int id);
@@ -526,11 +534,15 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
         }
 		public void PassTurn()
 		{
-			if (this.IsFighterTurn())
-			{
-				this.Fight.StopTurn();
-				this.OnTurnPassed();
-			}
+            if (this.IsFighterTurn())
+            {
+                this.Fight.StopTurn();
+                this.OnTurnPassed();
+            }
+            else if (this.GetSummons().Any(x => x == this.Fight.FighterPlaying))
+            {
+                this.Fight.FighterPlaying.PassTurn();
+            }
 		}
         public void StopTurn()
         {
@@ -1951,7 +1963,7 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
                   (short)Stats[PlayerFields.AP].Total,
                   (short)Stats[PlayerFields.MP].Total,
                   Stats[PlayerFields.Initiative],
-                  Stats[PlayerFields.Prospecting],
+                  new CharacterBaseCharacteristic(0, 0, 0, 0, 0),
                   Stats[PlayerFields.AP],
                   Stats[PlayerFields.MP],
                   Stats[PlayerFields.Strength],
@@ -1961,30 +1973,30 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
                   Stats[PlayerFields.Agility],
                   Stats[PlayerFields.Intelligence],
                   Stats[PlayerFields.Range],
-                  Stats[PlayerFields.SummonLimit],
-                  Stats[PlayerFields.DamageReflection],
-                  Stats[PlayerFields.CriticalHit],
+                  new CharacterBaseCharacteristic(0, 0, 0, 0, 0),
+                  new CharacterBaseCharacteristic(0, 0, 0, 0, 0),
+                  new CharacterBaseCharacteristic(0, 0, 0, 0, 0),
                   (ushort)0,
-                  Stats[PlayerFields.CriticalMiss],
-                  Stats[PlayerFields.HealBonus],
-                  Stats[PlayerFields.DamageBonus],
-                  Stats[PlayerFields.WeaponDamageBonus],
-                  Stats[PlayerFields.DamageBonusPercent],
-                  Stats[PlayerFields.TrapBonus],
-                  Stats[PlayerFields.TrapBonusPercent],
-                  Stats[PlayerFields.GlyphBonusPercent],
-                  Stats[PlayerFields.PermanentDamagePercent],
-                  Stats[PlayerFields.TackleBlock],
-                  Stats[PlayerFields.TackleEvade],
-                  Stats[PlayerFields.APAttack],
-                  Stats[PlayerFields.MPAttack],
-                  Stats[PlayerFields.PushDamageBonus],
-                  Stats[PlayerFields.CriticalDamageBonus],
-                  Stats[PlayerFields.NeutralDamageBonus],
-                  Stats[PlayerFields.EarthDamageBonus],
-                  Stats[PlayerFields.WaterDamageBonus],
-                  Stats[PlayerFields.AirDamageBonus],
-                  Stats[PlayerFields.FireDamageBonus],
+                  new CharacterBaseCharacteristic(0, 0, 0, 0, 0),
+                  new CharacterBaseCharacteristic(0, 0, 0, 0, 0),
+                  new CharacterBaseCharacteristic(0, 0, 0, 0, 0),
+                  new CharacterBaseCharacteristic(0, 0, 0, 0, 0),
+                  new CharacterBaseCharacteristic(0, 0, 0, 0, 0),
+                  new CharacterBaseCharacteristic(0, 0, 0, 0, 0),
+                  new CharacterBaseCharacteristic(0, 0, 0, 0, 0),
+                  new CharacterBaseCharacteristic(0, 0, 0, 0, 0),
+                  new CharacterBaseCharacteristic(0, 0, 0, 0, 0),
+                  new CharacterBaseCharacteristic(0, 0, 0, 0, 0),
+                  new CharacterBaseCharacteristic(0, 0, 0, 0, 0),
+                  new CharacterBaseCharacteristic(0, 0, 0, 0, 0),
+                  new CharacterBaseCharacteristic(0, 0, 0, 0, 0),
+                  new CharacterBaseCharacteristic(0, 0, 0, 0, 0),
+                  new CharacterBaseCharacteristic(0, 0, 0, 0, 0),
+                  new CharacterBaseCharacteristic(0, 0, 0, 0, 0),
+                  new CharacterBaseCharacteristic(0, 0, 0, 0, 0),
+                  new CharacterBaseCharacteristic(0, 0, 0, 0, 0),
+                  new CharacterBaseCharacteristic(0, 0, 0, 0, 0),
+                  new CharacterBaseCharacteristic(0, 0, 0, 0, 0),
                   Stats[PlayerFields.DodgeAPProbability],
                   Stats[PlayerFields.DodgeMPProbability],
                   Stats[PlayerFields.NeutralResistPercent],
@@ -2010,6 +2022,84 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
                   Stats[PlayerFields.PvpAirElementReduction],
                   Stats[PlayerFields.PvpFireElementReduction],
                   new List<CharacterSpellModification>(), 0);
+
+            //new CharacterBaseCharacteristic(0,0,0,0,0)
+
+
+            //return new CharacterCharacteristicsInformations(0,
+            //      0,
+            //      0,
+            //      0,
+            //      0,
+            //      0,
+            //      0,
+            //      new ActorExtendedAlignmentInformations(),
+            //      (uint)Stats.Health.Total,
+            //      (uint)Stats.Health.TotalMax,
+            //      0,
+            //      0,
+            //      (short)Stats[PlayerFields.AP].Total,
+            //      (short)Stats[PlayerFields.MP].Total,
+            //      Stats[PlayerFields.Initiative],
+            //      Stats[PlayerFields.Prospecting],
+            //      Stats[PlayerFields.AP],
+            //      Stats[PlayerFields.MP],
+            //      Stats[PlayerFields.Strength],
+            //      Stats[PlayerFields.Vitality],
+            //      Stats[PlayerFields.Wisdom],
+            //      Stats[PlayerFields.Chance],
+            //      Stats[PlayerFields.Agility],
+            //      Stats[PlayerFields.Intelligence],
+            //      Stats[PlayerFields.Range],
+            //      Stats[PlayerFields.SummonLimit],
+            //      Stats[PlayerFields.DamageReflection],
+            //      Stats[PlayerFields.CriticalHit],
+            //      (ushort)0,
+            //      Stats[PlayerFields.CriticalMiss],
+            //      Stats[PlayerFields.HealBonus],
+            //      Stats[PlayerFields.DamageBonus],
+            //      Stats[PlayerFields.WeaponDamageBonus],
+            //      Stats[PlayerFields.DamageBonusPercent],
+            //      Stats[PlayerFields.TrapBonus],
+            //      Stats[PlayerFields.TrapBonusPercent],
+            //      Stats[PlayerFields.GlyphBonusPercent],
+            //      Stats[PlayerFields.PermanentDamagePercent],
+            //      Stats[PlayerFields.TackleBlock],
+            //      Stats[PlayerFields.TackleEvade],
+            //      Stats[PlayerFields.APAttack],
+            //      Stats[PlayerFields.MPAttack],
+            //      Stats[PlayerFields.PushDamageBonus],
+            //      Stats[PlayerFields.CriticalDamageBonus],
+            //      Stats[PlayerFields.NeutralDamageBonus],
+            //      Stats[PlayerFields.EarthDamageBonus],
+            //      Stats[PlayerFields.WaterDamageBonus],
+            //      Stats[PlayerFields.AirDamageBonus],
+            //      Stats[PlayerFields.FireDamageBonus],
+            //      Stats[PlayerFields.DodgeAPProbability],
+            //      Stats[PlayerFields.DodgeMPProbability],
+            //      Stats[PlayerFields.NeutralResistPercent],
+            //      Stats[PlayerFields.EarthResistPercent],
+            //      Stats[PlayerFields.WaterResistPercent],
+            //      Stats[PlayerFields.AirResistPercent],
+            //      Stats[PlayerFields.FireResistPercent],
+            //      Stats[PlayerFields.NeutralElementReduction],
+            //      Stats[PlayerFields.EarthElementReduction],
+            //      Stats[PlayerFields.WaterElementReduction],
+            //      Stats[PlayerFields.AirElementReduction],
+            //      Stats[PlayerFields.FireElementReduction],
+            //      Stats[PlayerFields.PushDamageReduction],
+            //      Stats[PlayerFields.CriticalDamageReduction],
+            //      Stats[PlayerFields.PvpNeutralResistPercent],
+            //      Stats[PlayerFields.PvpEarthResistPercent],
+            //      Stats[PlayerFields.PvpWaterResistPercent],
+            //      Stats[PlayerFields.PvpAirResistPercent],
+            //      Stats[PlayerFields.PvpFireResistPercent],
+            //      Stats[PlayerFields.PvpNeutralElementReduction],
+            //      Stats[PlayerFields.PvpEarthElementReduction],
+            //      Stats[PlayerFields.PvpWaterElementReduction],
+            //      Stats[PlayerFields.PvpAirElementReduction],
+            //      Stats[PlayerFields.PvpFireElementReduction],
+            //      new List<CharacterSpellModification>(), 0);
         }
     }
 }

@@ -2624,6 +2624,8 @@ namespace Stump.DofusProtocol.Enums
 		Silicurse,
 		Andespite,
 		Silicut,
-        Foilage = 5567
+        Foilage = 5567,
+        SylvesterPower = 5568
+
 	}
 }
