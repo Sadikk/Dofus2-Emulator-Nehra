@@ -362,8 +362,16 @@ namespace Stump.Server.WorldServer.Game.Maps.Cells
 		{
 			return this.GetCellInDirection(direction, 1);
 		}
-        
-		public IEnumerable<MapPoint> GetAdjacentCells(Func<short, bool> predicate, bool diagonal = false)
+        public DirectionsEnum GetOppositeDirection(DirectionsEnum direction)
+        {
+            return (DirectionsEnum)(((int)direction + 4) % 8);
+        }
+        public MapPoint GetNearestCellInOppositeDirection(DirectionsEnum direction)
+        {
+            return this.GetCellInDirection(GetOppositeDirection(direction), 1);
+        }
+
+        public IEnumerable<MapPoint> GetAdjacentCells(Func<short, bool> predicate, bool diagonal = false)
 		{
             MapPoint northEast = new MapPoint(X, Y + 1);
             if (northEast != null && IsInMap(northEast.X, northEast.Y) && predicate(northEast.CellId))

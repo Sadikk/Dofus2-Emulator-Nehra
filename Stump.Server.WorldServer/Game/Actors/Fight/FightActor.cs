@@ -528,7 +528,7 @@ namespace Stump.Server.WorldServer.Game.Actors.Fight
                         this.Fight.EndSequence(SequenceTypeEnum.SEQUENCE_TRIGGERED);
                     }
                 }
-
+                this.PreviousPosition = null;
                 this.OnTurnStarted();
             }
         }

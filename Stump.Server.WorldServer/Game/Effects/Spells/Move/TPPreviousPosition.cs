@@ -24,7 +24,8 @@ namespace Stump.Server.WorldServer.Game.Effects.Spells.Move
             {
                 if (fightActor.PreviousPosition != null)
                 {
-                    Cell destCell = fightActor.PreviousPosition.Cell;
+                    Cell destCell = this.Fight.Cells[fightActor.Position.Point.GetNearestCellInOppositeDirection(fightActor.Position.Direction).CellId];
+                    //Cell destCell = fightActor.PreviousPosition.Cell;
                     FightActor oldFighter = base.Fight.GetOneFighter(destCell);
                     if (oldFighter != null)
                     {
@@ -34,8 +35,8 @@ namespace Stump.Server.WorldServer.Game.Effects.Spells.Move
                         base.Caster.AddTelefragState(base.Caster, base.Spell);
                         ActionsHandler.SendGameActionFightTeleportOnSameMapMessage(base.Fight.Clients, base.Caster, oldFighter, base.Caster.Cell);
                     }
-                    base.Caster.Position.Cell = destCell;
-                    ActionsHandler.SendGameActionFightTeleportOnSameMapMessage(base.Fight.Clients, base.Caster, base.Caster, destCell);
+                    fightActor.Position.Cell = destCell;
+                    ActionsHandler.SendGameActionFightTeleportOnSameMapMessage(base.Fight.Clients, base.Caster, fightActor, destCell);
                 }
             }
             return true;
