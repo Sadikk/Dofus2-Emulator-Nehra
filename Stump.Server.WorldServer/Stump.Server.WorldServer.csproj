@@ -142,6 +142,7 @@
     <Compile Include="Game\Challenges\Checkers\ZombieChallenge.cs" />
     <Compile Include="Game\Dialogs\Prisms\PrismInfoDialog.cs" />
     <Compile Include="Game\Effects\Spells\Armor\DamageSustained.cs" />
+    <Compile Include="Game\Effects\Spells\Buffs\DelayedAPBuff.cs" />
     <Compile Include="Game\Effects\Spells\Debuffs\APDebuffTelefrag.cs" />
     <Compile Include="Game\Effects\Spells\Move\SymmetricTeleportCaster.cs" />
     <Compile Include="Game\Effects\Spells\Move\SymmetricTeleportCenter.cs" />
@@ -176,6 +177,7 @@
     <Compile Include="Game\Spells\Xelor\HandHandler.cs" />
     <Compile Include="Game\Spells\Xelor\LossOfMotivationHandler.cs" />
     <Compile Include="Game\Spells\Xelor\TemporalDustHandler.cs" />
+    <Compile Include="Game\Spells\Xelor\TemporalParadoxHandler.cs" />
     <Compile Include="Game\Spells\Xelor\XelorsPunchHandler.cs" />
     <Compile Include="Handlers\Achievements\AchievementHandler.cs" />
     <Compile Include="Handlers\Context\RolePlay\Arenas\ArenaHandler.cs" />

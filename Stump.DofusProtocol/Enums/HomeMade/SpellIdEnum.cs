@@ -92,7 +92,7 @@ namespace Stump.DofusProtocol.Enums
 		HomingHand,
 		LossofMotivation,
 		Teleportation_0,
-		Devotion,
+		TemporalParadox,
 		Flight,
 		XelorsPunch,
 		DarkRay,

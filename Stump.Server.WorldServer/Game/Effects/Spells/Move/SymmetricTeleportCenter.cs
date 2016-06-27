@@ -23,25 +23,21 @@ namespace Stump.Server.WorldServer.Game.Effects.Spells.Move
             //it applies only when the target has the state "Telefrag"
             foreach (FightActor fightActor in base.GetAffectedActors())
             {
-                //todo caster is not in get affected actors ??
-                if (fightActor != null && fightActor.HasState((int)SpellStatesEnum.Telefrag))
+
+                MapPoint destPoint = new MapPoint(base.TargetedCell).GetSymmetricCell(fightActor.Position.Point);
+                Cell destCell = base.Caster.Map.GetCell(destPoint.CellId);
+                FightActor oldFighter = base.Fight.GetOneFighter(destCell);
+                if (oldFighter != null)
                 {
-                    MapPoint destPoint = new MapPoint(base.TargetedCell).GetSymmetricCell(fightActor.Position.Point);
-                    Cell destCell = base.Caster.Map.GetCell(destPoint.CellId);
-                    FightActor oldFighter = base.Fight.GetOneFighter(destCell);
-                    if (oldFighter != null)
-                    {
-                        //if there was a fighter on the cell we are going to tp on, we need to move him at our old position
-                        oldFighter.AddTelefragState(base.Caster, base.Spell);
-                        base.Caster.AddTelefragState(base.Caster, base.Spell);
-                        oldFighter.Position.Cell = fightActor.Position.Cell;
-                        ActionsHandler.SendGameActionFightTeleportOnSameMapMessage(base.Fight.Clients, base.Caster, oldFighter, fightActor.Position.Cell);
-                    }
-                    // not sure if it is the right client !! todo : check
-                    fightActor.Position.Cell = destCell;
-                    ActionsHandler.SendGameActionFightTeleportOnSameMapMessage(base.Fight.Clients, base.Caster, fightActor, destCell);
+                    //if there was a fighter on the cell we are going to tp on, we need to move him at our old position
+                    oldFighter.AddTelefragState(base.Caster, base.Spell);
+                    base.Caster.AddTelefragState(base.Caster, base.Spell);
+                    oldFighter.Position.Cell = fightActor.Position.Cell;
+                    ActionsHandler.SendGameActionFightTeleportOnSameMapMessage(base.Fight.Clients, base.Caster, oldFighter, fightActor.Position.Cell);
                 }
-                
+                // not sure if it is the right client !! todo : check
+                fightActor.Position.Cell = destCell;
+                ActionsHandler.SendGameActionFightTeleportOnSameMapMessage(base.Fight.Clients, base.Caster, fightActor, destCell);
             }
             return true;
         }

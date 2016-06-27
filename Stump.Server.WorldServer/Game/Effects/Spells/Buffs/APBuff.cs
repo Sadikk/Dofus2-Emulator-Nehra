@@ -7,7 +7,7 @@ using Stump.Server.WorldServer.Game.Spells;
 
 namespace Stump.Server.WorldServer.Game.Effects.Spells.Buffs
 {
-	[EffectHandler(EffectsEnum.Effect_RegainAP), EffectHandler(EffectsEnum.Effect_AddAP_111)]
+	[EffectHandler(EffectsEnum.Effect_RegainAP)]
 	public class APBuff : SpellEffectHandler
 	{
 		public APBuff(EffectDice effect, FightActor caster, Spell spell, Cell targetedCell, bool critical) : base(effect, caster, spell, targetedCell, critical)
